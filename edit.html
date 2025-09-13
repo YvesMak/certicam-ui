@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certicam - Modifier les informations</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/edit.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+</head>
+<body>
+    <main class="edit-container">
+        <div class="edit-header">
+            <div class="back-link">
+                <a href="index.html">
+                    <i class="fi fi-rr-angle-left"></i>
+                    Retour
+                </a>
+            </div>
+            <div class="header-logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam">
+            </div>
+        </div>
+
+        <form class="edit-form">
+            <h1>Informations de facturation</h1>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nom">Nom</label>
+                    <input type="text" id="nom" name="nom" value="Cobango" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom</label>
+                    <input type="text" id="prenom" name="prenom" value="Coco" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="cococobango@gmail.com" class="form-control">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="adresse">Adresse</label>
+                    <input type="text" id="adresse" name="adresse" value="Bastos, Rue 1.770, Yaoundé, Cameroun" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Téléphone</label>
+                    <input type="tel" id="telephone" name="telephone" value="699009900" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group full-width">
+                <label for="produit">Produit</label>
+                <select id="produit" name="produit" class="form-control">
+                    <option value="acte-naissance-300">Acte de naissance - 300 FCFA</option>
+                    <option value="attestation-400">Attestation - 400 FCFA</option>
+                    <option value="bulletin-salaire-800">Bulletin de salaire - 800 FCFA</option>
+                    <option value="casier-1500">Extrait de casier judiciaire - 1500 FCFA</option>
+                    <option value="certificat-residence-600">Certificat de résidence - 600 FCFA</option>
+                    <option value="certificat-scolarite-500">Certificat de scolarité - 500 FCFA</option>
+                    <option value="cni-2000">CNI - 2000 FCFA</option>
+                    <option value="diplome-1200">Diplôme - 1200 FCFA</option>
+                    <option value="autorisation-3000">Autorisation - 3000 FCFA</option>
+                    <option value="licence-10000">Licence - 10000 FCFA</option>
+                    <option value="passeport-15000">Passeport - 15000 FCFA</option>
+                    <option value="permis-conduire-5000">Permis de conduire - 5000 FCFA</option>
+                    <option value="registre-commerce-8000">Registre de commerce - 8000 FCFA</option>
+                    <option value="releve-1000" selected>Relevé bancaire - 1000 FCFA</option>
+                    <option value="titre-foncier-25000">Titre foncier - 25000 FCFA</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-button">Payer</button>
+        </form>
+    </main>
+
+    <script src="js/edit.js"></script>
+</body>
+</html>

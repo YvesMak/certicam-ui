@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certicam - Paiement</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/payment.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <a href="index.html" class="back-button">
+                <i class="fi fi-rr-angle-left"></i>
+                Retour
+            </a>
+            <div class="header-logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam">
+            </div>
+        </div>
+
+        <div class="payment-layout">
+            <!-- Colonne de gauche - Récapitulatif -->
+            <div class="order-summary-section">
+                <div class="order-card">
+                    <h1>Récapitulatif de la commande</h1>
+
+                    <div class="order-details">
+                        <div class="detail-row">
+                            <span class="label">Nom</span>
+                            <span class="value" id="payment-nom">Cobango</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Prénom</span>
+                            <span class="value" id="payment-prenom">Coco</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Numéro de téléphone</span>
+                            <span class="value" id="payment-telephone">699009900</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Email</span>
+                            <span class="value" id="payment-email">cococobango@gmail.com</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Adresse</span>
+                            <span class="value" id="payment-adresse">Bastos, Rue 1.770, Yaoundé, Cameroun</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="label">Produit</span>
+                            <span class="value" id="payment-produit">Relevé bancaire - 1000 FCFA</span>
+                        </div>
+                        <div class="detail-row total">
+                            <span class="label">Total à payer</span>
+                            <span class="value" id="payment-total">1000 FCFA</span>
+                        </div>
+                    </div>
+
+                    <button class="modify-button" id="modify-button">Modifier</button>
+                </div>
+            </div>
+
+            <!-- Colonne de droite - Méthodes de paiement -->
+            <div class="payment-methods-section">
+                <div class="payment-card">
+                    <h2>Méthode de paiement</h2>
+                    
+                    <div class="payment-options">
+                        <div class="payment-option orange" data-method="orange">
+                            <div class="payment-icon">
+                                <img src="img/orange-logo.png" alt="Orange Money">
+                            </div>
+                            <span>Paiement Orange Money</span>
+                        </div>
+                        <div class="payment-option mtn" data-method="mtn">
+                            <div class="payment-icon">
+                                <img src="img/mtn-logo.png" alt="MTN Mobile Money">
+                            </div>
+                            <span>Paiement MTN Mobile Money</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-form" style="display: none;">
+                        <div class="phone-input-container">
+                            <input type="tel" class="phone-input" id="payment-phone-input" placeholder="699009900" maxlength="9">
+                        </div>
+                        <p class="payment-info">Vous recevrez une demande d'appel de fond du montant correspondant</p>
+                        <button class="pay-button">Payer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/payment.js"></script>
+</body>
+</html>
