@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Navbar Simple</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .test-content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar injectée directement pour test -->
+    <header class="certicam-header">
+        <div class="header-content">
+            <div class="header-left">
+                <button class="menu-button" id="mobile-menu-button">
+                    <i class="fi fi-rr-menu-burger">☰</i>
+                </button>
+                <div class="user-profile">
+                    <img src="img/coco-profile.jpg" alt="Photo de profil" class="profile-pic">
+                </div>
+                <span class="notification-icon">
+                    <i class="fi fi-rr-bell">🔔</i>
+                </span>
+            </div>
+            <div class="logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam Logo">
+            </div>
+        </div>
+    </header>
+
+    <!-- Menu Mobile -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-profile">
+                    <img src="img/coco-profile.jpg" alt="Photo de profil" class="mobile-profile-pic">
+                    <div class="mobile-profile-info">
+                        <h4>Test User</h4>
+                        <p>test@example.com</p>
+                    </div>
+                </div>
+                <button class="mobile-menu-close" id="mobile-menu-close">
+                    <i class="fi fi-br-cross-small">✕</i>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="index.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-home">🏠</i>
+                    <span>Accueil</span>
+                </a>
+                <a href="transactions.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-time-past">📊</i>
+                    <span>Transactions</span>
+                </a>
+                <a href="settings.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-settings">⚙️</i>
+                    <span>Paramètres</span>
+                </a>
+                <a href="support.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-headset">🎧</i>
+                    <span>Support</span>
+                </a>
+                
+                <div class="mobile-menu-divider"></div>
+                
+                <button class="mobile-menu-link logout-btn">
+                    <i class="fi fi-rr-sign-out-alt">🚪</i>
+                    <span>Déconnexion</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="test-content">
+        <h1>Test Navbar Directe</h1>
+        <p>Cliquez sur le menu burger ☰ pour ouvrir le menu mobile.</p>
+        <p>Si ça fonctionne ici, le problème est dans le système d'injection.</p>
+        <button onclick="showDebugInfo()">Afficher debug info</button>
+        <div id="debug-info"></div>
+    </div>
+    
+    <script>
+        console.log('🧪 Test navbar directe démarré');
+        
+        function showDebugInfo() {
+            const header = document.querySelector('header');
+            const menuButton = document.getElementById('mobile-menu-button');
+            const menuOverlay = document.getElementById('mobile-menu-overlay');
+            const menuClose = document.getElementById('mobile-menu-close');
+            
+            document.getElementById('debug-info').innerHTML = `
+                <h3>Debug Info:</h3>
+                <p>Header: ${!!header} (${header?.tagName})</p>
+                <p>Menu Button: ${!!menuButton} (${menuButton?.tagName})</p>
+                <p>Menu Overlay: ${!!menuOverlay} (${menuOverlay?.tagName})</p>
+                <p>Menu Close: ${!!menuClose} (${menuClose?.tagName})</p>
+                <p>Body children count: ${document.body.children.length}</p>
+            `;
+        }
+        
+        // Attacher les événements directement
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuButton = document.getElementById('mobile-menu-button');
+            const menuOverlay = document.getElementById('mobile-menu-overlay');
+            const menuClose = document.getElementById('mobile-menu-close');
+            
+            console.log('📋 Éléments trouvés:', {
+                menuButton: !!menuButton,
+                menuOverlay: !!menuOverlay,
+                menuClose: !!menuClose
+            });
+            
+            if (menuButton && menuOverlay) {
+                menuButton.addEventListener('click', () => {
+                    console.log('🍔 Menu burger cliqué !');
+                    menuOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+            
+            if (menuClose && menuOverlay) {
+                menuClose.addEventListener('click', () => {
+                    console.log('❌ Fermeture menu !');
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+                
+                menuOverlay.addEventListener('click', (e) => {
+                    if (e.target === menuOverlay) {
+                        console.log('🔲 Overlay cliqué !');
+                        menuOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && menuOverlay.classList.contains('active')) {
+                    console.log('⌨️ Escape !');
+                    menuOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

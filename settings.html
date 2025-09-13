@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/settings.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+</head>
+<body>
+    <main>
+        <div class="settings-container">
+            <h1>Paramètres</h1>
+            
+            <!-- Onglets de navigation -->
+            <div class="settings-tabs">
+                <button class="tab-btn active" data-tab="preferences">Préférences</button>
+                <button class="tab-btn" data-tab="notifications">Notifications</button>
+                <button class="tab-btn" data-tab="security">Sécurité</button>
+                <button class="tab-btn" data-tab="profile">Profil</button>
+                <button class="tab-btn" data-tab="billing">Facturation</button>
+            </div>
+
+            <!-- Contenu des onglets -->
+            <div class="settings-content">
+                
+                <!-- Onglet Préférences -->
+                <div class="tab-content active" id="preferences">
+                    <div class="settings-section">
+                        <h2>Langue</h2>
+                        <div class="setting-item">
+                            <label class="setting-label">Langue de l'interface</label>
+                            <div class="language-toggle">
+                                <button class="lang-btn active">Français</button>
+                                <button class="lang-btn">English</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2>Fuseau horaire</h2>
+                        <div class="setting-item">
+                            <div class="timezone-badge">
+                                Afrique/Douala (UTC+1)
+                            </div>
+                            <select class="timezone-select">
+                                <option value="africa/douala" selected>Afrique/Douala (UTC+1)</option>
+                                <option value="europe/paris">Europe/Paris (UTC+1)</option>
+                                <option value="america/new_york">America/New_York (UTC-5)</option>
+                                <option value="asia/tokyo">Asia/Tokyo (UTC+9)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Notifications -->
+                <div class="tab-content" id="notifications">
+                    <div class="settings-section">
+                        <h2>Notifications</h2>
+                        <div class="setting-item">
+                            <label class="setting-label">Notifications par email</label>
+                            <div class="toggle-switch">
+                                <button class="toggle-btn active">Activer</button>
+                                <button class="toggle-btn">Désactiver</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Sécurité -->
+                <div class="tab-content" id="security">
+                    <div class="settings-section">
+                        <h2>Mot de passe</h2>
+                        <div class="setting-item">
+                            <label class="setting-label">Mot de passe actuel</label>
+                            <div class="password-input">
+                                <input type="password" placeholder="Votre mot de passe actuel" class="form-input">
+                                <button class="toggle-visibility">
+                                    <i class="fi fi-rr-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <label class="setting-label">Nouveau mot de passe</label>
+                            <div class="password-input">
+                                <input type="password" placeholder="Nouveau mot de passe" class="form-input">
+                                <button class="toggle-visibility">
+                                    <i class="fi fi-rr-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary">Enregistrer</button>
+
+                        <div class="forgot-password">
+                            <p>Mot de passe oublié ? <a href="#" class="link-green">Réinitialiser votre mot de passe</a></p>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2>Authentification à deux facteurs</h2>
+                        <div class="setting-item">
+                            <label class="setting-label">Authentification à deux facteurs (2FA)</label>
+                            <div class="toggle-switch">
+                                <button class="toggle-btn">Activer</button>
+                                <button class="toggle-btn active">Désactiver</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Profil -->
+                <div class="tab-content" id="profile">
+                    <div class="settings-section">
+                        <h2>Informations du compte</h2>
+                        
+                        <div class="profile-info">
+                            <div class="profile-avatar-section">
+                                <img src="img/coco-profile.jpg" alt="Photo de profil" class="profile-avatar">
+                                <button class="btn-link">
+                                    Modifier
+                                    <i class="fi fi-rr-edit"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="profile-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">NIU :</label>
+                                        <input type="text" value="P01222567890987" class="form-input" readonly>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom :</label>
+                                        <input type="text" value="Cobango" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Prénoms :</label>
+                                        <input type="text" value="Coco" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Email :</label>
+                                        <input type="email" value="cococobango@gmail.com" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Téléphone :</label>
+                                        <input type="tel" value="699009900" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Adresse :</label>
+                                        <input type="text" value="Bastos, Rue 1770, Yaoundé, Cameroun" class="form-input">
+                                    </div>
+                                </div>
+
+                                <button class="btn-primary">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onglet Facturation -->
+                <div class="tab-content" id="billing">
+                    <div class="settings-section">
+                        <h2>Options de facturation</h2>
+                        
+                        <div class="billing-info">
+                            <div class="billing-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Nom :</label>
+                                        <input type="text" value="Cobango" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Prénoms :</label>
+                                        <input type="text" value="Coco" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Email :</label>
+                                        <input type="email" value="cococobango@gmail.com" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Téléphone :</label>
+                                        <input type="tel" value="699009900" class="form-input">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label class="form-label">Adresse :</label>
+                                        <input type="text" value="Bastos, Rue 1770, Yaoundé, Cameroun" class="form-input">
+                                    </div>
+                                </div>
+
+                                <button class="btn-secondary">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2>Ajouter paiement Mobile Money</h2>
+                        
+                        <div class="payment-methods">
+                            <div class="payment-options">
+                                <div class="payment-option active">
+                                    <img src="img/orange-logo.png" alt="Orange Money" class="payment-logo">
+                                </div>
+                                <div class="payment-option">
+                                    <img src="img/mtn-logo.png" alt="MTN Mobile Money" class="payment-logo">
+                                </div>
+                            </div>
+                            
+                            <div class="payment-form">
+                                <div class="form-group">
+                                    <label class="form-label">Numéro Orange Money</label>
+                                    <input type="tel" value="699009900" class="form-input">
+                                </div>
+                                
+                                <div class="payment-actions">
+                                    <button class="btn-secondary">Annuler</button>
+                                    <button class="btn-primary">Ajouter</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="saved-payment-methods">
+                            <h3>Moyen de paiement enregistré</h3>
+                            <div class="payment-method-item">
+                                <div class="payment-method-info">
+                                    <i class="fi fi-rr-smartphone"></i>
+                                    <span>+237 699009900</span>
+                                </div>
+                                <button class="btn-delete">
+                                    <i class="fi fi-rr-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/certicam-init.js"></script>
+    <script>
+        // Marquer la page settings comme active quand la navbar est chargée
+        document.addEventListener('navbarLoaded', () => {
+            if (window.Certicam) {
+                window.Certicam.setActivePage('settings.html');
+            }
+        });
+    </script>
+    <script src="js/settings.js"></script>
+</body>
+</html>

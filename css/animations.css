@@ -1,0 +1,256 @@
+/* Animations et transitions globales */
+
+/* Animation de fondu pour les onglets */
+.tab-content {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.tab-content.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* Animation pour les modales */
+.chat-modal,
+.email-modal {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.chat-modal.active,
+.email-modal.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Animation pour les messages de chat */
+.message {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideInMessage 0.3s ease forwards;
+}
+
+@keyframes slideInMessage {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation pour l'indicateur de frappe */
+.typing-indicator .typing-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    padding: var(--spacing-sm);
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--color-gray-400);
+    border-radius: 50%;
+    animation: typingDot 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typingDot {
+    0%, 60%, 100% {
+        transform: translateY(0);
+    }
+    30% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Animation pour les boutons */
+.support-btn,
+.btn-primary,
+.btn-secondary,
+.tab-btn,
+.toggle-btn,
+.lang-btn {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.support-btn:active,
+.btn-primary:active,
+.btn-secondary:active {
+    transform: scale(0.98);
+}
+
+/* Animation pour les cartes de support */
+.support-option {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.support-option:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Animation pour les inputs focus */
+.form-input,
+.chat-input,
+.timezone-select {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-input:focus,
+.chat-input:focus,
+.timezone-select:focus {
+    transform: translateY(-1px);
+}
+
+/* Animation pour les méthodes de paiement */
+.payment-option {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.payment-option:hover {
+    transform: scale(1.02);
+}
+
+.payment-option.active {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 195, 108, 0.2);
+}
+
+/* Animation pour l'illustration de support - flat style */
+/* Supprimé pour adopter le style flat design */
+
+/* Animation pour les éléments qui apparaissent */
+.settings-section,
+.support-option {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.settings-section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.support-option:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.support-option:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation pour le statut de l'agent */
+.agent-status {
+    animation: pulse 2s infinite;
+}
+
+.agent-status.online {
+    background: var(--color-green);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 195, 108, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(0, 195, 108, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 195, 108, 0);
+    }
+}
+
+/* Animation pour la sauvegarde réussie */
+.btn-primary.success {
+    background: var(--color-green) !important;
+    transform: scale(1.05);
+}
+
+/* Transitions pour le menu mobile */
+.mobile-menu-overlay {
+    transition: opacity 0.3s ease;
+}
+
+.mobile-menu {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Animation pour le toggle de visibilité du mot de passe */
+.toggle-visibility {
+    transition: all 0.2s ease;
+}
+
+.toggle-visibility:active {
+    transform: scale(0.95);
+}
+
+/* Animation pour les notifications toast (pour future implémentation) */
+.toast {
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Responsive animations - réduire les animations sur mobile pour les performances */
+@media (max-width: 768px) {
+    .support-option:hover {
+        transform: none;
+    }
+    
+    .chat-modal,
+    .email-modal {
+        transition: opacity 0.2s ease;
+    }
+    
+    .support-illustration {
+        animation: none;
+    }
+}
+
+/* Préférence réduite de mouvement */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .support-illustration {
+        animation: none;
+    }
+    
+    .bubble-dots span {
+        animation: none;
+    }
+    
+    .typing-dots span {
+        animation: none;
+    }
+}

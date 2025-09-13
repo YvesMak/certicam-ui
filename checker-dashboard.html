@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Vérificateur | Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/checker.css">
+    <style>
+        .checker-dashboard {
+            background: var(--surface-gradient);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: var(--card-background);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+        }
+
+        .verification-queue {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .queue-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        .queue-item:hover {
+            background: var(--hover-background);
+        }
+
+        .queue-item:last-child {
+            border-bottom: none;
+        }
+
+        .document-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--border-radius);
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .document-details h4 {
+            margin: 0 0 0.25rem 0;
+            color: var(--text-color);
+        }
+
+        .document-details p {
+            margin: 0;
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+        }
+
+        .queue-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-verify, .btn-reject, .btn-approve {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-verify {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-approve {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-reject {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .priority-high { border-left: 4px solid var(--error-color); }
+        .priority-medium { border-left: 4px solid var(--warning-color); }
+        .priority-low { border-left: 4px solid var(--success-color); }
+
+        .recent-activity {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .activity-content h5 {
+            margin: 0 0 0.25rem 0;
+            color: var(--text-color);
+        }
+
+        .activity-content p {
+            margin: 0;
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+        }
+
+        .activity-time {
+            color: var(--text-color-muted);
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) {
+            .checker-dashboard {
+                padding: 1rem;
+            }
+            
+            .dashboard-header, .verification-queue, .recent-activity {
+                padding: 1.5rem;
+            }
+
+            .header-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .queue-item {
+                flex-direction: column;
+                align-items: start;
+                gap: 1rem;
+            }
+
+            .queue-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navbar-container"></div>
+
+    <div class="checker-dashboard">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1>Tableau de bord - Vérificateur</h1>
+                <p>Bienvenue <span data-user="name">Vérificateur</span>. Voici votre résumé d'activité.</p>
+                
+                <div class="header-stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="pending-count">12</div>
+                        <div class="stat-label">Documents en attente</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="verified-today">8</div>
+                        <div class="stat-label">Vérifiés aujourd'hui</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="approval-rate">94%</div>
+                        <div class="stat-label">Taux d'approbation</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="avg-time">2.5min</div>
+                        <div class="stat-label">Temps moyen</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Verification Queue -->
+                <div class="col-lg-8">
+                    <div class="verification-queue">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <h2>File de vérification</h2>
+                            <button class="btn btn-primary" onclick="refreshQueue()">
+                                <i class="fas fa-sync-alt"></i> Actualiser
+                            </button>
+                        </div>
+
+                        <div id="verification-queue-list">
+                            <!-- Queue items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="col-lg-4">
+                    <div class="recent-activity">
+                        <h3>Activité récente</h3>
+                        <div id="recent-activity-list">
+                            <!-- Activity items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="dashboard-actions" style="margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="openBatchVerification()">
+                    <i class="fas fa-layer-group"></i> Vérification par lot
+                </button>
+                <button class="btn btn-secondary" onclick="viewStatistics()">
+                    <i class="fas fa-chart-bar"></i> Statistiques
+                </button>
+                <button class="btn btn-secondary" onclick="exportReport()">
+                    <i class="fas fa-download"></i> Exporter rapport
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Verification Modal -->
+    <div id="verification-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Vérification de document</h3>
+                <button class="modal-close" onclick="closeVerificationModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="document-preview"></div>
+                <div class="verification-actions">
+                    <button class="btn-approve" onclick="approveDocument()">
+                        <i class="fas fa-check"></i> Approuver
+                    </button>
+                    <button class="btn-reject" onclick="rejectDocument()">
+                        <i class="fas fa-times"></i> Rejeter
+                    </button>
+                    <button class="btn btn-secondary" onclick="requestMoreInfo()">
+                        <i class="fas fa-question"></i> Demander info
+                    </button>
+                </div>
+                <div class="verification-notes">
+                    <label for="verification-comment">Commentaires:</label>
+                    <textarea id="verification-comment" rows="3" placeholder="Ajoutez vos commentaires..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="components/navbar-loader.js"></script>
+    <script src="js/session-manager.js"></script>
+    <script src="js/auth-guards.js"></script>
+    <script>
+        // Checker Dashboard functionality
+        class CheckerDashboard {
+            constructor() {
+                this.currentDocument = null;
+                this.queueData = [];
+                this.activityData = [];
+                this.init();
+            }
+
+            init() {
+                // Require checker role
+                AuthGuard.requireRole('checker');
+                
+                this.loadQueueData();
+                this.loadActivityData();
+                this.loadStatistics();
+                this.setupEventListeners();
+            }
+
+            loadQueueData() {
+                // Simulate queue data - replace with real API call
+                this.queueData = [
+                    {
+                        id: 'doc_001',
+                        type: 'passport',
+                        user: 'Marie Dubois',
+                        submitted: '2024-01-15T10:30:00Z',
+                        priority: 'high',
+                        status: 'pending'
+                    },
+                    {
+                        id: 'doc_002',
+                        type: 'id_card',
+                        user: 'Jean Martin',
+                        submitted: '2024-01-15T09:15:00Z',
+                        priority: 'medium',
+                        status: 'pending'
+                    },
+                    {
+                        id: 'doc_003',
+                        type: 'birth_certificate',
+                        user: 'Sophie Lambert',
+                        submitted: '2024-01-15T08:45:00Z',
+                        priority: 'low',
+                        status: 'pending'
+                    }
+                ];
+
+                this.renderQueue();
+            }
+
+            loadActivityData() {
+                // Simulate activity data
+                this.activityData = [
+                    {
+                        type: 'approved',
+                        document: 'Passeport - Pierre Durand',
+                        time: '2024-01-15T11:00:00Z'
+                    },
+                    {
+                        type: 'rejected',
+                        document: 'CNI - Anne Petit',
+                        time: '2024-01-15T10:45:00Z'
+                    },
+                    {
+                        type: 'approved',
+                        document: 'Acte naissance - Marc Rousseau',
+                        time: '2024-01-15T10:30:00Z'
+                    }
+                ];
+
+                this.renderActivity();
+            }
+
+            loadStatistics() {
+                // Update statistics - replace with real API call
+                document.getElementById('pending-count').textContent = '12';
+                document.getElementById('verified-today').textContent = '8';
+                document.getElementById('approval-rate').textContent = '94%';
+                document.getElementById('avg-time').textContent = '2.5min';
+            }
+
+            renderQueue() {
+                const container = document.getElementById('verification-queue-list');
+                container.innerHTML = '';
+
+                this.queueData.forEach(item => {
+                    const queueItem = this.createQueueItem(item);
+                    container.appendChild(queueItem);
+                });
+            }
+
+            createQueueItem(item) {
+                const div = document.createElement('div');
+                div.className = `queue-item priority-${item.priority}`;
+                
+                const timeAgo = this.getTimeAgo(item.submitted);
+                const docTypeIcon = this.getDocumentIcon(item.type);
+
+                div.innerHTML = `
+                    <div class="document-info">
+                        <div class="document-icon">${docTypeIcon}</div>
+                        <div class="document-details">
+                            <h4>${this.getDocumentTitle(item.type)}</h4>
+                            <p>${item.user} • Soumis ${timeAgo}</p>
+                        </div>
+                    </div>
+                    <div class="queue-actions">
+                        <button class="btn-verify" onclick="checkerDashboard.openVerification('${item.id}')">
+                            <i class="fas fa-eye"></i> Vérifier
+                        </button>
+                        <button class="btn-approve" onclick="checkerDashboard.quickApprove('${item.id}')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn-reject" onclick="checkerDashboard.quickReject('${item.id}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+
+                return div;
+            }
+
+            renderActivity() {
+                const container = document.getElementById('recent-activity-list');
+                container.innerHTML = '';
+
+                this.activityData.forEach(item => {
+                    const activityItem = this.createActivityItem(item);
+                    container.appendChild(activityItem);
+                });
+            }
+
+            createActivityItem(item) {
+                const div = document.createElement('div');
+                div.className = 'activity-item';
+                
+                const timeAgo = this.getTimeAgo(item.time);
+                const icon = item.type === 'approved' ? '✓' : '✗';
+                const iconColor = item.type === 'approved' ? 'var(--success-color)' : 'var(--error-color)';
+
+                div.innerHTML = `
+                    <div class="activity-icon" style="background: ${iconColor}">
+                        ${icon}
+                    </div>
+                    <div class="activity-content">
+                        <h5>${item.type === 'approved' ? 'Approuvé' : 'Rejeté'}</h5>
+                        <p>${item.document}</p>
+                    </div>
+                    <div class="activity-time">${timeAgo}</div>
+                `;
+
+                return div;
+            }
+
+            openVerification(documentId) {
+                this.currentDocument = this.queueData.find(doc => doc.id === documentId);
+                if (!this.currentDocument) return;
+
+                // Show modal
+                document.getElementById('verification-modal').style.display = 'flex';
+                
+                // Load document preview (simulate)
+                document.getElementById('document-preview').innerHTML = `
+                    <div style="text-align: center; padding: 2rem; background: var(--surface-background); border-radius: var(--border-radius);">
+                        <i class="fas fa-file-alt" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                        <h4>${this.getDocumentTitle(this.currentDocument.type)}</h4>
+                        <p>Utilisateur: ${this.currentDocument.user}</p>
+                        <p>Soumis: ${new Date(this.currentDocument.submitted).toLocaleString()}</p>
+                    </div>
+                `;
+            }
+
+            closeVerificationModal() {
+                document.getElementById('verification-modal').style.display = 'none';
+                this.currentDocument = null;
+                document.getElementById('verification-comment').value = '';
+            }
+
+            approveDocument() {
+                if (!this.currentDocument) return;
+                
+                const comment = document.getElementById('verification-comment').value;
+                this.processDocument(this.currentDocument.id, 'approved', comment);
+            }
+
+            rejectDocument() {
+                if (!this.currentDocument) return;
+                
+                const comment = document.getElementById('verification-comment').value;
+                if (!comment.trim()) {
+                    SessionManager.showNotification('Veuillez ajouter un commentaire pour le rejet', 'error');
+                    return;
+                }
+                
+                this.processDocument(this.currentDocument.id, 'rejected', comment);
+            }
+
+            quickApprove(documentId) {
+                this.processDocument(documentId, 'approved', 'Approbation rapide');
+            }
+
+            quickReject(documentId) {
+                const reason = prompt('Raison du rejet:');
+                if (reason) {
+                    this.processDocument(documentId, 'rejected', reason);
+                }
+            }
+
+            processDocument(documentId, action, comment) {
+                // Simulate processing
+                console.log(`Processing document ${documentId}: ${action}`, comment);
+                
+                // Remove from queue
+                this.queueData = this.queueData.filter(doc => doc.id !== documentId);
+                
+                // Add to activity
+                this.activityData.unshift({
+                    type: action,
+                    document: `Document ${documentId}`,
+                    time: new Date().toISOString()
+                });
+                
+                // Update UI
+                this.renderQueue();
+                this.renderActivity();
+                this.loadStatistics();
+                this.closeVerificationModal();
+                
+                SessionManager.showNotification(
+                    `Document ${action === 'approved' ? 'approuvé' : 'rejeté'} avec succès`,
+                    action === 'approved' ? 'success' : 'info'
+                );
+            }
+
+            getDocumentIcon(type) {
+                const icons = {
+                    passport: '🛂',
+                    id_card: '🆔',
+                    birth_certificate: '📄',
+                    driver_license: '🚗'
+                };
+                return icons[type] || '📄';
+            }
+
+            getDocumentTitle(type) {
+                const titles = {
+                    passport: 'Passeport',
+                    id_card: 'Carte d\'identité',
+                    birth_certificate: 'Acte de naissance',
+                    driver_license: 'Permis de conduire'
+                };
+                return titles[type] || 'Document';
+            }
+
+            getTimeAgo(dateString) {
+                const diff = Date.now() - new Date(dateString).getTime();
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                
+                if (days > 0) return `il y a ${days}j`;
+                if (hours > 0) return `il y a ${hours}h`;
+                return `il y a ${minutes}min`;
+            }
+
+            setupEventListeners() {
+                // Auto-refresh every 30 seconds
+                setInterval(() => {
+                    this.loadQueueData();
+                    this.loadStatistics();
+                }, 30000);
+            }
+        }
+
+        // Global functions
+        function refreshQueue() {
+            checkerDashboard.loadQueueData();
+        }
+
+        function openBatchVerification() {
+            SessionManager.showNotification('Fonctionnalité en développement', 'info');
+        }
+
+        function viewStatistics() {
+            window.location.href = 'checker-statistics.html';
+        }
+
+        function exportReport() {
+            SessionManager.showNotification('Export en cours...', 'info');
+        }
+
+        function requestMoreInfo() {
+            SessionManager.showNotification('Demande d\'information envoyée', 'success');
+            checkerDashboard.closeVerificationModal();
+        }
+
+        // Initialize dashboard
+        let checkerDashboard;
+        document.addEventListener('DOMContentLoaded', () => {
+            checkerDashboard = new CheckerDashboard();
+        });
+    </script>
+</body>
+</html>

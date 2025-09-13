@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <!-- Logo -->
+        <div class="auth-logo">
+            <img src="img/certicam-main-logo.png" alt="Certicam Logo">
+            <h1>Bienvenue sur Certicam</h1>
+            <p>Plateforme de certification de documents administratifs</p>
+        </div>
+
+        <!-- Auth Forms Container -->
+        <div class="auth-forms">
+            <!-- Login Form -->
+            <div class="auth-form active" id="login-form">
+                <h2>Connexion</h2>
+                <form id="login">
+                    <div class="form-group">
+                        <label for="login-email">Adresse email</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-envelope input-icon"></i>
+                            <input type="email" id="login-email" name="email" placeholder="votre@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Mot de passe</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-lock input-icon"></i>
+                            <input type="password" id="login-password" name="password" placeholder="••••••••" required>
+                            <button type="button" class="password-toggle" data-target="login-password">
+                                <i class="fi fi-rr-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            Se souvenir de moi
+                        </label>
+                        <a href="#" class="forgot-link" id="forgot-password-link">Mot de passe oublié ?</a>
+                    </div>
+
+                    <button type="submit" class="btn-primary auth-btn">
+                        <span class="btn-text">Se connecter</span>
+                        <i class="fi fi-rr-spinner btn-spinner" style="display: none;"></i>
+                    </button>
+                </form>
+
+                <div class="auth-switch">
+                    <p>Pas encore de compte ? <a href="#" id="show-register">Créer un compte</a></p>
+                </div>
+
+                <!-- Quick Login for Demo -->
+                <div class="demo-accounts">
+                    <h3>Comptes de démonstration</h3>
+                    <div class="demo-buttons">
+                        <button class="demo-btn" data-role="user">
+                            <i class="fi fi-rr-user"></i>
+                            Utilisateur
+                        </button>
+                        <button class="demo-btn" data-role="checker">
+                            <i class="fi fi-rr-shield-check"></i>
+                            Checker
+                        </button>
+                        <button class="demo-btn" data-role="agent">
+                            <i class="fi fi-rr-headset"></i>
+                            Agent
+                        </button>
+                        <button class="demo-btn" data-role="admin">
+                            <i class="fi fi-rr-settings"></i>
+                            Admin
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div class="auth-form" id="register-form">
+                <h2>Créer un compte</h2>
+                <form id="register">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="register-firstname">Prénom</label>
+                            <div class="input-container">
+                                <i class="fi fi-rr-user input-icon"></i>
+                                <input type="text" id="register-firstname" name="firstname" placeholder="Votre prénom" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-lastname">Nom</label>
+                            <div class="input-container">
+                                <i class="fi fi-rr-user input-icon"></i>
+                                <input type="text" id="register-lastname" name="lastname" placeholder="Votre nom" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-email">Adresse email</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-envelope input-icon"></i>
+                            <input type="email" id="register-email" name="email" placeholder="votre@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-phone">Téléphone</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-phone-call input-icon"></i>
+                            <input type="tel" id="register-phone" name="phone" placeholder="6XX XX XX XX" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-password">Mot de passe</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-lock input-icon"></i>
+                            <input type="password" id="register-password" name="password" placeholder="••••••••" required>
+                            <button type="button" class="password-toggle" data-target="register-password">
+                                <i class="fi fi-rr-eye"></i>
+                            </button>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill"></div>
+                            </div>
+                            <span class="strength-text">Force du mot de passe</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register-confirm">Confirmer le mot de passe</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-lock input-icon"></i>
+                            <input type="password" id="register-confirm" name="confirm" placeholder="••••••••" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" id="accept-terms" required>
+                            <span class="checkmark"></span>
+                            J'accepte les <a href="#" class="link">conditions d'utilisation</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-primary auth-btn">
+                        <span class="btn-text">Créer mon compte</span>
+                        <i class="fi fi-rr-spinner btn-spinner" style="display: none;"></i>
+                    </button>
+                </form>
+
+                <div class="auth-switch">
+                    <p>Déjà un compte ? <a href="#" id="show-login">Se connecter</a></p>
+                </div>
+            </div>
+
+            <!-- Reset Password Form -->
+            <div class="auth-form" id="reset-form">
+                <h2>Mot de passe oublié</h2>
+                <p class="reset-description">Entrez votre adresse email pour recevoir un lien de réinitialisation.</p>
+                
+                <form id="reset-password">
+                    <div class="form-group">
+                        <label for="reset-email">Adresse email</label>
+                        <div class="input-container">
+                            <i class="fi fi-rr-envelope input-icon"></i>
+                            <input type="email" id="reset-email" name="email" placeholder="votre@email.com" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary auth-btn">
+                        <span class="btn-text">Envoyer le lien</span>
+                        <i class="fi fi-rr-spinner btn-spinner" style="display: none;"></i>
+                    </button>
+                </form>
+
+                <div class="auth-switch">
+                    <p><a href="#" id="back-to-login">← Retour à la connexion</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2FA Modal -->
+    <div class="modal-overlay" id="twofa-modal" style="display: none;">
+        <div class="modal auth-modal">
+            <div class="modal-header">
+                <h3>Authentification à deux facteurs</h3>
+            </div>
+            <div class="modal-content">
+                <p>Entrez le code à 6 chiffres envoyé sur votre téléphone</p>
+                <div class="twofa-input">
+                    <input type="text" maxlength="1" class="twofa-digit" data-index="0">
+                    <input type="text" maxlength="1" class="twofa-digit" data-index="1">
+                    <input type="text" maxlength="1" class="twofa-digit" data-index="2">
+                    <input type="text" maxlength="1" class="twofa-digit" data-index="3">
+                    <input type="text" maxlength="1" class="twofa-digit" data-index="4">
+                    <input type="text" maxlength="1" class="twofa-digit" data-index="5">
+                </div>
+                <div class="twofa-timer">
+                    Code valide pendant <span id="timer">02:00</span>
+                </div>
+                <div class="twofa-actions">
+                    <button class="btn-secondary" id="resend-code">Renvoyer le code</button>
+                    <button class="btn-primary" id="verify-code">Vérifier</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="success-modal" style="display: none;">
+        <div class="modal auth-modal">
+            <div class="modal-content text-center">
+                <div class="success-icon">
+                    <i class="fi fi-rr-check-circle"></i>
+                </div>
+                <h3>Connexion réussie !</h3>
+                <p>Redirection en cours...</p>
+                <div class="loading-bar">
+                    <div class="loading-fill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/auth-handler.js"></script>
+    <script src="js/session-manager.js"></script>
+</body>
+</html>

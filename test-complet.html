@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Complet - Navbar Système</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
+</head>
+<body>
+    <main class="main-content">
+        <div class="container">
+            <h1>🧪 Test Complet du Système Navbar</h1>
+            
+            <div class="test-panel" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 20px 0;">
+                <h2>📋 Statut des Tests</h2>
+                
+                <div class="test-status" style="display: grid; gap: 16px; margin: 20px 0;">
+                    <div class="status-item" style="display: flex; align-items: center; gap: 12px;">
+                        <span id="navbar-status" class="status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #ffc107;"></span>
+                        <span>Navbar chargée et visible</span>
+                        <span id="navbar-result" style="margin-left: auto; font-weight: 500;">En attente...</span>
+                    </div>
+                    
+                    <div class="status-item" style="display: flex; align-items: center; gap: 12px;">
+                        <span id="sticky-status" class="status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #ffc107;"></span>
+                        <span>Position sticky fonctionnelle</span>
+                        <span id="sticky-result" style="margin-left: auto; font-weight: 500;">En attente...</span>
+                    </div>
+                    
+                    <div class="status-item" style="display: flex; align-items: center; gap: 12px;">
+                        <span id="menu-status" class="status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #ffc107;"></span>
+                        <span>Menu mobile fonctionnel</span>
+                        <span id="menu-result" style="margin-left: auto; font-weight: 500;">En attente...</span>
+                    </div>
+                    
+                    <div class="status-item" style="display: flex; align-items: center; gap: 12px;">
+                        <span id="content-status" class="status-dot" style="width: 12px; height: 12px; border-radius: 50%; background: #ffc107;"></span>
+                        <span>Menu contient : Accueil, Historique, Support, Paramètres, Déconnexion</span>
+                        <span id="content-result" style="margin-left: auto; font-weight: 500;">En attente...</span>
+                    </div>
+                </div>
+                
+                <button id="start-test" onclick="runCompleteTest()" style="padding: 12px 24px; background: #007ACC; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 20px;">
+                    🚀 Lancer le test complet
+                </button>
+            </div>
+            
+            <div class="demo-content" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 20px 0;">
+                <h2>📱 Test du Menu Mobile</h2>
+                <p>Une fois la navbar chargée, cliquez sur le bouton hamburger (☰) pour ouvrir le menu mobile.</p>
+                <p><strong>Le menu doit contenir :</strong></p>
+                <ul>
+                    <li>🏠 Accueil</li>
+                    <li>⏰ Historique (Transactions)</li>
+                    <li>💬 Support</li>
+                    <li>⚙️ Paramètres</li>
+                    <li>🚪 Se déconnecter</li>
+                </ul>
+            </div>
+            
+            <!-- Contenu long pour tester le sticky -->
+            <div style="height: 1500px; background: linear-gradient(180deg, #e3f2fd 0%, #bbdefb 50%, #90caf9 100%); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #1565c0; text-align: center; border-radius: 12px; margin: 20px 0;">
+                <div>
+                    <h3>📌 Zone de Test du Sticky</h3>
+                    <p>Faites défiler cette page pour vérifier que la navbar reste fixée en haut !</p>
+                    <p style="font-size: 18px; margin-top: 40px;">La navbar doit rester visible pendant le défilement.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="js/certicam-init.js"></script>
+    
+    <script>
+        async function runCompleteTest() {
+            console.log('🧪 Début du test complet...');
+            
+            const button = document.getElementById('start-test');
+            button.disabled = true;
+            button.textContent = '🔄 Test en cours...';
+            
+            // Test 1: Navbar présente et visible
+            await testNavbarPresence();
+            
+            // Test 2: Position sticky
+            await testStickyPosition();
+            
+            // Test 3: Menu mobile
+            await testMobileMenu();
+            
+            // Test 4: Contenu du menu
+            await testMenuContent();
+            
+            button.disabled = false;
+            button.textContent = '✅ Test terminé';
+            
+            console.log('🎯 Test complet terminé');
+        }
+        
+        async function testNavbarPresence() {
+            console.log('🔍 Test 1: Présence de la navbar...');
+            
+            // Attendre un peu que la navbar se charge
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            const header = document.querySelector('header');
+            const overlay = document.querySelector('#mobile-menu-overlay');
+            
+            const success = header && overlay && header.offsetHeight > 0;
+            
+            updateTestStatus('navbar', success, 
+                success ? 'Navbar chargée ✅' : 'Navbar manquante ❌'
+            );
+            
+            if (success) {
+                console.log('✅ Navbar présente, dimensions:', header.offsetWidth + 'x' + header.offsetHeight);
+            } else {
+                console.error('❌ Navbar non trouvée ou invisible');
+            }
+        }
+        
+        async function testStickyPosition() {
+            console.log('🔍 Test 2: Position sticky...');
+            
+            const header = document.querySelector('header');
+            if (!header) {
+                updateTestStatus('sticky', false, 'Header manquant ❌');
+                return;
+            }
+            
+            const styles = getComputedStyle(header);
+            const isSticky = styles.position === 'sticky' || styles.position === 'fixed';
+            const hasCorrectTop = styles.top === '0px';
+            const hasZIndex = parseInt(styles.zIndex) >= 1000;
+            
+            const success = isSticky && hasCorrectTop && hasZIndex;
+            
+            updateTestStatus('sticky', success,
+                success ? 'Sticky OK ✅' : 'Position incorrecte ❌'
+            );
+            
+            console.log('📍 Position:', styles.position, 'Top:', styles.top, 'Z-index:', styles.zIndex);
+        }
+        
+        async function testMobileMenu() {
+            console.log('🔍 Test 3: Fonctionnalité du menu mobile...');
+            
+            const menuButton = document.getElementById('mobile-menu-button');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const closeButton = document.getElementById('mobile-menu-close');
+            
+            const elementsPresent = menuButton && overlay && closeButton;
+            
+            if (!elementsPresent) {
+                updateTestStatus('menu', false, 'Éléments manquants ❌');
+                return;
+            }
+            
+            // Test d'ouverture
+            menuButton.click();
+            await new Promise(resolve => setTimeout(resolve, 300));
+            
+            const isOpen = overlay.classList.contains('active');
+            
+            if (isOpen) {
+                // Test de fermeture
+                closeButton.click();
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
+                const isClosed = !overlay.classList.contains('active');
+                const success = isOpen && isClosed;
+                
+                updateTestStatus('menu', success,
+                    success ? 'Menu fonctionne ✅' : 'Problème fermeture ❌'
+                );
+            } else {
+                updateTestStatus('menu', false, 'Menu ne s\'ouvre pas ❌');
+            }
+        }
+        
+        async function testMenuContent() {
+            console.log('🔍 Test 4: Contenu du menu...');
+            
+            const requiredLinks = [
+                { href: 'index.html', text: 'Accueil' },
+                { href: 'transactions.html', text: 'Historique' },
+                { href: 'support.html', text: 'Support' },
+                { href: 'settings.html', text: 'Paramètres' }
+            ];
+            
+            const logoutButton = document.getElementById('mobile-menu-logout');
+            
+            let foundLinks = 0;
+            for (const link of requiredLinks) {
+                const element = document.querySelector(`a[href="${link.href}"]`);
+                if (element && element.textContent.includes(link.text)) {
+                    foundLinks++;
+                }
+            }
+            
+            const hasLogout = !!logoutButton;
+            const success = foundLinks === 4 && hasLogout;
+            
+            updateTestStatus('content', success,
+                success ? `Tous les liens OK (${foundLinks}/4 + déco) ✅` : `Liens manquants (${foundLinks}/4) ❌`
+            );
+        }
+        
+        function updateTestStatus(testId, success, message) {
+            const statusDot = document.getElementById(`${testId}-status`);
+            const resultText = document.getElementById(`${testId}-result`);
+            
+            if (statusDot && resultText) {
+                statusDot.style.background = success ? '#28a745' : '#dc3545';
+                resultText.textContent = message;
+                resultText.style.color = success ? '#28a745' : '#dc3545';
+            }
+        }
+        
+        // Auto-start du test après chargement
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                console.log('🚀 Auto-démarrage du test dans 3 secondes...');
+                setTimeout(runCompleteTest, 3000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

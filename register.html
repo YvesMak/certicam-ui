@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S'inscrire - Certicam</title>
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/register.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+</head>
+<body>
+    <div class="register-container">
+        <div class="register-left">
+            <div class="logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam">
+            </div>
+            
+            <h1 class="register-title" id="register-title">S'inscrire</h1>
+            <p class="register-subtitle">
+                Vous avez déjà un compte ? <a href="login.html" class="login-link">Se connecter</a>
+            </p>
+
+            <form id="register-form" novalidate role="form" aria-labelledby="register-title">
+                <div class="form-group">
+                    <label for="firstname" class="sr-only">Prénom</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="firstname" 
+                        name="firstname"
+                        placeholder="Prénom" 
+                        required
+                        autocomplete="off"
+                        aria-describedby="firstname-error"
+                        aria-invalid="false"
+                    >
+                    <div class="error-message" id="firstname-error" style="display: none;" role="alert" aria-live="polite"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastname" class="sr-only">Nom</label>
+                    <input 
+                        type="text" 
+                        class="form-input" 
+                        id="lastname" 
+                        name="lastname"
+                        placeholder="Nom" 
+                        required
+                        autocomplete="off"
+                        aria-describedby="lastname-error"
+                        aria-invalid="false"
+                    >
+                    <div class="error-message" id="lastname-error" style="display: none;" role="alert" aria-live="polite"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="sr-only">Adresse email</label>
+                    <input 
+                        type="email" 
+                        class="form-input" 
+                        id="email" 
+                        name="email"
+                        placeholder="Adresse email" 
+                        required
+                        autocomplete="off"
+                        aria-describedby="email-error"
+                        aria-invalid="false"
+                    >
+                    <div class="error-message" id="email-error" style="display: none;" role="alert" aria-live="polite"></div>
+                </div>
+
+                <div class="form-options">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">J'accepte les <a href="#" class="terms-link">conditions d'utilisation</a></label>
+                    </div>
+                </div>
+
+                <button type="submit" class="register-btn">
+                    Créer mon compte
+                </button>
+            </form>
+
+            <div class="demo-note">
+                <p><i class="fi fi-rr-info"></i> Après inscription, vous recevrez un email de confirmation</p>
+            </div>
+        </div>
+
+        <div class="register-right">
+            <!-- Image d'illustration en background via CSS -->
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/register.js"></script>
+</body>
+</html>

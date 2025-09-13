@@ -1,0 +1,517 @@
+// ===== NAVBAR INTEGRATION WITH AUTH SYSTEM =====
+
+class NavbarAuth {
+    constructor() {
+        this.init();
+    }
+
+    init() {
+        // Wait for DOM and session manager
+        if (typeof SessionManager === 'undefined') {
+            // Si pas de SessionManager, afficher l'état non-authentifié
+            setTimeout(() => {
+                this.setupAuthState();
+                this.setupEventListeners();
+                this.updateNavigation();
+            }, 100);
+            return;
+        }
+
+        this.setupAuthState();
+        this.setupEventListeners();
+        this.updateNavigation();
+    }
+
+    setupAuthState() {
+        const session = SessionManager?.getSession();
+        
+        if (session) {
+            this.showAuthenticatedState(session.user);
+        } else {
+            this.showUnauthenticatedState();
+        }
+    }
+
+    showAuthenticatedState(user) {
+        // Hide login button, show user profile
+        const authActions = document.getElementById('auth-actions');
+        const loginButton = document.getElementById('login-button');
+        const logoutButton = document.getElementById('logout-button');
+        
+        if (authActions) authActions.style.display = 'none';
+        if (loginButton) loginButton.style.display = 'none';
+        if (logoutButton) logoutButton.style.display = 'block';
+
+        // Update user profile info
+        this.updateUserProfile(user);
+        
+        // Show appropriate menu items based on role
+        this.updateRoleBasedNavigation(user.role);
+    }
+
+    showUnauthenticatedState() {
+        // Show login button, hide user profile details
+        const authActions = document.getElementById('auth-actions');
+        const loginButton = document.getElementById('login-button');
+        const logoutButton = document.getElementById('logout-button');
+        
+        if (authActions) authActions.style.display = 'block';
+        if (loginButton) loginButton.style.display = 'block';
+        if (logoutButton) logoutButton.style.display = 'none';
+
+        // Hide role-specific navigation but show basic user links
+        this.updateRoleBasedNavigation('user'); // Afficher comme utilisateur de base
+    }
+
+    updateUserProfile(user) {
+        // Update user name
+        document.querySelectorAll('[data-user="name"]').forEach(el => {
+            el.textContent = user.profile.firstName || user.email.split('@')[0];
+        });
+
+        // Update user email
+        document.querySelectorAll('[data-user="email"]').forEach(el => {
+            el.textContent = user.email;
+        });
+
+        // Update user role
+        document.querySelectorAll('[data-user="role"]').forEach(el => {
+            const roleNames = {
+                user: 'Utilisateur',
+                checker: 'Vérificateur',
+                agent: 'Agent',
+                admin: 'Administrateur'
+            };
+            el.textContent = roleNames[user.role] || user.role;
+        });
+
+        // Update profile avatar if available
+        if (user.profile.avatar) {
+            document.querySelectorAll('[data-user="avatar"]').forEach(el => {
+                el.src = user.profile.avatar;
+            });
+        }
+    }
+
+    updateRoleBasedNavigation(userRole) {
+        // Show/hide navigation items based on role
+        document.querySelectorAll('[data-show-for-role]').forEach(el => {
+            const allowedRoles = el.dataset.showForRole.split(',');
+            if (allowedRoles.includes(userRole) || !userRole) {
+                el.style.display = '';
+            } else {
+                el.style.display = 'none';
+            }
+        });
+
+        // Si pas d'utilisateur connecté, afficher les liens basiques pour les tests
+        if (!userRole) {
+            document.querySelectorAll('[data-show-for-role*="user"]').forEach(el => {
+                el.style.display = '';
+            });
+        }
+
+        // Set active page
+        this.setActivePage();
+    }
+
+    hideAllRoleNavigation() {
+        document.querySelectorAll('[data-show-for-role]').forEach(el => {
+            el.style.display = 'none';
+        });
+    }
+
+    setActivePage() {
+        // Remove all active classes
+        document.querySelectorAll('.mobile-menu-link').forEach(link => {
+            link.classList.remove('active');
+        });
+
+        // Add active class to current page
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        const currentLink = document.querySelector(`a[href="${currentPage}"]`);
+        if (currentLink) {
+            currentLink.classList.add('active');
+        }
+    }
+
+    setupEventListeners() {
+        // Logout button
+        const logoutButton = document.getElementById('logout-button');
+        if (logoutButton) {
+            logoutButton.addEventListener('click', this.handleLogout.bind(this));
+        }
+
+        // Listen for session changes
+        document.addEventListener('sessionChanged', (e) => {
+            const { user, action } = e.detail;
+            
+            if (action === 'login') {
+                this.showAuthenticatedState(user);
+            } else if (action === 'logout') {
+                this.showUnauthenticatedState();
+            }
+        });
+
+        // Listen for session expiration
+        document.addEventListener('sessionExpired', () => {
+            this.showUnauthenticatedState();
+        });
+
+        // Update notifications
+        this.setupNotifications();
+    }
+
+    setupNotifications() {
+        // Simulate notification updates
+        this.updateNotificationBadge();
+        
+        // Update every 30 seconds
+        setInterval(() => {
+            this.updateNotificationBadge();
+        }, 30000);
+    }
+
+    updateNotificationBadge() {
+        const session = SessionManager.getSession();
+        if (!session) return;
+
+        const notificationBadge = document.getElementById('notification-count');
+        if (!notificationBadge) return;
+
+        // Simulate notification count based on role
+        let count = 0;
+        switch (session.user.role) {
+            case 'admin':
+                count = Math.floor(Math.random() * 10) + 5; // 5-15 notifications
+                break;
+            case 'agent':
+                count = Math.floor(Math.random() * 8) + 3; // 3-11 notifications
+                break;
+            case 'checker':
+                count = Math.floor(Math.random() * 5) + 2; // 2-7 notifications
+                break;
+            case 'user':
+                count = Math.floor(Math.random() * 3); // 0-3 notifications
+                break;
+        }
+
+        if (count > 0) {
+            notificationBadge.textContent = count > 99 ? '99+' : count;
+            notificationBadge.style.display = 'inline-block';
+        } else {
+            notificationBadge.style.display = 'none';
+        }
+    }
+
+    handleLogout() {
+        // Create a more elegant logout confirmation modal
+        this.showLogoutModal();
+    }
+
+    showLogoutModal() {
+        // Create modal overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'logout-modal-overlay';
+        overlay.innerHTML = `
+            <div class="logout-modal">
+                <div class="logout-modal-header">
+                    <i class="fi fi-rr-sign-out-alt logout-icon"></i>
+                    <h3>Déconnexion</h3>
+                </div>
+                <div class="logout-modal-body">
+                    <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
+                    <p class="logout-modal-subtitle">Vous serez redirigé vers la page de connexion.</p>
+                </div>
+                <div class="logout-modal-actions">
+                    <button class="logout-cancel-btn" type="button">
+                        <i class="fi fi-rr-cross-small"></i>
+                        Annuler
+                    </button>
+                    <button class="logout-confirm-btn" type="button">
+                        <i class="fi fi-rr-sign-out-alt"></i>
+                        Se déconnecter
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Add styles if not already present
+        if (!document.getElementById('logout-modal-styles')) {
+            const styles = document.createElement('style');
+            styles.id = 'logout-modal-styles';
+            styles.textContent = `
+                .logout-modal-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(0, 0, 0, 0.5);
+                    backdrop-filter: blur(4px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    animation: fadeIn 0.2s ease;
+                }
+
+                .logout-modal {
+                    background: var(--color-white);
+                    border-radius: var(--radius-lg);
+                    box-shadow: var(--shadow-2xl);
+                    max-width: 400px;
+                    width: calc(100% - var(--spacing-lg));
+                    animation: slideUp 0.3s ease;
+                }
+
+                .logout-modal-header {
+                    padding: var(--spacing-lg);
+                    text-align: center;
+                    border-bottom: 1px solid var(--color-gray-200);
+                }
+
+                .logout-icon {
+                    font-size: 32px;
+                    color: var(--color-text-interactive);
+                    margin-bottom: var(--spacing-sm);
+                }
+
+                .logout-modal-header h3 {
+                    margin: 0;
+                    font-size: var(--font-size-heading-sm);
+                    font-weight: var(--font-weight-semibold);
+                    color: var(--color-text-primary);
+                }
+
+                .logout-modal-body {
+                    padding: var(--spacing-lg);
+                    text-align: center;
+                }
+
+                .logout-modal-body p {
+                    margin: 0;
+                    color: var(--color-text-primary);
+                    font-size: var(--font-size-body-sm);
+                }
+
+                .logout-modal-subtitle {
+                    margin-top: var(--spacing-sm) !important;
+                    color: var(--color-text-secondary) !important;
+                    font-size: var(--font-size-body-xs) !important;
+                }
+
+                .logout-modal-actions {
+                    padding: var(--spacing-lg);
+                    display: flex;
+                    gap: var(--spacing-sm);
+                    border-top: 1px solid var(--color-gray-200);
+                }
+
+                .logout-cancel-btn, .logout-confirm-btn {
+                    flex: 1;
+                    padding: var(--spacing-sm) var(--spacing-md);
+                    border-radius: var(--radius-sm);
+                    font-size: var(--font-size-body-sm);
+                    font-weight: var(--font-weight-medium);
+                    font-family: var(--font-family);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: var(--spacing-xs);
+                    min-height: 40px;
+                }
+
+                .logout-cancel-btn {
+                    background: var(--color-gray-100);
+                    color: var(--color-text-secondary);
+                    border: 1px solid var(--color-gray-200);
+                }
+
+                .logout-cancel-btn:hover {
+                    background: var(--color-gray-200);
+                    color: var(--color-text-primary);
+                }
+
+                .logout-confirm-btn {
+                    background: var(--color-button-bg-primary);
+                    color: var(--color-button-label-primary);
+                    border: none;
+                }
+
+                .logout-confirm-btn:hover {
+                    background: var(--color-gray-700);
+                    transform: translateY(-1px);
+                }
+
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+
+                @keyframes slideUp {
+                    from { 
+                        opacity: 0; 
+                        transform: translateY(20px); 
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: translateY(0); 
+                    }
+                }
+
+                @media (max-width: 480px) {
+                    .logout-modal {
+                        max-width: none;
+                        width: calc(100% - var(--spacing-md));
+                    }
+                    
+                    .logout-modal-actions {
+                        flex-direction: column;
+                    }
+                }
+            `;
+            document.head.appendChild(styles);
+        }
+
+        // Add event listeners
+        const cancelBtn = overlay.querySelector('.logout-cancel-btn');
+        const confirmBtn = overlay.querySelector('.logout-confirm-btn');
+
+        cancelBtn.addEventListener('click', () => {
+            overlay.remove();
+        });
+
+        confirmBtn.addEventListener('click', () => {
+            overlay.remove();
+            this.performLogout();
+        });
+
+        // Close on overlay click
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                overlay.remove();
+            }
+        });
+
+        // Close on Escape key
+        const handleEscape = (e) => {
+            if (e.key === 'Escape') {
+                overlay.remove();
+                document.removeEventListener('keydown', handleEscape);
+            }
+        };
+        document.addEventListener('keydown', handleEscape);
+
+        document.body.appendChild(overlay);
+    }
+
+    performLogout() {
+        try {
+            // Show loading state on logout button
+            const logoutButton = document.getElementById('logout-button');
+            if (logoutButton) {
+                const originalContent = logoutButton.innerHTML;
+                logoutButton.innerHTML = '<i class="fi fi-rr-loading"></i> <span>Déconnexion...</span>';
+                logoutButton.style.opacity = '0.7';
+                logoutButton.disabled = true;
+            }
+
+            // Perform logout
+            SessionManager.logout();
+            
+            // Redirect to login page
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 500);
+            
+        } catch (error) {
+            console.error('Erreur lors de la déconnexion:', error);
+            // Fallback redirect
+            window.location.href = 'login.html';
+        }
+    }
+
+    updateNavigation() {
+        // Ensure navigation is properly updated after DOM changes
+        setTimeout(() => {
+            this.setupAuthState();
+        }, 100);
+    }
+}
+
+// Global navigation functions
+function goToAuth() {
+    window.location.href = 'login.html';
+}
+
+function toggleMobileMenu() {
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const isVisible = overlay.style.display === 'flex';
+    
+    overlay.style.display = isVisible ? 'none' : 'flex';
+}
+
+// Mobile menu functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuClose = document.getElementById('mobile-menu-close');
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+    if (mobileMenuButton) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenuOverlay.style.display = 'flex';
+        });
+    }
+
+    if (mobileMenuClose) {
+        mobileMenuClose.addEventListener('click', function() {
+            mobileMenuOverlay.style.display = 'none';
+        });
+    }
+
+    if (mobileMenuOverlay) {
+        mobileMenuOverlay.addEventListener('click', function(e) {
+            if (e.target === mobileMenuOverlay) {
+                mobileMenuOverlay.style.display = 'none';
+            }
+        });
+    }
+
+    // Initialize navbar auth integration
+    window.navbarAuth = new NavbarAuth();
+    
+    // Add setActivePage function to global Certicam object
+    if (!window.Certicam) window.Certicam = {};
+    window.Certicam.setActivePage = function(pageName) {
+        // Remove active class from all navigation links
+        document.querySelectorAll('.nav-link, .mobile-nav-item a').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Find and activate the correct link based on page name
+        const pageMap = {
+            'index.html': ['dashboard', 'accueil', 'home'],
+            'admin.html': ['admin', 'administration'],
+            'transactions.html': ['transactions'],
+            'settings.html': ['settings', 'paramètres'],
+            'support.html': ['support', 'aide'],
+            'checker.html': ['checker', 'vérification'],
+            'agent-dashboard.html': ['agent']
+        };
+        
+        const keywords = pageMap[pageName] || [pageName.replace('.html', '')];
+        
+        keywords.forEach(keyword => {
+            const links = document.querySelectorAll(`[href*="${keyword}"], [data-page="${keyword}"]`);
+            links.forEach(link => link.classList.add('active'));
+        });
+    };
+});
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { NavbarAuth };
+}

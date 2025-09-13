@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Agent | Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/navbar.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .agent-dashboard {
+            background: var(--surface-gradient);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-card);
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .metric-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .metric-trend {
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .trend-up { color: var(--success-color); }
+        .trend-down { color: var(--error-color); }
+        .trend-neutral { color: var(--text-color-muted); }
+
+        .management-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .management-card {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .user-list, .checker-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .user-item, .checker-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s;
+        }
+
+        .user-item:hover, .checker-item:hover {
+            background: var(--hover-background);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-details h5 {
+            margin: 0 0 0.25rem 0;
+            color: var(--text-color);
+        }
+
+        .user-details p {
+            margin: 0;
+            color: var(--text-color-muted);
+            font-size: 0.9rem;
+        }
+
+        .user-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active { background: var(--success-color); color: white; }
+        .status-inactive { background: var(--text-color-muted); color: white; }
+        .status-suspended { background: var(--error-color); color: white; }
+
+        .performance-chart {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            background: var(--surface-background);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color-muted);
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .action-btn.secondary {
+            background: var(--secondary-color);
+        }
+
+        .alerts-section {
+            background: var(--card-background);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+
+        .alert-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            padding: 1rem;
+            border-left: 4px solid var(--warning-color);
+            background: var(--warning-background);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+        }
+
+        .alert-item.error {
+            border-left-color: var(--error-color);
+            background: var(--error-background);
+        }
+
+        .alert-item.info {
+            border-left-color: var(--info-color);
+            background: var(--info-background);
+        }
+
+        .alert-icon {
+            flex-shrink: 0;
+            margin-top: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .agent-dashboard {
+                padding: 1rem;
+            }
+            
+            .analytics-grid, .management-sections {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .analytics-card, .management-card {
+                padding: 1.5rem;
+            }
+
+            .quick-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navbar-container"></div>
+
+    <div class="agent-dashboard">
+        <div class="container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <h1>Tableau de bord - Agent</h1>
+                <p>Vue d'ensemble de la plateforme et gestion des opérations</p>
+            </div>
+
+            <!-- Analytics Grid -->
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3>Utilisateurs actifs</h3>
+                    <div class="metric-row">
+                        <span class="metric-label">Total</span>
+                        <div>
+                            <span class="metric-value" id="total-users">1,247</span>
+                            <span class="metric-trend trend-up">↗ +5.2%</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Aujourd'hui</span>
+                        <div>
+                            <span class="metric-value" id="active-today">342</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Nouveaux (7j)</span>
+                        <div>
+                            <span class="metric-value" id="new-users">89</span>
+                            <span class="metric-trend trend-up">↗ +12%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Vérifications</h3>
+                    <div class="metric-row">
+                        <span class="metric-label">En attente</span>
+                        <div>
+                            <span class="metric-value" id="pending-verifications">127</span>
+                            <span class="metric-trend trend-down">↘ -8%</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Complétées</span>
+                        <div>
+                            <span class="metric-value" id="completed-today">89</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Taux d'approbation</span>
+                        <div>
+                            <span class="metric-value" id="approval-rate">92.4%</span>
+                            <span class="metric-trend trend-up">↗ +2.1%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Revenus</h3>
+                    <div class="metric-row">
+                        <span class="metric-label">Aujourd'hui</span>
+                        <div>
+                            <span class="metric-value" id="revenue-today">2,847€</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Ce mois</span>
+                        <div>
+                            <span class="metric-value" id="revenue-month">45,230€</span>
+                            <span class="metric-trend trend-up">↗ +15.3%</span>
+                        </div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Moyenne/utilisateur</span>
+                        <div>
+                            <span class="metric-value" id="avg-revenue">36.30€</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            <div class="alerts-section">
+                <h3>Alertes système</h3>
+                <div id="alerts-container">
+                    <!-- Alerts will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Performance Chart -->
+            <div class="performance-chart">
+                <h3>Performance des vérifications (7 derniers jours)</h3>
+                <div class="chart-placeholder">
+                    <p>Graphique de performance - Intégration Chart.js recommandée</p>
+                </div>
+            </div>
+
+            <!-- Management Sections -->
+            <div class="management-sections">
+                <!-- User Management -->
+                <div class="management-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3>Gestion des utilisateurs</h3>
+                        <button class="btn btn-sm btn-primary" onclick="openUserManagement()">
+                            <i class="fas fa-plus"></i> Ajouter
+                        </button>
+                    </div>
+                    <div class="user-list" id="user-list">
+                        <!-- Users will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Checker Management -->
+                <div class="management-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                        <h3>Vérificateurs</h3>
+                        <button class="btn btn-sm btn-primary" onclick="manageCheckers()">
+                            <i class="fas fa-cog"></i> Gérer
+                        </button>
+                    </div>
+                    <div class="checker-list" id="checker-list">
+                        <!-- Checkers will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="generateReport()">
+                    <i class="fas fa-chart-line"></i> Générer rapport
+                </button>
+                <button class="action-btn secondary" onclick="manageSettings()">
+                    <i class="fas fa-cog"></i> Paramètres système
+                </button>
+                <button class="action-btn secondary" onclick="viewLogs()">
+                    <i class="fas fa-file-alt"></i> Journaux système
+                </button>
+                <button class="action-btn secondary" onclick="backupData()">
+                    <i class="fas fa-download"></i> Sauvegarde
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="components/navbar-loader.js"></script>
+    <script src="js/session-manager.js"></script>
+    <script src="js/auth-guards.js"></script>
+    <script>
+        // Agent Dashboard functionality
+        class AgentDashboard {
+            constructor() {
+                this.users = [];
+                this.checkers = [];
+                this.alerts = [];
+                this.init();
+            }
+
+            init() {
+                // Require agent role
+                AuthGuard.requireRole('agent');
+                
+                this.loadData();
+                this.loadUsers();
+                this.loadCheckers();
+                this.loadAlerts();
+                this.startRealTimeUpdates();
+            }
+
+            loadData() {
+                // Simulate real-time data updates
+                this.updateMetrics();
+            }
+
+            updateMetrics() {
+                // Simulate API calls for metrics
+                const metrics = {
+                    totalUsers: 1247 + Math.floor(Math.random() * 10),
+                    activeToday: 342 + Math.floor(Math.random() * 20),
+                    newUsers: 89 + Math.floor(Math.random() * 5),
+                    pendingVerifications: 127 - Math.floor(Math.random() * 10),
+                    completedToday: 89 + Math.floor(Math.random() * 15),
+                    approvalRate: (92.4 + Math.random() * 2).toFixed(1),
+                    revenueToday: (2847 + Math.random() * 500).toFixed(0),
+                    revenueMonth: (45230 + Math.random() * 1000).toFixed(0),
+                    avgRevenue: (36.30 + Math.random() * 5).toFixed(2)
+                };
+
+                // Update DOM
+                Object.keys(metrics).forEach(key => {
+                    const element = document.getElementById(key.replace(/([A-Z])/g, '-$1').toLowerCase());
+                    if (element) {
+                        if (key.includes('revenue') || key.includes('avg')) {
+                            element.textContent = metrics[key] + (key.includes('avg') ? '€' : '€');
+                        } else if (key.includes('rate')) {
+                            element.textContent = metrics[key] + '%';
+                        } else {
+                            element.textContent = metrics[key];
+                        }
+                    }
+                });
+            }
+
+            loadUsers() {
+                // Simulate user data
+                this.users = [
+                    {
+                        id: 'user_001',
+                        name: 'Marie Dubois',
+                        email: 'marie.dubois@email.com',
+                        status: 'active',
+                        lastActive: '2024-01-15T11:30:00Z',
+                        verifications: 12
+                    },
+                    {
+                        id: 'user_002',
+                        name: 'Jean Martin',
+                        email: 'jean.martin@email.com',
+                        status: 'active',
+                        lastActive: '2024-01-15T10:15:00Z',
+                        verifications: 8
+                    },
+                    {
+                        id: 'user_003',
+                        name: 'Sophie Lambert',
+                        email: 'sophie.lambert@email.com',
+                        status: 'inactive',
+                        lastActive: '2024-01-14T16:45:00Z',
+                        verifications: 3
+                    },
+                    {
+                        id: 'user_004',
+                        name: 'Pierre Durand',
+                        email: 'pierre.durand@email.com',
+                        status: 'suspended',
+                        lastActive: '2024-01-13T14:20:00Z',
+                        verifications: 0
+                    }
+                ];
+
+                this.renderUsers();
+            }
+
+            loadCheckers() {
+                // Simulate checker data
+                this.checkers = [
+                    {
+                        id: 'checker_001',
+                        name: 'Alice Robert',
+                        email: 'alice.robert@certicam.com',
+                        status: 'active',
+                        verificationsToday: 15,
+                        approvalRate: 94.2
+                    },
+                    {
+                        id: 'checker_002',
+                        name: 'Bob Moreau',
+                        email: 'bob.moreau@certicam.com',
+                        status: 'active',
+                        verificationsToday: 12,
+                        approvalRate: 91.8
+                    },
+                    {
+                        id: 'checker_003',
+                        name: 'Claire Petit',
+                        email: 'claire.petit@certicam.com',
+                        status: 'inactive',
+                        verificationsToday: 0,
+                        approvalRate: 96.1
+                    }
+                ];
+
+                this.renderCheckers();
+            }
+
+            loadAlerts() {
+                // Simulate alerts
+                this.alerts = [
+                    {
+                        id: 'alert_001',
+                        type: 'error',
+                        title: 'Erreur de connexion base de données',
+                        message: 'Connexion intermittente détectée à 11:45',
+                        time: '2024-01-15T11:45:00Z'
+                    },
+                    {
+                        id: 'alert_002',
+                        type: 'warning',
+                        title: 'File de vérification surchargée',
+                        message: 'Plus de 150 documents en attente',
+                        time: '2024-01-15T11:30:00Z'
+                    },
+                    {
+                        id: 'alert_003',
+                        type: 'info',
+                        title: 'Nouveau vérificateur connecté',
+                        message: 'Alice Robert a commencé sa session',
+                        time: '2024-01-15T11:00:00Z'
+                    }
+                ];
+
+                this.renderAlerts();
+            }
+
+            renderUsers() {
+                const container = document.getElementById('user-list');
+                container.innerHTML = '';
+
+                this.users.forEach(user => {
+                    const userItem = this.createUserItem(user);
+                    container.appendChild(userItem);
+                });
+            }
+
+            createUserItem(user) {
+                const div = document.createElement('div');
+                div.className = 'user-item';
+                
+                const initials = user.name.split(' ').map(n => n[0]).join('');
+                const lastActive = this.getTimeAgo(user.lastActive);
+
+                div.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${initials}</div>
+                        <div class="user-details">
+                            <h5>${user.name}</h5>
+                            <p>${user.email} • ${user.verifications} vérifications</p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="user-status status-${user.status}">
+                            ${user.status === 'active' ? 'Actif' : 
+                              user.status === 'inactive' ? 'Inactif' : 'Suspendu'}
+                        </span>
+                    </div>
+                `;
+
+                div.addEventListener('click', () => this.viewUserDetails(user.id));
+                return div;
+            }
+
+            renderCheckers() {
+                const container = document.getElementById('checker-list');
+                container.innerHTML = '';
+
+                this.checkers.forEach(checker => {
+                    const checkerItem = this.createCheckerItem(checker);
+                    container.appendChild(checkerItem);
+                });
+            }
+
+            createCheckerItem(checker) {
+                const div = document.createElement('div');
+                div.className = 'checker-item';
+                
+                const initials = checker.name.split(' ').map(n => n[0]).join('');
+
+                div.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-avatar">${initials}</div>
+                        <div class="user-details">
+                            <h5>${checker.name}</h5>
+                            <p>${checker.verificationsToday} vérifications • ${checker.approvalRate}% approbation</p>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="user-status status-${checker.status}">
+                            ${checker.status === 'active' ? 'En ligne' : 'Hors ligne'}
+                        </span>
+                    </div>
+                `;
+
+                div.addEventListener('click', () => this.viewCheckerDetails(checker.id));
+                return div;
+            }
+
+            renderAlerts() {
+                const container = document.getElementById('alerts-container');
+                container.innerHTML = '';
+
+                if (this.alerts.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-color-muted); text-align: center;">Aucune alerte active</p>';
+                    return;
+                }
+
+                this.alerts.forEach(alert => {
+                    const alertItem = this.createAlertItem(alert);
+                    container.appendChild(alertItem);
+                });
+            }
+
+            createAlertItem(alert) {
+                const div = document.createElement('div');
+                div.className = `alert-item ${alert.type}`;
+                
+                const icons = {
+                    error: '⚠️',
+                    warning: '⚡',
+                    info: 'ℹ️'
+                };
+
+                div.innerHTML = `
+                    <div class="alert-icon">${icons[alert.type]}</div>
+                    <div>
+                        <h5>${alert.title}</h5>
+                        <p>${alert.message}</p>
+                        <small style="color: var(--text-color-muted);">${this.getTimeAgo(alert.time)}</small>
+                    </div>
+                `;
+
+                return div;
+            }
+
+            viewUserDetails(userId) {
+                // Simulate opening user details modal
+                SessionManager.showNotification('Ouverture des détails utilisateur...', 'info');
+            }
+
+            viewCheckerDetails(checkerId) {
+                // Simulate opening checker details
+                SessionManager.showNotification('Ouverture des détails vérificateur...', 'info');
+            }
+
+            getTimeAgo(dateString) {
+                const diff = Date.now() - new Date(dateString).getTime();
+                const minutes = Math.floor(diff / 60000);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                
+                if (days > 0) return `il y a ${days}j`;
+                if (hours > 0) return `il y a ${hours}h`;
+                return `il y a ${minutes}min`;
+            }
+
+            startRealTimeUpdates() {
+                // Update metrics every 30 seconds
+                setInterval(() => {
+                    this.updateMetrics();
+                }, 30000);
+
+                // Reload data every 5 minutes
+                setInterval(() => {
+                    this.loadUsers();
+                    this.loadCheckers();
+                    this.loadAlerts();
+                }, 300000);
+            }
+        }
+
+        // Global functions
+        function openUserManagement() {
+            window.location.href = 'admin-users.html';
+        }
+
+        function manageCheckers() {
+            window.location.href = 'admin-checkers.html';
+        }
+
+        function generateReport() {
+            SessionManager.showNotification('Génération du rapport en cours...', 'info');
+        }
+
+        function manageSettings() {
+            window.location.href = 'admin-settings.html';
+        }
+
+        function viewLogs() {
+            SessionManager.showNotification('Ouverture des journaux système...', 'info');
+        }
+
+        function backupData() {
+            if (confirm('Lancer une sauvegarde complète des données ?')) {
+                SessionManager.showNotification('Sauvegarde en cours...', 'info');
+                // Simulate backup process
+                setTimeout(() => {
+                    SessionManager.showNotification('Sauvegarde terminée avec succès', 'success');
+                }, 3000);
+            }
+        }
+
+        // Initialize dashboard
+        let agentDashboard;
+        document.addEventListener('DOMContentLoaded', () => {
+            agentDashboard = new AgentDashboard();
+        });
+    </script>
+</body>
+</html>

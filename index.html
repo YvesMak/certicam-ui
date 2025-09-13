@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certicam - Gestion de Documents</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+</head>
+<body>
+    <main>
+        <div class="welcome-section">
+            <h1>Bonjour Coco, <span class="subtitle">consultez vos documents !</span></h1>
+        </div>
+
+        <div class="search-section">
+            <div class="search-bar">
+                <div class="search-input-container">
+                    <input type="text" id="search-input" placeholder="Rechercher par institution émettrice, date de validité, nom du document">
+                    <button class="search-clear" id="search-clear" style="display: none;">
+                        <i class="fi fi-rr-cross"></i>
+                    </button>
+                </div>
+                <button class="filter-button" id="filter-toggle">
+                    <i class="fi fi-br-bars-filter"></i>
+                    Filtres
+                </button>
+            </div>
+            
+            <!-- Panel de filtres -->
+            <div class="filter-panel" id="filter-panel">
+                <div class="filter-panel-header">
+                    <h3>Filtres</h3>
+                    <button class="filter-close" id="filter-close">&times;</button>
+                </div>
+                
+                <div class="filter-panel-content">
+                    <!-- Filtre par statut -->
+                    <div class="filter-group">
+                        <label class="filter-label">Statut du document</label>
+                        <div class="filter-chips">
+                            <label class="filter-chip">
+                                <input type="radio" name="status-filter" value="all" checked>
+                                <span class="chip-text">Tous</span>
+                            </label>
+                            <label class="filter-chip">
+                                <input type="radio" name="status-filter" value="valid">
+                                <span class="chip-text">Validé</span>
+                            </label>
+                            <label class="filter-chip">
+                                <input type="radio" name="status-filter" value="not-valid">
+                                <span class="chip-text">Pas validé</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtre par type de document -->
+                    <div class="filter-group">
+                        <label class="filter-label">Type de document</label>
+                        <div class="filter-chips">
+                            <label class="filter-chip">
+                                <input type="radio" name="type-filter" value="all" checked>
+                                <span class="chip-text">Tous</span>
+                            </label>
+                            <label class="filter-chip">
+                                <input type="radio" name="type-filter" value="diplome">
+                                <span class="chip-text">Diplôme</span>
+                            </label>
+                            <label class="filter-chip">
+                                <input type="radio" name="type-filter" value="certificat">
+                                <span class="chip-text">Certificat</span>
+                            </label>
+                            <label class="filter-chip">
+                                <input type="radio" name="type-filter" value="banque">
+                                <span class="chip-text">Banque</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Filtre par date -->
+                    <div class="filter-group">
+                        <label class="filter-label">Période de validité</label>
+                        <div class="date-range">
+                            <div class="date-range-input" id="date-range-input">
+                                <span class="date-range-text">Sélectionner une période</span>
+                                <i class="fi fi-br-calendar date-range-icon"></i>
+                            </div>
+                            <div id="advanced-date-picker" class="advanced-date-picker" style="display: none;">
+                                <div class="date-picker-header">
+                                    <span class="date-picker-title">Période de validité</span>
+                                    <button class="date-picker-close" type="button">
+                                        <i class="fi fi-br-cross-small"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Onglets de navigation -->
+                                <div class="date-picker-tabs">
+                                    <button class="tab-button active" data-tab="dates" type="button">Dates</button>
+                                    <button class="tab-button" data-tab="months" type="button">Mois</button>
+                                    <button class="tab-button" data-tab="flexible" type="button">Flexible</button>
+                                </div>
+                                
+                                <!-- Contenu Dates -->
+                                <div class="tab-content active" id="dates-tab">
+                                    <div class="calendar-navigation">
+                                        <button class="nav-button" id="prev-month" type="button">
+                                            <i class="fi fi-br-angle-left"></i>
+                                        </button>
+                                        <div class="month-year">
+                                            <span id="current-month">Septembre 2025</span>
+                                        </div>
+                                        <button class="nav-button" id="next-month" type="button">
+                                            <i class="fi fi-br-angle-right"></i>
+                                        </button>
+                                    </div>
+                                    
+                                    <div class="calendar-container">
+                                        <div class="calendar-grid">
+                                            <div class="calendar-header">
+                                                <div class="day-header">L</div>
+                                                <div class="day-header">M</div>
+                                                <div class="day-header">M</div>
+                                                <div class="day-header">J</div>
+                                                <div class="day-header">V</div>
+                                                <div class="day-header">S</div>
+                                                <div class="day-header">D</div>
+                                            </div>
+                                            <div class="calendar-body" id="calendar-body">
+                                                <!-- Les jours seront générés par JavaScript -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="quick-options">
+                                        <button class="quick-option active" data-range="exact" type="button">Exact</button>
+                                        <button class="quick-option" data-range="1" type="button">±1j</button>
+                                        <button class="quick-option" data-range="2" type="button">±2j</button>
+                                        <button class="quick-option" data-range="3" type="button">±3j</button>
+                                        <button class="quick-option" data-range="7" type="button">±7j</button>
+                                        <button class="quick-option" data-range="14" type="button">±14j</button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contenu Mois -->
+                                <div class="tab-content" id="months-tab">
+                                    <div class="months-grid">
+                                        <div class="month-item" data-month="0">Jan</div>
+                                        <div class="month-item" data-month="1">Fév</div>
+                                        <div class="month-item" data-month="2">Mar</div>
+                                        <div class="month-item" data-month="3">Avr</div>
+                                        <div class="month-item" data-month="4">Mai</div>
+                                        <div class="month-item" data-month="5">Jun</div>
+                                        <div class="month-item" data-month="6">Jul</div>
+                                        <div class="month-item" data-month="7">Aoû</div>
+                                        <div class="month-item active" data-month="8">Sep</div>
+                                        <div class="month-item" data-month="9">Oct</div>
+                                        <div class="month-item" data-month="10">Nov</div>
+                                        <div class="month-item" data-month="11">Déc</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Contenu Flexible -->
+                                <div class="tab-content" id="flexible-tab">
+                                    <div class="flexible-options">
+                                        <div class="flexible-item" data-period="today">
+                                            <span>Aujourd'hui</span>
+                                        </div>
+                                        <div class="flexible-item" data-period="week">
+                                            <span>Cette semaine</span>
+                                        </div>
+                                        <div class="flexible-item" data-period="month">
+                                            <span>Ce mois-ci</span>
+                                        </div>
+                                        <div class="flexible-item" data-period="next-month">
+                                            <span>Mois prochain</span>
+                                        </div>
+                                        <div class="flexible-item" data-period="next-3months">
+                                            <span>3 prochains mois</span>
+                                        </div>
+                                        <div class="flexible-item" data-period="next-6months">
+                                            <span>6 prochains mois</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="date-picker-actions">
+                                    <button type="button" class="btn-secondary date-picker-clear">
+                                        <i class="fi fi-br-cross-small"></i>
+                                        <span>Effacer</span>
+                                    </button>
+                                    <button type="button" class="btn-primary date-picker-apply">
+                                        <i class="fi fi-br-check"></i>
+                                        <span>Appliquer</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="filter-actions">
+                        <button class="btn-secondary" id="reset-filters">Réinitialiser</button>
+                        <button class="btn-primary" id="apply-filters">Appliquer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="documents-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nom du document</th>
+                        <th>Type/Catégorie</th>
+                        <th>Institution émettrice</th>
+                        <th>Date de validité</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                        <th class="view-column"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Relevé bancaire</span>
+                                <span class="document-date">Mis en ligne le 12 Mai 2025</span>
+                            </div>
+                        </td>
+                        <td>Banque</td>
+                        <td>Banque XYZ</td>
+                        <td>12 Mai 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">CNI</span>
+                                <span class="document-date">Mis en ligne le 15 Juin 2025</span>
+                            </div>
+                        </td>
+                        <td>Identité</td>
+                        <td>DGSN</td>
+                        <td>12 Décembre 2035</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Extrait de casier judiciaire</span>
+                                <span class="document-date">Mis en ligne le 03 Avril 2025</span>
+                            </div>
+                        </td>
+                        <td>Justice</td>
+                        <td>Tribunal de Ndokoti</td>
+                        <td>12 Décembre 2025</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Attestation de travail</span>
+                                <span class="document-date">Mis en ligne le 08 Juillet 2025</span>
+                            </div>
+                        </td>
+                        <td>Emploi</td>
+                        <td>Ministère du Travail</td>
+                        <td>15 Janvier 2026</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Diplôme de licence</span>
+                                <span class="document-date">Mis en ligne le 22 Mars 2025</span>
+                            </div>
+                        </td>
+                        <td>Education</td>
+                        <td>Université de Yaoundé I</td>
+                        <td>Permanent</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Certificat médical</span>
+                                <span class="document-date">Mis en ligne le 10 Août 2025</span>
+                            </div>
+                        </td>
+                        <td>Santé</td>
+                        <td>Hôpital Central</td>
+                        <td>10 Février 2026</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Acte de naissance</span>
+                                <span class="document-date">Mis en ligne le 05 Septembre 2025</span>
+                            </div>
+                        </td>
+                        <td>État civil</td>
+                        <td>Mairie de Douala</td>
+                        <td>Permanent</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Permis de conduire</span>
+                                <span class="document-date">Mis en ligne le 18 Janvier 2025</span>
+                            </div>
+                        </td>
+                        <td>Transport</td>
+                        <td>CNTTC</td>
+                        <td>25 Décembre 2030</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <!-- Documents 9-16 -->
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Passeport biométrique</span>
+                                <span class="document-date">Mis en ligne le 14 Février 2025</span>
+                            </div>
+                        </td>
+                        <td>Identité</td>
+                        <td>DGSN</td>
+                        <td>14 Février 2035</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Bulletin de salaire</span>
+                                <span class="document-date">Mis en ligne le 01 Septembre 2025</span>
+                            </div>
+                        </td>
+                        <td>Emploi</td>
+                        <td>CNPS</td>
+                        <td>31 Décembre 2025</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Certificat de scolarité</span>
+                                <span class="document-date">Mis en ligne le 16 Octobre 2025</span>
+                            </div>
+                        </td>
+                        <td>Éducation</td>
+                        <td>Lycée de Bonapriso</td>
+                        <td>30 Juin 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Certificat de mariage</span>
+                                <span class="document-date">Mis en ligne le 25 Décembre 2024</span>
+                            </div>
+                        </td>
+                        <td>État civil</td>
+                        <td>Mairie de Bafoussam</td>
+                        <td>Permanent</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Carte professionnelle</span>
+                                <span class="document-date">Mis en ligne le 07 Avril 2025</span>
+                            </div>
+                        </td>
+                        <td>Profession</td>
+                        <td>Ordre des Médecins</td>
+                        <td>31 Décembre 2027</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Attestation d'assurance</span>
+                                <span class="document-date">Mis en ligne le 20 Mai 2025</span>
+                            </div>
+                        </td>
+                        <td>Assurance</td>
+                        <td>SAHAM Assurance</td>
+                        <td>20 Mai 2026</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Quitus fiscal</span>
+                                <span class="document-date">Mis en ligne le 11 Novembre 2025</span>
+                            </div>
+                        </td>
+                        <td>Fiscal</td>
+                        <td>DGI Cameroun</td>
+                        <td>31 Décembre 2025</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Baccalauréat</span>
+                                <span class="document-date">Mis en ligne le 29 Août 2025</span>
+                            </div>
+                        </td>
+                        <td>Éducation</td>
+                        <td>Office du Baccalauréat</td>
+                        <td>Permanent</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Relevé bancaire</span>
+                                <span class="document-date">Mis en ligne le 12 Mai 2025</span>
+                            </div>
+                        </td>
+                        <td>Banque</td>
+                        <td>Banque XYZ</td>
+                        <td>12 Mai 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Relevé bancaire</span>
+                                <span class="document-date">Mis en ligne le 12 Mai 2025</span>
+                            </div>
+                        </td>
+                        <td>Banque</td>
+                        <td>Banque XYZ</td>
+                        <td>12 Mai 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Relevé bancaire</span>
+                                <span class="document-date">Mis en ligne le 12 Mai 2025</span>
+                            </div>
+                        </td>
+                        <td>Banque</td>
+                        <td>Banque XYZ</td>
+                        <td>12 Mai 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Relevé bancaire</span>
+                                <span class="document-date">Mis en ligne le 12 Mai 2025</span>
+                            </div>
+                        </td>
+                        <td>Banque</td>
+                        <td>Banque XYZ</td>
+                        <td>12 Mai 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <!-- Documents 17-32 -->
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Carte grise</span>
+                                <span class="document-date">Mis en ligne le 03 Juin 2025</span>
+                            </div>
+                        </td>
+                        <td>Transport</td>
+                        <td>Ministère des Transports</td>
+                        <td>15 Juin 2030</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Certificat de vaccination</span>
+                                <span class="document-date">Mis en ligne le 12 Juillet 2025</span>
+                            </div>
+                        </td>
+                        <td>Santé</td>
+                        <td>Ministère de la Santé</td>
+                        <td>12 Juillet 2030</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Autorisation parentale</span>
+                                <span class="document-date">Mis en ligne le 28 Mars 2025</span>
+                            </div>
+                        </td>
+                        <td>Administration</td>
+                        <td>Préfecture de Douala</td>
+                        <td>31 Mars 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Relevé de notes Master</span>
+                                <span class="document-date">Mis en ligne le 09 Octobre 2025</span>
+                            </div>
+                        </td>
+                        <td>Éducation</td>
+                        <td>Université de Dschang</td>
+                        <td>Permanent</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Certificat de résidence</span>
+                                <span class="document-date">Mis en ligne le 17 Février 2025</span>
+                            </div>
+                        </td>
+                        <td>Administration</td>
+                        <td>Mairie de Garoua</td>
+                        <td>17 Février 2026</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Contrat de travail</span>
+                                <span class="document-date">Mis en ligne le 04 Janvier 2025</span>
+                            </div>
+                        </td>
+                        <td>Emploi</td>
+                        <td>Inspection du Travail</td>
+                        <td>04 Janvier 2027</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Certificat de nationalité</span>
+                                <span class="document-date">Mis en ligne le 21 Septembre 2025</span>
+                            </div>
+                        </td>
+                        <td>Nationalité</td>
+                        <td>Tribunal de Première Instance</td>
+                        <td>Permanent</td>
+                        <td><span class="status not-valid">Pas validé</span></td>
+                        <td class="actions">
+                            <button class="action-button pay">Payer</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="document-info">
+                                <span class="document-name">Attestation de stage</span>
+                                <span class="document-date">Mis en ligne le 13 Août 2025</span>
+                            </div>
+                        </td>
+                        <td>Formation</td>
+                        <td>ENEO Cameroun</td>
+                        <td>31 Décembre 2025</td>
+                        <td><span class="status valid">Validé</span></td>
+                        <td class="actions">
+                            <button class="action-button download">Télécharger</button>
+                        </td>
+                        <td class="view-column">
+                            <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                        </td>
+                    </tr>
+                    <!-- Documents 25-60 -->
+                    <tr><td><div class="document-info"><span class="document-name">Titre foncier</span><span class="document-date">Mis en ligne le 05 Mai 2025</span></div></td><td>Foncier</td><td>Ministère des Domaines</td><td>Permanent</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de capacité</span><span class="document-date">Mis en ligne le 19 Juin 2025</span></div></td><td>Professionnel</td><td>Ministère du Commerce</td><td>19 Juin 2028</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Autorisation de sortie</span><span class="document-date">Mis en ligne le 02 Juillet 2025</span></div></td><td>Administration</td><td>Préfecture de Yaoundé</td><td>02 Janvier 2026</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de célibat</span><span class="document-date">Mis en ligne le 27 Août 2025</span></div></td><td>État civil</td><td>Mairie de Bertoua</td><td>27 Février 2026</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Attestation CNPS</span><span class="document-date">Mis en ligne le 15 Septembre 2025</span></div></td><td>Emploi</td><td>CNPS Cameroun</td><td>31 Décembre 2025</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Carte de séjour</span><span class="document-date">Mis en ligne le 08 Octobre 2025</span></div></td><td>Immigration</td><td>DGSN</td><td>08 Octobre 2027</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat médical d'aptitude</span><span class="document-date">Mis en ligne le 23 Novembre 2025</span></div></td><td>Santé</td><td>Hôpital Laquintinie</td><td>23 Mai 2026</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Attestation de formation</span><span class="document-date">Mis en ligne le 06 Décembre 2025</span></div></td><td>Formation</td><td>IRIC Yaoundé</td><td>Permanent</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de vie</span><span class="document-date">Mis en ligne le 14 Janvier 2025</span></div></td><td>Administration</td><td>Sous-préfecture Limbé</td><td>14 Juillet 2025</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Licence de commerce</span><span class="document-date">Mis en ligne le 30 Mars 2025</span></div></td><td>Commerce</td><td>Ministère du Commerce</td><td>30 Mars 2027</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de non-gage</span><span class="document-date">Mis en ligne le 18 Avril 2025</span></div></td><td>Transport</td><td>Crédit Foncier</td><td>18 Octobre 2025</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Attestation fiscale</span><span class="document-date">Mis en ligne le 07 Mai 2025</span></div></td><td>Fiscal</td><td>Centre des Impôts</td><td>31 Décembre 2025</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Carte d'étudiant</span><span class="document-date">Mis en ligne le 22 Septembre 2025</span></div></td><td>Éducation</td><td>Université de Ngaoundéré</td><td>30 Juin 2026</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de conformité</span><span class="document-date">Mis en ligne le 11 Août 2025</span></div></td><td>Technique</td><td>Bureau de Normalisation</td><td>11 Août 2027</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Agrément transport</span><span class="document-date">Mis en ligne le 26 Octobre 2025</span></div></td><td>Transport</td><td>Ministère des Transports</td><td>26 Octobre 2028</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de stage professionnel</span><span class="document-date">Mis en ligne le 09 Décembre 2025</span></div></td><td>Formation</td><td>Chambre de Commerce</td><td>Permanent</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Autorisation d'exploitation</span><span class="document-date">Mis en ligne le 16 Janvier 2025</span></div></td><td>Commerce</td><td>Préfecture de Bamenda</td><td>16 Janvier 2027</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de baptême</span><span class="document-date">Mis en ligne le 03 Février 2025</span></div></td><td>Religion</td><td>Paroisse Mvog-Mbi</td><td>Permanent</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Licence d'importation</span><span class="document-date">Mis en ligne le 20 Avril 2025</span></div></td><td>Douane</td><td>Douane Camerounaise</td><td>20 Avril 2026</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Attestation de fin de service</span><span class="document-date">Mis en ligne le 08 Juin 2025</span></div></td><td>Emploi</td><td>Fonction Publique</td><td>Permanent</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat d'origine</span><span class="document-date">Mis en ligne le 25 Juillet 2025</span></div></td><td>Commerce</td><td>Chambre de Commerce</td><td>25 Janvier 2026</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Carte de santé</span><span class="document-date">Mis en ligne le 12 Septembre 2025</span></div></td><td>Santé</td><td>District de Santé</td><td>12 Septembre 2027</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Autorisation de construction</span><span class="document-date">Mis en ligne le 29 Octobre 2025</span></div></td><td>Urbanisme</td><td>Délégation d'Urbanisme</td><td>29 Octobre 2027</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de grossesse</span><span class="document-date">Mis en ligne le 17 Novembre 2025</span></div></td><td>Santé</td><td>Hôpital Gynéco-Obstétrique</td><td>17 Mai 2026</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Licence de pêche</span><span class="document-date">Mis en ligne le 04 Décembre 2025</span></div></td><td>Pêche</td><td>Ministère de la Pêche</td><td>04 Décembre 2027</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de décès</span><span class="document-date">Mis en ligne le 21 Janvier 2025</span></div></td><td>État civil</td><td>Mairie de Maroua</td><td>Permanent</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Autorisation forestière</span><span class="document-date">Mis en ligne le 13 Mars 2025</span></div></td><td>Foresterie</td><td>Ministère des Forêts</td><td>13 Mars 2028</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de conformité sanitaire</span><span class="document-date">Mis en ligne le 01 Mai 2025</span></div></td><td>Santé</td><td>Délégation de Santé</td><td>01 Mai 2026</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Carte de réfugié</span><span class="document-date">Mis en ligne le 18 Juin 2025</span></div></td><td>Immigration</td><td>HCR Cameroun</td><td>18 Juin 2027</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Licence de radiodiffusion</span><span class="document-date">Mis en ligne le 06 Août 2025</span></div></td><td>Communication</td><td>Ministère de la Communication</td><td>06 Août 2028</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de fin d'études</span><span class="document-date">Mis en ligne le 24 Septembre 2025</span></div></td><td>Éducation</td><td>École Normale Supérieure</td><td>Permanent</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Autorisation minière</span><span class="document-date">Mis en ligne le 12 Octobre 2025</span></div></td><td>Mines</td><td>Ministère des Mines</td><td>12 Octobre 2030</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de récépissé</span><span class="document-date">Mis en ligne le 28 Novembre 2025</span></div></td><td>Administration</td><td>Préfecture de Ebolowa</td><td>28 Mai 2026</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Licence touristique</span><span class="document-date">Mis en ligne le 15 Décembre 2025</span></div></td><td>Tourisme</td><td>Ministère du Tourisme</td><td>15 Décembre 2027</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Certificat de bonne conduite</span><span class="document-date">Mis en ligne le 02 Janvier 2025</span></div></td><td>Justice</td><td>Commissariat Central</td><td>02 Juillet 2025</td><td><span class="status not-valid">Pas validé</span></td><td class="actions"><button class="action-button pay">Payer</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                    <tr><td><div class="document-info"><span class="document-name">Autorisation d'élevage</span><span class="document-date">Mis en ligne le 19 Février 2025</span></div></td><td>Élevage</td><td>Ministère de l'Élevage</td><td>19 Février 2028</td><td><span class="status valid">Validé</span></td><td class="actions"><button class="action-button download">Télécharger</button></td><td class="view-column"><button class="action-button view"><i class="fi fi-rr-eye"></i></button></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination">
+            <div class="rows-per-page">
+                <div class="selector-wrapper">
+                    <span class="current-selection">8 documents</span>
+                    <button class="rows-selector">
+                        <i class="fi fi-rr-angle-small-down"></i>
+                    </button>
+                    <div class="selector-dropdown">
+                        <div class="dropdown-item" data-value="8">8 documents</div>
+                        <div class="dropdown-item" data-value="16">16 documents</div>
+                        <div class="dropdown-item" data-value="24">24 documents</div>
+                        <div class="dropdown-item" data-value="60">60 documents</div>
+                    </div>
+                </div>
+            </div>
+            <div class="pagination-controls">
+                <div class="page-numbers">
+                    <span class="active">1</span>
+                    <span>2</span>
+                    <span>3</span>
+                    <span>4</span>
+                    <span>5</span>
+                    <span>6</span>
+                    <span>7</span>
+                    <span>8</span>
+                </div>
+            </div>
+            <div class="pagination-buttons">
+                <button class="prev-button">
+                    <i class="fi fi-rr-angle-small-left"></i>
+                    Précédent
+                </button>
+                <button class="next-button">
+                    Suivant
+                    <i class="fi fi-rr-angle-small-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal d'aperçu du document -->
+    <div id="document-preview-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Aperçu du document</h3>
+                <button class="modal-close"><i class="fi fi-br-cross-small"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="document-preview">
+                    <div class="document-watermark">
+                        <img src="img/certicam-main-logo.png" alt="Certicam" class="watermark-logo">
+                    </div>
+                    <div class="document-content">
+                        <div class="document-header">
+                            <h2 id="preview-document-name">Nom du document</h2>
+                            <div class="document-meta">
+                                <span class="document-type" id="preview-document-type">Type</span>
+                                <span class="document-status" id="preview-document-status">Statut</span>
+                            </div>
+                        </div>
+                        <div class="document-details">
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fi fi-rr-building"></i>
+                                    Institution émettrice
+                                </span>
+                                <span class="detail-value" id="preview-institution">Institution</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fi fi-rr-calendar"></i>
+                                    Date de validité
+                                </span>
+                                <span class="detail-value" id="preview-validity">Date</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fi fi-rr-cloud-upload"></i>
+                                    Date de mise en ligne
+                                </span>
+                                <span class="detail-value" id="preview-upload-date">Date</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">
+                                    <i class="fi fi-rr-coin"></i>
+                                    Prix de certification
+                                </span>
+                                <span class="detail-value" id="preview-price">Prix</span>
+                            </div>
+                        </div>
+                        <div class="document-preview-image">
+                            <div class="preview-placeholder">
+                                <i class="fi fi-rr-document"></i>
+                                <p id="preview-document-text">Aperçu du document</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-footer-left">
+                    <button class="btn-secondary" id="close-preview">
+                        <i class="fi fi-br-cross-small"></i>
+                        Fermer
+                    </button>
+                </div>
+                <div class="modal-footer-right">
+                    <button class="btn-primary" id="pay-from-preview" style="display: none;">
+                        <i class="fi fi-rr-credit-card"></i>
+                        Payer maintenant
+                    </button>
+                    <button class="btn-download" id="download-from-preview" style="display: none;">
+                        <i class="fi fi-rr-download"></i>
+                        Télécharger
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts du framework modulaire -->
+    <script src="js/certicam-init.js"></script>
+    <script>
+        // Marquer la page d'accueil comme active quand la navbar est chargée
+        document.addEventListener('navbarLoaded', () => {
+            if (window.Certicam) {
+                window.Certicam.setActivePage('index.html');
+            }
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+</html>

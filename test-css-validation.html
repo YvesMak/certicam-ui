@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Validation CSS</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
+</head>
+<body>
+    <h1 style="margin: 20px;">Test de validation CSS pour la navbar</h1>
+    
+    <p style="margin: 20px;">Cette page teste si les styles CSS fonctionnent correctement pour la navbar.</p>
+    
+    <button onclick="loadAndInjectNavbar()" style="margin: 20px; padding: 10px 20px; background: #007ACC; color: white; border: none; border-radius: 4px; cursor: pointer;">
+        Charger et injecter la navbar
+    </button>
+
+    <script>
+        async function loadAndInjectNavbar() {
+            try {
+                console.log('🧪 Test de chargement et injection navbar...');
+                
+                // 1. Charger navbar.html
+                const response = await fetch('components/navbar.html');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const html = await response.text();
+                console.log('📡 HTML chargé:', html.length, 'caractères');
+                
+                // 2. Créer container temporaire
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                
+                // 3. Injecter au début du body
+                const firstChild = document.body.firstChild;
+                const elementsToInsert = Array.from(tempDiv.children);
+                
+                console.log('📦 Éléments à injecter:', elementsToInsert.length);
+                
+                elementsToInsert.forEach((element, index) => {
+                    console.log(`📍 Injection élément ${index + 1}:`, element.tagName, element.className);
+                    document.body.insertBefore(element, firstChild);
+                });
+                
+                console.log('✅ Injection terminée');
+                console.log('🔍 Header présent:', !!document.querySelector('header'));
+                console.log('🔍 Header visible:', getComputedStyle(document.querySelector('header')).display !== 'none');
+                console.log('🔍 Menu overlay présent:', !!document.querySelector('.mobile-menu-overlay'));
+                
+                // Test du menu
+                const menuButton = document.getElementById('mobile-menu-button');
+                if (menuButton) {
+                    console.log('🎯 Bouton menu trouvé, ajout event listener...');
+                    menuButton.addEventListener('click', () => {
+                        console.log('🔘 Clic sur bouton menu');
+                        const overlay = document.getElementById('mobile-menu-overlay');
+                        if (overlay) {
+                            overlay.classList.toggle('active');
+                            console.log('🎭 Menu toggled, active:', overlay.classList.contains('active'));
+                        }
+                    });
+                }
+                
+            } catch (error) {
+                console.error('❌ Erreur:', error);
+                alert('Erreur: ' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>

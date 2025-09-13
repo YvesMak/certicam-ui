@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Continuer votre inscription - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #f5f7fa;
+            padding: 40px 20px;
+        }
+
+        .complete-registration-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 40px 20px;
+            background: white;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .form-container {
+            padding: 20px 40px 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .form-label {
+            display: block;
+            color: #1a1a1a;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1.5px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: #f9fafb;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #00D4AA;
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+            background: white;
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-input:disabled {
+            background: #f3f4f6;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #9ca3af;
+            font-size: 18px;
+        }
+
+        .password-requirements {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .requirement {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            color: #666;
+        }
+
+        .requirement:last-child {
+            margin-bottom: 0;
+        }
+
+        .requirement.valid {
+            color: #10b981;
+        }
+
+        .requirement.invalid {
+            color: #ef4444;
+        }
+
+        .requirement-icon {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        .terms-section {
+            margin: 20px 0;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #00D4AA;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .checkbox-container label {
+            color: #374151;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .terms-link {
+            color: #00D4AA;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 16px;
+            background: #2d3436;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .continue-btn:hover {
+            background: #636e72;
+            transform: translateY(-1px);
+        }
+
+        .continue-btn:disabled {
+            background: #e1e5e9;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .continue-btn.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .continue-btn.loading::after {
+            content: "";
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .complete-registration-container {
+                margin: 0;
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .header, .form-container {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="complete-registration-container">
+        <div class="header">
+            <div class="logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam">
+            </div>
+            <h1 class="header-title">Continuez votre inscription</h1>
+            <p class="header-subtitle">Veuillez remplir les informations suivantes pour compléter votre inscription.</p>
+        </div>
+
+        <div class="form-container">
+            <form id="complete-registration-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstname" class="form-label">Prénom</label>
+                        <input type="text" class="form-input" id="firstname" name="firstname" disabled>
+                        <div class="error-message" id="firstname-error" style="display: none;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname" class="form-label">Nom</label>
+                        <input type="text" class="form-input" id="lastname" name="lastname" disabled>
+                        <div class="error-message" id="lastname-error" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone" class="form-label">Numéro de téléphone</label>
+                    <input type="tel" class="form-input" id="phone" name="phone" placeholder="P01222567890987" value="P01222567890987">
+                    <div class="error-message" id="phone-error" style="display: none;"></div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="address" class="form-label">Adresse</label>
+                        <input type="text" class="form-input" id="address" name="address" placeholder="Bastos, Rue T.710, Yaoundé, ..." value="Bastos, Rue T.710, Yaoundé, ...">
+                        <div class="error-message" id="address-error" style="display: none;"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone2" class="form-label">Téléphone 2</label>
+                        <input type="tel" class="form-input" id="phone2" name="phone2" placeholder="+237 690 00 90 00" value="+237 690 00 90 00">
+                        <div class="error-message" id="phone2-error" style="display: none;"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Adresse email</label>
+                    <input type="email" class="form-input" id="email" name="email" disabled>
+                    <div class="error-message" id="email-error" style="display: none;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="password" name="password" placeholder="••••••••••••••••••••••••" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                            <i class="fi fi-rr-eye" id="password-icon"></i>
+                        </button>
+                    </div>
+                    <div class="password-requirements">
+                        <div class="requirement" id="length-req">
+                            <span class="requirement-icon">○</span>
+                            <span>Au moins 8 caractères</span>
+                        </div>
+                        <div class="requirement" id="uppercase-req">
+                            <span class="requirement-icon">○</span>
+                            <span>Au moins une majuscule</span>
+                        </div>
+                        <div class="requirement" id="number-req">
+                            <span class="requirement-icon">○</span>
+                            <span>Au moins un chiffre</span>
+                        </div>
+                    </div>
+                    <div class="error-message" id="password-error" style="display: none;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm-password" class="form-label">Confirmer le mot de passe</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input" id="confirm-password" name="confirm-password" placeholder="••••••••••••••••••••••••" required>
+                        <button type="button" class="password-toggle" onclick="togglePassword('confirm-password')">
+                            <i class="fi fi-rr-eye" id="confirm-password-icon"></i>
+                        </button>
+                    </div>
+                    <div class="error-message" id="confirm-password-error" style="display: none;"></div>
+                </div>
+
+                <div class="terms-section">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">
+                            J'accepte les <a href="#" class="terms-link">termes et Conditions</a>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="continue-btn" id="continue-btn">
+                    Continuer
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Load registration data
+        document.addEventListener('DOMContentLoaded', function() {
+            const registrationData = sessionStorage.getItem('registration_data');
+            if (registrationData) {
+                const data = JSON.parse(registrationData);
+                document.getElementById('firstname').value = data.firstname;
+                document.getElementById('lastname').value = data.lastname;
+                document.getElementById('email').value = data.email;
+            }
+        });
+
+        // Password visibility toggle
+        function togglePassword(fieldId) {
+            const passwordField = document.getElementById(fieldId);
+            const passwordIcon = document.getElementById(fieldId + '-icon');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                passwordIcon.className = 'fi fi-rr-eye-crossed';
+            } else {
+                passwordField.type = 'password';
+                passwordIcon.className = 'fi fi-rr-eye';
+            }
+        }
+
+        // Password validation
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            
+            // Check length
+            const lengthReq = document.getElementById('length-req');
+            if (password.length >= 8) {
+                lengthReq.classList.remove('invalid');
+                lengthReq.classList.add('valid');
+                lengthReq.querySelector('.requirement-icon').textContent = '✓';
+            } else {
+                lengthReq.classList.remove('valid');
+                lengthReq.classList.add('invalid');
+                lengthReq.querySelector('.requirement-icon').textContent = '○';
+            }
+
+            // Check uppercase
+            const uppercaseReq = document.getElementById('uppercase-req');
+            if (/[A-Z]/.test(password)) {
+                uppercaseReq.classList.remove('invalid');
+                uppercaseReq.classList.add('valid');
+                uppercaseReq.querySelector('.requirement-icon').textContent = '✓';
+            } else {
+                uppercaseReq.classList.remove('valid');
+                uppercaseReq.classList.add('invalid');
+                uppercaseReq.querySelector('.requirement-icon').textContent = '○';
+            }
+
+            // Check number
+            const numberReq = document.getElementById('number-req');
+            if (/\d/.test(password)) {
+                numberReq.classList.remove('invalid');
+                numberReq.classList.add('valid');
+                numberReq.querySelector('.requirement-icon').textContent = '✓';
+            } else {
+                numberReq.classList.remove('valid');
+                numberReq.classList.add('invalid');
+                numberReq.querySelector('.requirement-icon').textContent = '○';
+            }
+
+            // Check password match
+            validatePasswordMatch();
+        });
+
+        // Confirm password validation
+        document.getElementById('confirm-password').addEventListener('input', validatePasswordMatch);
+
+        function validatePasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const confirmField = document.getElementById('confirm-password');
+            const errorDiv = document.getElementById('confirm-password-error');
+
+            if (confirmPassword && password !== confirmPassword) {
+                confirmField.classList.add('error');
+                errorDiv.textContent = 'Les mots de passe ne correspondent pas';
+                errorDiv.style.display = 'block';
+            } else {
+                confirmField.classList.remove('error');
+                errorDiv.style.display = 'none';
+            }
+        }
+
+        // Form submission
+        document.getElementById('complete-registration-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('continue-btn');
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const terms = document.getElementById('terms').checked;
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.style.display = 'none';
+            });
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            
+            let hasErrors = false;
+            
+            // Validate required fields
+            if (!phone.trim()) {
+                showError('phone', 'Le numéro de téléphone est requis');
+                hasErrors = true;
+            }
+            
+            if (!address.trim()) {
+                showError('address', 'L\'adresse est requise');
+                hasErrors = true;
+            }
+            
+            if (!password) {
+                showError('password', 'Le mot de passe est requis');
+                hasErrors = true;
+            } else if (!isValidPassword(password)) {
+                showError('password', 'Le mot de passe ne respecte pas les critères');
+                hasErrors = true;
+            }
+            
+            if (password !== confirmPassword) {
+                showError('confirm-password', 'Les mots de passe ne correspondent pas');
+                hasErrors = true;
+            }
+            
+            if (!terms) {
+                alert('Vous devez accepter les termes et conditions');
+                hasErrors = true;
+            }
+            
+            if (hasErrors) return;
+            
+            // Loading state
+            btn.classList.add('loading');
+            btn.textContent = 'Finalisation...';
+            
+            // Simulate registration completion
+            setTimeout(() => {
+                // Store complete user data
+                const registrationData = JSON.parse(sessionStorage.getItem('registration_data'));
+                const userData = {
+                    ...registrationData,
+                    phone,
+                    address,
+                    phone2: document.getElementById('phone2').value,
+                    password,
+                    registrationComplete: true,
+                    timestamp: Date.now()
+                };
+                
+                sessionStorage.setItem('user_data', JSON.stringify(userData));
+                sessionStorage.removeItem('registration_data');
+                
+                // Redirect to success page
+                window.location.href = 'registration-success.html';
+            }, 2000);
+        });
+
+        function isValidPassword(password) {
+            return password.length >= 8 && 
+                   /[A-Z]/.test(password) && 
+                   /\d/.test(password);
+        }
+        
+        function showError(fieldId, message) {
+            const field = document.getElementById(fieldId);
+            const errorDiv = document.getElementById(fieldId + '-error');
+            
+            field.classList.add('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

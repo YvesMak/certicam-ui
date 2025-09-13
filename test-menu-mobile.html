@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Menu Mobile</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { margin: 0; font-family: var(--font-family); }
+        .test-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            padding: 10px 20px;
+            background: var(--color-green);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .test-content {
+            padding: 60px 20px 20px;
+            max-width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-content">
+        <h1>Test du Menu Mobile</h1>
+        <p>Cliquez sur le bouton vert pour ouvrir le menu mobile.</p>
+        <button class="test-button" onclick="showMenu()">📱 Ouvrir Menu</button>
+    </div>
+    
+    <!-- Menu Mobile -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay">
+        <div class="mobile-menu">
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-profile">
+                    <img src="img/coco-profile.jpg" alt="Photo de profil" class="mobile-profile-pic">
+                    <div class="mobile-profile-info">
+                        <h4>Test User</h4>
+                        <p>test@example.com</p>
+                        <span class="user-role-badge">user</span>
+                    </div>
+                </div>
+                <button class="mobile-menu-close" id="mobile-menu-close">
+                    <i class="fi fi-br-cross-small">×</i>
+                </button>
+            </div>
+            <nav class="mobile-menu-nav">
+                <a href="index.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-home">🏠</i>
+                    <span>Accueil</span>
+                </a>
+                <a href="transactions.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-time-past">📊</i>
+                    <span>Transactions</span>
+                </a>
+                <a href="settings.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-settings">⚙️</i>
+                    <span>Paramètres</span>
+                </a>
+                <a href="support.html" class="mobile-menu-link">
+                    <i class="fi fi-rr-headset">🎧</i>
+                    <span>Support</span>
+                </a>
+                
+                <div class="mobile-menu-divider"></div>
+                
+                <button class="mobile-menu-link logout-btn">
+                    <i class="fi fi-rr-sign-out-alt">🚪</i>
+                    <span>Déconnexion</span>
+                </button>
+            </nav>
+        </div>
+    </div>
+    
+    <script>
+        function showMenu() {
+            const overlay = document.getElementById('mobile-menu-overlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function hideMenu() {
+            const overlay = document.getElementById('mobile-menu-overlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Event listeners
+        document.getElementById('mobile-menu-close').addEventListener('click', hideMenu);
+        
+        document.getElementById('mobile-menu-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'mobile-menu-overlay') {
+                hideMenu();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideMenu();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/support.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css">
+</head>
+<body>
+    <main>
+        <div class="support-container">
+            <!-- Header Section -->
+            <div class="support-header">
+                <div class="support-title">
+                    <h1>Centre d'aide</h1>
+                    <p class="support-subtitle">Notre équipe est disponible pour vous accompagner dans vos démarches administratives</p>
+                </div>
+                
+                <!-- Status Banner -->
+                <div class="support-status">
+                    <div class="status-indicator">
+                        <div class="status-dot online"></div>
+                        <span class="status-text">Support client en ligne</span>
+                    </div>
+                    <div class="response-time">
+                        <i class="fi fi-rr-clock"></i>
+                        <span>Réponse sous 24h ouvrées</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Options -->
+            <div class="contact-section">
+                <h2 class="section-title">Comment souhaitez-vous nous contacter ?</h2>
+                
+                <div class="support-options">
+                    <div class="support-option recommended">
+                        <div class="option-badge">Recommandé</div>
+                        <div class="support-icon">
+                            <i class="fi fi-rr-comments"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Chat en direct</h3>
+                            <p>Réponse immédiate avec un conseiller</p>
+                            <div class="option-features">
+                                <span class="feature-item">
+                                    <i class="fi fi-rr-check"></i>
+                                    Instantané
+                                </span>
+                                <span class="feature-item">
+                                    <i class="fi fi-rr-check"></i>
+                                    Partage de fichiers
+                                </span>
+                            </div>
+                        </div>
+                        <button class="support-btn primary" id="launch-chat">
+                            <i class="fi fi-rr-comment-alt"></i>
+                            Démarrer le chat
+                        </button>
+                    </div>
+
+                    <div class="support-option">
+                        <div class="support-icon">
+                            <i class="fi fi-rr-envelope"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Envoyer un e-mail</h3>
+                            <p>Pour une demande détaillée avec pièces jointes</p>
+                            <div class="option-features">
+                                <span class="feature-item">
+                                    <i class="fi fi-rr-check"></i>
+                                    Suivi par e-mail
+                                </span>
+                                <span class="feature-item">
+                                    <i class="fi fi-rr-check"></i>
+                                    Pièces jointes
+                                </span>
+                            </div>
+                        </div>
+                        <button class="support-btn secondary" id="send-email">
+                            <i class="fi fi-rr-paper-plane"></i>
+                            Écrire un message
+                        </button>
+                    </div>
+
+                    <div class="support-option">
+                        <div class="support-icon urgent">
+                            <i class="fi fi-rr-phone-call"></i>
+                        </div>
+                        <div class="option-content">
+                            <h3>Appel téléphonique</h3>
+                            <p>Pour les urgences ou problèmes critiques</p>
+                            <div class="option-features">
+                                <span class="feature-item">
+                                    <i class="fi fi-rr-check"></i>
+                                    Support immédiat
+                                </span>
+                                <span class="feature-item urgent-feature">
+                                    <i class="fi fi-rr-exclamation"></i>
+                                    Urgences uniquement
+                                </span>
+                            </div>
+                        </div>
+                        <button class="support-btn outline" id="make-call">
+                            <i class="fi fi-rr-phone-call"></i>
+                            +237 6 XX XX XX XX
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="faq-section">
+                <h2 class="section-title">Questions fréquentes</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-icon">
+                            <i class="fi fi-rr-document"></i>
+                        </div>
+                        <h4>Comment télécharger mes actes certifiés ?</h4>
+                        <p>Accédez à votre historique et cliquez sur "Télécharger"</p>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-icon">
+                            <i class="fi fi-rr-shield-check"></i>
+                        </div>
+                        <h4>Mes données personnelles sont-elles protégées ?</h4>
+                        <p>Oui, conformité RGPD et protection renforcée</p>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-icon">
+                            <i class="fi fi-rr-time-past"></i>
+                        </div>
+                        <h4>Quelle est la validité de mes certificats ?</h4>
+                        <p>Validité permanente selon la réglementation camerounaise</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Modal -->
+        <div class="chat-modal" id="chat-modal">
+            <div class="chat-container">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="agent-avatar">
+                            <div class="generic-avatar">
+                                <i class="fi fi-rr-headset"></i>
+                            </div>
+                            <div class="agent-status online"></div>
+                        </div>
+                        <div class="agent-details">
+                            <h4>Conseiller Certicam</h4>
+                            <span class="agent-status-text">Support client • En ligne</span>
+                        </div>
+                    </div>
+                    <div class="chat-actions-header">
+                        <button class="chat-action-btn" title="Plus d'options" id="chat-options">
+                            <i class="fi fi-rr-menu-dots-vertical"></i>
+                        </button>
+                        <button class="chat-close" id="chat-close" title="Fermer le chat">
+                            <i class="fi fi-rr-cross"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Message d'accueil automatique du conseiller -->
+                    <div class="message system-message">
+                        <div class="message-content">
+                            <div class="system-icon">
+                                <i class="fi fi-rr-shield-check"></i>
+                            </div>
+                            <p>Conversation sécurisée • Vos données sont protégées</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <div class="chat-input-wrapper">
+                        <div class="input-actions-left">
+                            <button class="chat-action-btn" title="Joindre un fichier" id="attach-file">
+                                <i class="fi fi-rr-clip"></i>
+                            </button>
+                            <button class="chat-action-btn" title="Ajouter une émoticône" id="add-emoji">
+                                <i class="fi fi-rr-smile"></i>
+                            </button>
+                        </div>
+                        <div class="input-field-container">
+                            <textarea placeholder="Décrivez votre problème ou posez votre question..." class="chat-input" id="chat-input" rows="1" maxlength="1000"></textarea>
+                            <div class="input-counter">
+                                <span id="char-counter">0/1000</span>
+                            </div>
+                        </div>
+                        <button class="chat-send" id="chat-send" title="Envoyer le message" disabled>
+                            <i class="fi fi-rr-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Modal -->
+        <div class="email-modal" id="email-modal">
+            <div class="email-container">
+                <div class="email-header">
+                    <h3>Envoyer un message</h3>
+                    <button class="email-close" id="email-close">
+                        <i class="fi fi-rr-cross"></i>
+                    </button>
+                </div>
+
+                <form class="email-form">
+                    <div class="form-group">
+                        <label for="email-subject">Sujet</label>
+                        <input type="text" id="email-subject" placeholder="Objet de votre message" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email-category">Catégorie</label>
+                        <select id="email-category" class="form-input">
+                            <option value="">Sélectionnez une catégorie</option>
+                            <option value="technical">Problème technique</option>
+                            <option value="account">Gestion de compte</option>
+                            <option value="billing">Facturation</option>
+                            <option value="other">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email-message">Message</label>
+                        <textarea id="email-message" rows="6" placeholder="Décrivez votre problème ou votre question..." class="form-input"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email-attachment">Pièce jointe (optionnel)</label>
+                        <div class="file-upload">
+                            <input type="file" id="email-attachment" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                            <span class="file-upload-text">Choisir un fichier</span>
+                        </div>
+                    </div>
+
+                    <div class="email-actions">
+                        <button type="button" class="btn-secondary" id="email-cancel">Annuler</button>
+                        <button type="submit" class="btn-primary">Envoyer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/certicam-init.js"></script>
+    <script>
+        // Marquer la page support comme active quand la navbar est chargée
+        document.addEventListener('navbarLoaded', () => {
+            if (window.Certicam) {
+                window.Certicam.setActivePage('support.html');
+            }
+        });
+    </script>
+    <script src="js/support.js"></script>
+</body>
+</html>
