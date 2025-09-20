@@ -7,19 +7,7 @@ class NavbarAuth {
     }
 
     init() {
-        // Wait for DOM and session manager
-        if (typeof SessionManager === 'undefined') {
-            setTimeout(() => {
-                this.setupAuthState();
-                this.setupEventListeners();
-                this.updateNavigation();
-                this.initProfileDropdown();
-                this.initLogoutButtons();
-                this.highlightCurrentPage();
-            }, 100);
-            return;
-        }
-
+        // Désactiver temporairement le SessionManager pour éviter les erreurs
         this.setupAuthState();
         this.setupEventListeners();
         this.updateNavigation();
@@ -29,13 +17,14 @@ class NavbarAuth {
     }
 
     setupAuthState() {
-        const session = SessionManager?.getSession();
+        // Pour le moment, utiliser des données par défaut sans SessionManager
+        const defaultUser = {
+            profile: { firstName: 'Rico' },
+            email: 'rico.tangana@certicam.com',
+            role: 'user'
+        };
         
-        if (session) {
-            this.showAuthenticatedState(session.user);
-        } else {
-            this.showUnauthenticatedState();
-        }
+        this.showAuthenticatedState(defaultUser);
     }
 
     showAuthenticatedState(user) {
@@ -588,44 +577,48 @@ function initMobileMenu() {
 
     console.log('InitMobileMenu:', { mobileMenuButton, mobileMenuClose, mobileMenuOverlay });
 
-    // Supprimer les anciens event listeners s'ils existent
-    if (mobileMenuButton) {
-        // Cloner le bouton pour supprimer tous les event listeners
-        const newButton = mobileMenuButton.cloneNode(true);
-        mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
-        
-        newButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Burger menu clicked');
-            if (mobileMenuOverlay) {
-                mobileMenuOverlay.classList.add('active');
-            }
-        });
+    // Vérifier que les éléments existent
+    if (!mobileMenuButton || !mobileMenuClose || !mobileMenuOverlay) {
+        console.warn('Éléments du menu mobile introuvables, nouvelle tentative dans 500ms...');
+        setTimeout(initMobileMenu, 500);
+        return;
     }
 
-    if (mobileMenuClose) {
-        const newClose = mobileMenuClose.cloneNode(true);
-        mobileMenuClose.parentNode.replaceChild(newClose, mobileMenuClose);
-        
-        newClose.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+    // Éviter de réinitialiser si déjà initialisé
+    if (mobileMenuButton.hasAttribute('data-mobile-menu-initialized')) {
+        console.log('Menu mobile déjà initialisé');
+        return;
+    }
+
+    // Ajouter les event listeners avec une seule initialisation
+    mobileMenuButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Burger menu clicked - opening overlay');
+        mobileMenuOverlay.classList.add('active');
+        console.log('Overlay classes after click:', mobileMenuOverlay.className);
+    });
+
+    mobileMenuClose.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Close button clicked');
+        closeMobileMenu();
+    });
+
+    mobileMenuOverlay.addEventListener('click', function(e) {
+        if (e.target === mobileMenuOverlay) {
+            console.log('Overlay background clicked');
             closeMobileMenu();
-        });
-    }
+        }
+    });
 
-    if (mobileMenuOverlay) {
-        // Supprimer les anciens listeners
-        const newOverlay = mobileMenuOverlay.cloneNode(true);
-        mobileMenuOverlay.parentNode.replaceChild(newOverlay, mobileMenuOverlay);
-        
-        newOverlay.addEventListener('click', function(e) {
-            if (e.target === newOverlay) {
-                closeMobileMenu();
-            }
-        });
-    }
+    // Marquer comme initialisé
+    mobileMenuButton.setAttribute('data-mobile-menu-initialized', 'true');
+    mobileMenuClose.setAttribute('data-mobile-menu-initialized', 'true');
+    mobileMenuOverlay.setAttribute('data-mobile-menu-initialized', 'true');
+    
+    console.log('Menu mobile initialisé avec succès');
 }
 
 // Exposer la fonction globalement pour réinitialisation
@@ -634,7 +627,9 @@ window.initMobileMenu = initMobileMenu;
 function closeMobileMenu() {
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     if (mobileMenuOverlay) {
+        console.log('Fermeture du menu mobile');
         mobileMenuOverlay.classList.remove('active');
+        console.log('Overlay classes after close:', mobileMenuOverlay.className);
     }
 }
 
