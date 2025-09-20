@@ -17,8 +17,7 @@ body {
     background-color: var(--color-surface-secondary);
     color: var(--color-text-primary);
     font-size: var(--font-size-body-md);
-    /* Padding pour la navbar sticky moderne */
-    padding-top: 72px;
+    /* Navbar sticky moderne - pas besoin de padding-top */
 }
 
 /* Header */

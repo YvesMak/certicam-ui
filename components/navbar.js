@@ -7,69 +7,56 @@ class NavbarAuth {
     }
 
     init() {
-        // Désactiver temporairement le SessionManager pour éviter les erreurs
+        // Initialisation optimisée sans délais
         this.setupAuthState();
-        this.setupEventListeners();
-        this.updateNavigation();
         this.initProfileDropdown();
         this.initLogoutButtons();
         this.highlightCurrentPage();
+        
+        // Setup léger des événements
+        this.setupEventListeners();
     }
 
     setupAuthState() {
         // Pour le moment, utiliser des données par défaut sans SessionManager
+        // Éviter les mises à jour qui causent des délais visuels
         const defaultUser = {
             profile: { firstName: 'Rico' },
             email: 'rico.tangana@certicam.com',
             role: 'user'
         };
         
-        this.showAuthenticatedState(defaultUser);
+        // Mise à jour immédiate et unique
+        this.updateUserProfileOnce(defaultUser);
+        this.updateRoleBasedNavigation(defaultUser.role);
     }
-
-    showAuthenticatedState(user) {
-        // Update user profile info
-        this.updateUserProfile(user);
+    
+    updateUserProfileOnce(user) {
+        // Mise à jour optimisée sans re-render multiples
+        const userNameElements = document.querySelectorAll('[data-user="name"]');
+        const userEmailElements = document.querySelectorAll('[data-user="email"]');
+        const userRoleElements = document.querySelectorAll('[data-user="role"]');
         
-        // Show appropriate menu items based on role
-        this.updateRoleBasedNavigation(user.role);
-    }
-
-    showUnauthenticatedState() {
-        // Show login button, hide user profile details
-        const authActions = document.getElementById('auth-actions');
-        const loginButton = document.getElementById('login-button');
-        const logoutButton = document.getElementById('logout-button');
+        // Batch update pour éviter les reflows
+        if (userNameElements.length > 0) {
+            const name = user.profile.firstName || user.email.split('@')[0];
+            userNameElements.forEach(el => el.textContent = name);
+        }
         
-        if (authActions) authActions.style.display = 'block';
-        if (loginButton) loginButton.style.display = 'block';
-        if (logoutButton) logoutButton.style.display = 'none';
-
-        // Hide role-specific navigation but show basic user links
-        this.updateRoleBasedNavigation('user'); // Afficher comme utilisateur de base
-    }
-
-    updateUserProfile(user) {
-        // Update user name
-        document.querySelectorAll('[data-user="name"]').forEach(el => {
-            el.textContent = user.profile.firstName || user.email.split('@')[0];
-        });
-
-        // Update user email
-        document.querySelectorAll('[data-user="email"]').forEach(el => {
-            el.textContent = user.email;
-        });
-
-        // Update user role
-        document.querySelectorAll('[data-user="role"]').forEach(el => {
+        if (userEmailElements.length > 0) {
+            userEmailElements.forEach(el => el.textContent = user.email);
+        }
+        
+        if (userRoleElements.length > 0) {
             const roleNames = {
-                user: 'Utilisateur',
-                checker: 'Vérificateur',
+                user: 'Particulier',
+                checker: 'Vérificateur', 
                 agent: 'Agent',
                 admin: 'Administrateur'
             };
-            el.textContent = roleNames[user.role] || user.role;
-        });
+            const roleName = roleNames[user.role] || user.role;
+            userRoleElements.forEach(el => el.textContent = roleName);
+        }
 
         // Update profile avatar if available
         if (user.profile.avatar) {
@@ -80,14 +67,12 @@ class NavbarAuth {
     }
 
     updateRoleBasedNavigation(userRole) {
-        // Show/hide navigation items based on role
-        document.querySelectorAll('[data-show-for-role]').forEach(el => {
+        // Show/hide navigation items based on role - version optimisée
+        const roleElements = document.querySelectorAll('[data-show-for-role]');
+        
+        roleElements.forEach(el => {
             const allowedRoles = el.dataset.showForRole.split(',');
-            if (allowedRoles.includes(userRole) || !userRole) {
-                el.style.display = '';
-            } else {
-                el.style.display = 'none';
-            }
+            el.style.display = (allowedRoles.includes(userRole) || !userRole) ? '' : 'none';
         });
 
         // Si pas d'utilisateur connecté, afficher les liens basiques pour les tests
@@ -96,9 +81,6 @@ class NavbarAuth {
                 el.style.display = '';
             });
         }
-
-        // Set active page
-        this.setActivePage();
     }
 
     hideAllRoleNavigation() {
@@ -576,13 +558,6 @@ class NavbarAuth {
                 hrefLink.classList.add('active');
             }
         }
-    }
-
-    updateNavigation() {
-        // Ensure navigation is properly updated after DOM changes
-        setTimeout(() => {
-            this.setupAuthState();
-        }, 100);
     }
 }
 
