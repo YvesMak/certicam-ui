@@ -21,198 +21,285 @@
 
     <main class="admin-main">
         <div class="admin-container">
-            <!-- En-tête de la page -->
-            <div class="admin-header">
-                <h1>Bienvenue dans votre espace administrateur</h1>
-            </div>
-
-            <!-- Section de recherche et actions -->
-            <div class="admin-actions">
-                <div class="search-section">
-                    <div class="search-input-container">
-                        <i class="fi fi-rr-search search-icon"></i>
-                        <input type="text" id="admin-search" placeholder="Rechercher par nom d'utilisateur">
+            <!-- Page Title -->
+            <div class="page-header">
+                <div class="page-header-content">
+                    <h1 class="page-title">Administration</h1>
+                    <p class="page-subtitle">Gérez les utilisateurs et leurs accès</p>
+                </div>
+                <div class="page-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">04</span>
+                        <span class="stat-label">Utilisateurs</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">01</span>
+                        <span class="stat-label">Admin</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">03</span>
+                        <span class="stat-label">Agents</span>
                     </div>
                 </div>
-                
-                <div class="action-buttons">
-                    <button class="btn-filters" id="admin-filters">
-                        <i class="fi fi-rr-filter"></i>
-                        Filtres
+            </div>
+
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <div class="search-controls">
+                    <div class="search-box">
+                        <i class="fi fi-rr-search search-icon"></i>
+                        <input type="text" id="admin-search" placeholder="Rechercher un utilisateur..." class="search-input">
+                    </div>
+                    <button class="control-btn filters-btn" id="admin-filters">
+                        <i class="fi fi-rr-settings-sliders"></i>
+                        <span>Filtres</span>
                     </button>
-                    <button class="btn-primary" id="add-user">
-                        <i class="fi fi-rr-plus"></i>
-                        Ajouter utilisateur
+                </div>
+                
+                <div class="action-controls">
+                    <button class="control-btn export-btn">
+                        <i class="fi fi-rr-download"></i>
+                        <span>Exporter</span>
+                    </button>
+                    <button class="btn-primary add-user-btn" id="add-user">
+                        <i class="fi fi-rr-user-add"></i>
+                        <span>Ajouter utilisateur</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Tableau des utilisateurs -->
-            <div class="admin-table-container">
-                <div class="table-wrapper">
-                    <table class="admin-table">
+            <!-- Data Table -->
+            <div class="data-table-section">
+                <div class="table-container">
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th class="sortable" data-column="name">Utilisateur</th>
-                                <th class="sortable" data-column="access">Niveau d'accès</th>
-                                <th class="sortable" data-column="lastActivity">Dernière activité <i class="bi bi-arrow-down"></i></th>
-                                <th class="sortable" data-column="dateAdded">Date d'ajout</th>
-                                <th class="actions-column"></th>
+                                <th class="col-user">
+                                    <div class="header-content">
+                                        <span>Utilisateur</span>
+                                    </div>
+                                </th>
+                                <th class="col-access">
+                                    <div class="header-content">
+                                        <span>Accès</span>
+                                    </div>
+                                </th>
+                                <th class="col-activity sortable">
+                                    <div class="header-content">
+                                        <span>Dernière activité</span>
+                                        <i class="fi fi-rr-arrow-small-down sort-icon"></i>
+                                    </div>
+                                </th>
+                                <th class="col-date">
+                                    <div class="header-content">
+                                        <span>Date d'ajout</span>
+                                    </div>
+                                </th>
+                                <th class="col-actions">
+                                    <div class="header-content">
+                                        <span>Actions</span>
+                                    </div>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <img src="img/coco-profile.jpg" alt="Rico Tangana" class="user-avatar">
-                                        <div class="user-details">
-                                            <h4>Rico Tangana</h4>
-                                            <p class="user-email">ricotangana@banquexyz.com</p>
+                            <tr class="table-row">
+                                <td class="user-cell">
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <img src="img/coco-profile.jpg" alt="Rico Tangana">
+                                        </div>
+                                        <div class="user-info">
+                                            <div class="user-name">Rico Tangana</div>
+                                            <div class="user-email">ricotangana@banquexyz.com</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="access-badge admin">Admin</span>
+                                <td class="access-cell">
+                                    <span class="access-chip admin-chip">Admin</span>
                                 </td>
-                                <td>16 Juin 2025 - 12:34</td>
-                                <td>11 Mai 2025</td>
-                                <td class="actions">
-                                    <button class="action-btn edit" title="Modifier">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" title="Supprimer">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
+                                <td class="activity-cell">
+                                    <div class="activity-info">
+                                        <span class="activity-date">16 Juin 2025</span>
+                                        <span class="activity-time">12:34</span>
+                                    </div>
+                                </td>
+                                <td class="date-cell">11 Mai 2025</td>
+                                <td class="actions-cell">
+                                    <div class="table-actions">
+                                        <button class="action-btn edit-action" title="Modifier" onclick="editUser(1)">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete-action" title="Supprimer" onclick="deleteUser(1)">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <img src="img/coco-profile.jpg" alt="Raphael Onana" class="user-avatar">
-                                        <div class="user-details">
-                                            <h4>Raphael Onana</h4>
-                                            <p class="user-email">raphael.onana@banquexyz.com</p>
+                            <tr class="table-row">
+                                <td class="user-cell">
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <img src="img/coco-profile.jpg" alt="Raphael Onana">
+                                        </div>
+                                        <div class="user-info">
+                                            <div class="user-name">Raphael Onana</div>
+                                            <div class="user-email">raphael.onana@banquexyz.com</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="access-badge agent">Agent</span>
+                                <td class="access-cell">
+                                    <span class="access-chip agent-chip">Agent</span>
                                 </td>
-                                <td>16 Juin 2025 - 17:25</td>
-                                <td>11 Mai 2025</td>
-                                <td class="actions">
-                                    <button class="action-btn edit" title="Modifier">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" title="Supprimer">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
+                                <td class="activity-cell">
+                                    <div class="activity-info">
+                                        <span class="activity-date">16 Juin 2025</span>
+                                        <span class="activity-time">17:25</span>
+                                    </div>
+                                </td>
+                                <td class="date-cell">11 Mai 2025</td>
+                                <td class="actions-cell">
+                                    <div class="table-actions">
+                                        <button class="action-btn edit-action" title="Modifier" onclick="editUser(2)">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete-action" title="Supprimer" onclick="deleteUser(2)">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <img src="img/coco-profile.jpg" alt="Joel Benini" class="user-avatar">
-                                        <div class="user-details">
-                                            <h4>Joel Benini</h4>
-                                            <p class="user-email">joel.benini@banquexyz.com</p>
+                            <tr class="table-row">
+                                <td class="user-cell">
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <img src="img/coco-profile.jpg" alt="Joel Benini">
+                                        </div>
+                                        <div class="user-info">
+                                            <div class="user-name">Joel Benini</div>
+                                            <div class="user-email">joel.benini@banquexyz.com</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="access-badge agent">Agent</span>
+                                <td class="access-cell">
+                                    <span class="access-chip agent-chip">Agent</span>
                                 </td>
-                                <td>16 Juin 2025 - 15:03</td>
-                                <td>11 Mai 2025</td>
-                                <td class="actions">
-                                    <button class="action-btn edit" title="Modifier">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" title="Supprimer">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
+                                <td class="activity-cell">
+                                    <div class="activity-info">
+                                        <span class="activity-date">16 Juin 2025</span>
+                                        <span class="activity-time">15:03</span>
+                                    </div>
+                                </td>
+                                <td class="date-cell">11 Mai 2025</td>
+                                <td class="actions-cell">
+                                    <div class="table-actions">
+                                        <button class="action-btn edit-action" title="Modifier" onclick="editUser(3)">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete-action" title="Supprimer" onclick="deleteUser(3)">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <img src="img/coco-profile.jpg" alt="Henriette Kong" class="user-avatar">
-                                        <div class="user-details">
-                                            <h4>Henriette Kong</h4>
-                                            <p class="user-email">henriette.kong@banquexyz.com</p>
+                            <tr class="table-row">
+                                <td class="user-cell">
+                                    <div class="user-profile">
+                                        <div class="user-avatar">
+                                            <img src="img/coco-profile.jpg" alt="Henriette Kong">
+                                        </div>
+                                        <div class="user-info">
+                                            <div class="user-name">Henriette Kong</div>
+                                            <div class="user-email">henriette.kong@banquexyz.com</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="access-badge agent">Agent</span>
+                                <td class="access-cell">
+                                    <span class="access-chip agent-chip">Agent</span>
                                 </td>
-                                <td>16 Juin 2025 - 12:40</td>
-                                <td>11 Mai 2025</td>
-                                <td class="actions">
-                                    <button class="action-btn edit" title="Modifier">
-                                        <i class="fi fi-rr-edit"></i>
-                                    </button>
-                                    <button class="action-btn delete" title="Supprimer">
-                                        <i class="fi fi-rr-trash"></i>
-                                    </button>
+                                <td class="activity-cell">
+                                    <div class="activity-info">
+                                        <span class="activity-date">16 Juin 2025</span>
+                                        <span class="activity-time">12:40</span>
+                                    </div>
+                                </td>
+                                <td class="date-cell">11 Mai 2025</td>
+                                <td class="actions-cell">
+                                    <div class="table-actions">
+                                        <button class="action-btn edit-action" title="Modifier" onclick="editUser(4)">
+                                            <i class="fi fi-rr-edit"></i>
+                                        </button>
+                                        <button class="action-btn delete-action" title="Supprimer" onclick="deleteUser(4)">
+                                            <i class="fi fi-rr-trash"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <!-- Statistiques -->
-            <div class="admin-stats">
-                <span class="stats-text">04 Utilisateurs (01 Admin, 03 agents)</span>
-            </div>
         </div>
     </main>
 
-    <!-- Modal d'ajout/modification utilisateur -->
-    <div class="modal-overlay" id="user-modal" style="display: none;">
-        <div class="modal">
+    <!-- User Management Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-container">
             <div class="modal-header">
-                <h3 id="modal-title">Ajouter un utilisateur</h3>
-                <button class="modal-close" id="close-modal">&times;</button>
+                <div class="modal-title">
+                    <h3 id="modal-title">Ajouter un utilisateur</h3>
+                    <p class="modal-subtitle">Remplissez les informations ci-dessous</p>
+                </div>
+                <button class="modal-close" id="close-modal">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
             </div>
             
             <div class="modal-content">
-                <form id="user-form">
-                    <div class="form-group">
-                        <label for="user-name">Nom complet</label>
-                        <input type="text" id="user-name" name="name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="user-email">Adresse email</label>
-                        <input type="email" id="user-email" name="email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="user-address">Adresse</label>
-                        <input type="text" id="user-address" name="address" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="user-password">Mot de passe</label>
-                        <input type="password" id="user-password" name="password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="access-level">Niveau d'accès</label>
-                        <select id="access-level" name="access" required>
-                            <option value="">Sélectionner un niveau</option>
-                            <option value="admin">Admin</option>
-                            <option value="agent">Agent</option>
-                        </select>
+                <form id="user-form" class="user-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="user-name" class="input-label">Nom complet</label>
+                            <input type="text" id="user-name" name="name" class="form-input" placeholder="Ex: Jean Dupont" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="user-email" class="input-label">Adresse email</label>
+                            <input type="email" id="user-email" name="email" class="form-input" placeholder="Ex: jean.dupont@banque.com" required>
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label for="user-address" class="input-label">Adresse complète</label>
+                            <input type="text" id="user-address" name="address" class="form-input" placeholder="Ex: 123 Rue des Banques, Yaoundé" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="user-password" class="input-label">Mot de passe</label>
+                            <input type="password" id="user-password" name="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="access-level" class="input-label">Niveau d'accès</label>
+                            <select id="access-level" name="access" class="form-select" required>
+                                <option value="">Sélectionner un niveau</option>
+                                <option value="admin">Administrateur</option>
+                                <option value="agent">Agent</option>
+                            </select>
+                        </div>
                     </div>
                 </form>
             </div>
             
             <div class="modal-footer">
-                <button class="btn-secondary" id="cancel-user">Annuler</button>
-                <button class="btn-primary" id="save-user">Enregistrer</button>
+                <button class="btn-secondary" id="cancel-user">
+                    <span>Annuler</span>
+                </button>
+                <button class="btn-primary" id="save-user">
+                    <i class="fi fi-rr-check"></i>
+                    <span>Enregistrer</span>
+                </button>
             </div>
         </div>
     </div>

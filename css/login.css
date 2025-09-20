@@ -1,4 +1,4 @@
-/* Login Page Styles - Certicam - Clean Flat Design */
+/* Login Page Styles - Certicam - Clean Flat Design - Balanced Layout */
 
 * {
     margin: 0;
@@ -18,18 +18,23 @@ body {
     display: flex;
     width: 100vw;
     height: 100vh;
+    max-width: none;
     background: var(--color-white);
+    border-radius: 0;
     overflow: hidden;
+    box-shadow: none;
+    min-height: auto;
 }
 
 .login-left {
-    flex: 0 0 50%;
+    flex: 1;
     width: 50%;
     padding: var(--spacing-3xl) var(--spacing-xl);
     display: flex;
     flex-direction: column;
     justify-content: center;
     background: var(--color-white);
+    max-width: none;
 }
 
 .logo {
@@ -91,9 +96,10 @@ body {
     border-radius: var(--radius-sm);
     font-size: var(--font-size-body-sm);
     font-family: var(--font-family);
-    transition: all 0.3s ease;
-    background: var(--color-white);
     color: var(--color-text-primary);
+    background: var(--color-white);
+    transition: all 0.3s ease;
+    outline: none;
     font-weight: var(--font-weight-regular);
 }
 
@@ -167,13 +173,10 @@ body {
 .password-container {
     position: relative;
     width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
 }
 
 .password-container .form-input {
     width: 100%;
-    max-width: none;
     padding-right: calc(var(--spacing-md) + 32px);
 }
 
@@ -435,7 +438,7 @@ body {
 
 /* Right Side avec Image Background */
 .login-right {
-    flex: 0 0 50%;
+    flex: 1;
     width: 50%;
     background: url('../img/Illustration-login-register.jpg') center/cover no-repeat;
     display: flex;
@@ -499,7 +502,6 @@ body {
 @media (min-width: 1440px) {
     .login-left {
         padding: var(--spacing-3xl) var(--spacing-2xl);
-        max-width: 600px;
     }
     
     .login-right {
@@ -510,200 +512,106 @@ body {
     .login-btn,
     .form-options,
     .demo-accounts {
-        max-width: 450px;
+        max-width: none;
     }
 }
 
-/* Desktop - 1024px to 1439px */
-@media (max-width: 1439px) and (min-width: 1024px) {
+/* Responsive Design - Harmonisé avec register.css */
+@media (max-width: 1200px) {
+    .login-container {
+        min-height: 100vh;
+    }
+    
     .login-left {
         padding: var(--spacing-2xl) var(--spacing-xl);
-        max-width: 540px;
+        max-width: 500px;
     }
     
     .login-right {
-        flex: 1;
+        min-width: 40%;
     }
 }
 
-/* Tablet Landscape - 768px to 1023px */
-@media (max-width: 1023px) and (min-width: 768px) {
-    .login-container {
-        height: 100vh;
-    }
-    
-    .login-left {
-        padding: var(--spacing-xl) var(--spacing-lg);
-        max-width: 480px;
-    }
-    
-    .login-right {
-        flex: 1;
-    }
-    
-    .demo-accounts {
-        margin-top: var(--spacing-lg);
-    }
-    
-    .demo-btn {
-        padding: var(--spacing-sm) var(--spacing-md);
-        font-size: var(--font-size-body-sm);
-    }
-}
-
-/* Tablet Portrait & Mobile Landscape - 481px to 767px */
-@media (max-width: 767px) and (min-width: 481px) {
+@media (max-width: 1024px) {
     .login-container {
         flex-direction: column;
+        width: 100vw;
+        height: auto;
         min-height: 100vh;
-        padding: 0;
     }
-
-    .login-left {
-        width: 100%;
-        max-width: 600px;
-        margin: 0 auto;
-        padding: var(--spacing-xl) var(--spacing-lg);
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
+    
     .login-right {
         display: none;
     }
     
+    .login-left {
+        width: 100%;
+        max-width: 600px;
+        padding: var(--spacing-2xl) var(--spacing-xl);
+        margin: 0 auto;
+        justify-content: center;
+    }
+    
     .logo {
-        margin-bottom: var(--spacing-lg);
-        text-align: center;
-    }
-    
-    .logo img {
-        max-height: 50px;
-    }
-
-    .login-title {
-        font-size: var(--font-size-heading-lg);
-        margin-bottom: var(--spacing-md);
-    }
-    
-    .login-subtitle {
-        font-size: var(--font-size-body-md);
         margin-bottom: var(--spacing-xl);
-    }
 
-    .form-input,
-    .login-btn,
-    .form-options,
-    .demo-accounts,
-    .password-container {
-        max-width: none;
+@media (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .login-right {
+        display: none;
+    }
+    
+    .login-left {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-lg);
     }
     
     .form-input {
+        max-width: none;
         padding: var(--spacing-md) var(--spacing-md);
         font-size: var(--font-size-body-md);
-        border-radius: var(--radius-md);
     }
     
     .login-btn {
+        max-width: none;
         padding: var(--spacing-md) var(--spacing-lg);
         font-size: var(--font-size-body-md);
-        border-radius: var(--radius-md);
-        min-height: 48px;
+        margin-bottom: var(--spacing-xl);
     }
-
+    
     .form-options {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: var(--spacing-sm);
-        margin: var(--spacing-lg) auto;
+        max-width: none;
     }
     
-    .checkbox-container,
-    .forgot-password {
-        font-size: var(--font-size-body-sm);
-    }
-
     .demo-accounts {
+        max-width: none;
         margin-top: var(--spacing-lg);
-        padding: var(--spacing-md);
-        background: var(--color-gray-50);
-        border-radius: var(--radius-md);
-    }
-    
-    .demo-accounts h3 {
-        font-size: var(--font-size-body-md);
-        margin-bottom: var(--spacing-sm);
-    }
-    
-    .demo-accounts p {
-        font-size: var(--font-size-body-sm);
-        margin-bottom: var(--spacing-md);
-    }
-
-    .demo-btn {
-        width: 100%;
-        margin-bottom: var(--spacing-sm);
-        padding: var(--spacing-sm) var(--spacing-md);
-        border-radius: var(--radius-sm);
-        font-size: var(--font-size-body-sm);
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-xs);
-    }
-    
-    .demo-btn:last-child {
-        margin-bottom: 0;
     }
 }
 
-/* Mobile Portrait - 320px to 480px */
 @media (max-width: 480px) {
-    .login-container {
-        flex-direction: column;
-        min-height: 100vh;
-        padding: 0;
-    }
-
     .login-left {
-        width: 100%;
-        padding: var(--spacing-lg) var(--spacing-md);
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 100vh;
-    }
-
-    .login-right {
-        display: none;
+        padding: var(--spacing-xl) var(--spacing-md);
+        max-width: none;
     }
     
-    .logo {
-        margin-bottom: var(--spacing-md);
-        text-align: center;
-    }
-    
-    .logo img {
-        max-height: 40px;
-    }
-
     .login-title {
         font-size: var(--font-size-heading-md);
-        margin-bottom: var(--spacing-sm);
         text-align: center;
     }
     
     .login-subtitle {
-        font-size: var(--font-size-body-sm);
-        margin-bottom: var(--spacing-lg);
         text-align: center;
     }
-
+    
     .form-group {
         margin-bottom: var(--spacing-md);
     }
@@ -711,170 +619,39 @@ body {
     .form-input {
         padding: var(--spacing-sm) var(--spacing-md);
         font-size: var(--font-size-body-sm);
-        border-radius: var(--radius-sm);
-        min-height: 48px;
-    }
-    
-    .password-container {
-        position: relative;
-        max-width: none;
-    }
-    
-    .password-toggle {
-        right: var(--spacing-sm);
-        width: 40px;
-        height: 40px;
+        border-radius: var(--radius-xs);
     }
     
     .login-btn {
         padding: var(--spacing-sm) var(--spacing-lg);
         font-size: var(--font-size-body-sm);
-        border-radius: var(--radius-sm);
-        min-height: 48px;
         margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-xs);
     }
-
+    
     .form-options {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--spacing-sm);
-        margin: var(--spacing-md) auto var(--spacing-lg) auto;
-    }
-    
-    .checkbox-container {
-        width: 100%;
-        justify-content: flex-start;
-    }
-    
-    .checkbox-container label,
-    .forgot-password {
-        font-size: var(--font-size-body-xs);
-    }
-    
-    .forgot-password {
-        align-self: center;
-        margin-top: var(--spacing-xs);
-    }
-
-    .demo-accounts {
-        margin-top: var(--spacing-md);
-        padding: var(--spacing-sm);
-        background: var(--color-gray-50);
-        border-radius: var(--radius-sm);
-    }
-    
-    .demo-accounts h3 {
-        font-size: var(--font-size-body-sm);
-        margin-bottom: var(--spacing-xs);
-        text-align: center;
-    }
-    
-    .demo-accounts p {
-        font-size: var(--font-size-body-xs);
-        margin-bottom: var(--spacing-sm);
-        text-align: center;
-    }
-
-    .demo-btn {
-        width: 100%;
-        margin-bottom: var(--spacing-xs);
-        padding: var(--spacing-xs) var(--spacing-sm);
-        border-radius: var(--radius-xs);
-        font-size: var(--font-size-body-xs);
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: var(--spacing-xs);
-    }
-    
-    .demo-btn:last-child {
-        margin-bottom: 0;
-    }
-    
-    .demo-btn i {
-        font-size: 12px;
     }
 }
 
-/* Ultra-small devices - 320px and below */
-@media (max-width: 320px) {
+@media (max-width: 360px) {
     .login-left {
-        padding: var(--spacing-md) var(--spacing-sm);
+        padding: var(--spacing-lg) var(--spacing-sm);
+    }
+    
+    .form-input,
+    .login-btn {
+        min-height: 44px; /* Touch target minimum */
     }
     
     .login-title {
         font-size: var(--font-size-heading-sm);
     }
-    
-    .form-input,
-    .login-btn {
-        min-height: 44px;
-        font-size: 14px;
-    }
-    
-    .demo-btn {
-        min-height: 40px;
-        padding: var(--spacing-xs);
-        font-size: 12px;
-    }
 }
 
-/* Landscape orientation optimization */
-@media (max-height: 600px) and (orientation: landscape) {
-    .login-container {
-        flex-direction: row;
-    }
-    
-    .login-left {
-        padding: var(--spacing-md);
-        overflow-y: auto;
-    }
-    
-    .login-right {
-        display: flex;
-        min-width: 40%;
-    }
-    
-    .demo-accounts {
-        margin-top: var(--spacing-sm);
-        padding: var(--spacing-sm);
-    }
-    
-    .demo-btn {
-        padding: var(--spacing-xs) var(--spacing-sm);
-        margin-bottom: var(--spacing-xs);
-    }
-}
-
-/* High DPI / Retina displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .login-right {
-        background-image: url('../img/Illustration-login-register.jpg');
-        background-size: cover;
-        background-position: center;
-    }
-}
-
-/* Accessibility - Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-    .form-input,
-    .login-btn,
-    .password-toggle,
-    .demo-btn {
-        transition: none;
-    }
-    
-    .login-btn.loading::after {
-        animation: none;
-    }
-    
-    .login-btn::before {
-        transition: none;
-    }
-}
-
-/* High contrast mode support */
+/* High Contrast Mode */
 @media (prefers-contrast: high) {
     .form-input {
         border-width: 2px;
@@ -882,19 +659,15 @@ body {
     
     .form-input:focus {
         border-width: 3px;
-        box-shadow: none;
-    }
-    
-    .login-btn {
-        border: 2px solid transparent;
-    }
-    
-    .demo-btn {
-        border-width: 2px;
     }
 }
 
-/* Dark mode preparation (if needed later) */
-@media (prefers-color-scheme: dark) {
-    /* Dark mode styles can be added here when Design System supports it */
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .form-input,
+    .login-btn,
+    .password-toggle,
+    .error-message {
+        transition: none;
+    }
 }
