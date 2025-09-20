@@ -1,18 +1,21 @@
-// ===== NAVBAR INTEGRATION WITH AUTH SYSTEM =====
+// ===== NAVBAR MODERNE AVEC AUTH SYSTEM =====
 
 class NavbarAuth {
     constructor() {
+        this.profileDropdownOpen = false;
         this.init();
     }
 
     init() {
         // Wait for DOM and session manager
         if (typeof SessionManager === 'undefined') {
-            // Si pas de SessionManager, afficher l'état non-authentifié
             setTimeout(() => {
                 this.setupAuthState();
                 this.setupEventListeners();
                 this.updateNavigation();
+                this.initProfileDropdown();
+                this.initLogoutButtons();
+                this.highlightCurrentPage();
             }, 100);
             return;
         }
@@ -20,6 +23,9 @@ class NavbarAuth {
         this.setupAuthState();
         this.setupEventListeners();
         this.updateNavigation();
+        this.initProfileDropdown();
+        this.initLogoutButtons();
+        this.highlightCurrentPage();
     }
 
     setupAuthState() {
@@ -33,15 +39,6 @@ class NavbarAuth {
     }
 
     showAuthenticatedState(user) {
-        // Hide login button, show user profile
-        const authActions = document.getElementById('auth-actions');
-        const loginButton = document.getElementById('login-button');
-        const logoutButton = document.getElementById('logout-button');
-        
-        if (authActions) authActions.style.display = 'none';
-        if (loginButton) loginButton.style.display = 'none';
-        if (logoutButton) logoutButton.style.display = 'block';
-
         // Update user profile info
         this.updateUserProfile(user);
         
@@ -431,6 +428,135 @@ class NavbarAuth {
             console.error('Erreur lors de la déconnexion:', error);
             // Fallback redirect
             window.location.href = 'login.html';
+        }
+    }
+
+    // === NOUVELLES MÉTHODES POUR NAVBAR MODERNE ===
+    
+    initProfileDropdown() {
+        const trigger = document.getElementById('profile-dropdown-trigger');
+        const menu = document.getElementById('profile-dropdown-menu');
+        
+        if (!trigger || !menu) return;
+        
+        // Toggle dropdown on click
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleProfileDropdown();
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+                this.closeProfileDropdown();
+            }
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.profileDropdownOpen) {
+                this.closeProfileDropdown();
+            }
+        });
+    }
+    
+    toggleProfileDropdown() {
+        const trigger = document.getElementById('profile-dropdown-trigger');
+        const menu = document.getElementById('profile-dropdown-menu');
+        
+        if (!trigger || !menu) return;
+        
+        if (this.profileDropdownOpen) {
+            this.closeProfileDropdown();
+        } else {
+            this.openProfileDropdown();
+        }
+    }
+    
+    openProfileDropdown() {
+        const trigger = document.getElementById('profile-dropdown-trigger');
+        const menu = document.getElementById('profile-dropdown-menu');
+        
+        if (!trigger || !menu) return;
+        
+        trigger.setAttribute('aria-expanded', 'true');
+        menu.classList.add('active');
+        this.profileDropdownOpen = true;
+    }
+    
+    closeProfileDropdown() {
+        const trigger = document.getElementById('profile-dropdown-trigger');
+        const menu = document.getElementById('profile-dropdown-menu');
+        
+        if (!trigger || !menu) return;
+        
+        trigger.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('active');
+        this.profileDropdownOpen = false;
+    }
+    
+    initLogoutButtons() {
+        // Desktop logout button
+        const desktopLogout = document.getElementById('desktop-logout-btn');
+        if (desktopLogout) {
+            desktopLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleLogout();
+            });
+        }
+        
+        // Mobile logout button
+        const mobileLogout = document.getElementById('mobile-menu-logout');
+        if (mobileLogout) {
+            mobileLogout.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleLogout();
+            });
+        }
+    }
+    
+    handleLogout() {
+        // Simple confirmation
+        if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+            this.performLogout();
+        }
+    }
+    
+    performLogout() {
+        // Clear session if SessionManager exists
+        if (typeof SessionManager !== 'undefined') {
+            SessionManager.clearSession();
+        }
+        
+        // Clear localStorage
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        // Redirect to login page
+        window.location.href = 'login.html';
+    }
+    
+    highlightCurrentPage() {
+        // Get current page name
+        const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+        
+        // Remove all active states
+        document.querySelectorAll('.mobile-menu-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active state to current page
+        const currentLink = document.querySelector(`.mobile-menu-link[data-page="${currentPage.replace('.html', '')}"]`);
+        if (currentLink) {
+            currentLink.classList.add('active');
+        }
+        
+        // Fallback: try href matching
+        if (!currentLink) {
+            const hrefLink = document.querySelector(`.mobile-menu-link[href="${currentPage}"]`);
+            if (hrefLink) {
+                hrefLink.classList.add('active');
+            }
         }
     }
 
