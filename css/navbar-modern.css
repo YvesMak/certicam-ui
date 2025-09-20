@@ -24,13 +24,40 @@
 .header-left {
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
 }
 
 .header-right {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
+}
+
+/* Photo de profil dans la navbar */
+.profile-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.profile-link:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-profile-pic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-border-primary);
+    transition: all 0.2s ease;
+}
+
+.profile-link:hover .navbar-profile-pic {
+    border-color: var(--color-primary);
 }
 
 /* Bouton menu mobile */

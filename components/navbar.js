@@ -7,8 +7,9 @@ class NavbarAuth {
     }
 
     init() {
-        // Initialisation optimisée sans délais - navbar épurée
+        // Initialisation optimisée sans délais - navbar épurée avec photo de profil
         this.setupAuthState();
+        this.initProfileLink();
         this.initLogoutButtons();
         this.highlightCurrentPage();
         
@@ -402,6 +403,37 @@ class NavbarAuth {
     }
 
     // === MÉTHODES POUR NAVBAR ÉPURÉE ===
+    
+    initProfileLink() {
+        const profileLink = document.getElementById('navbar-profile-link');
+        if (profileLink) {
+            profileLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.goToProfileSettings();
+            });
+        }
+    }
+    
+    goToProfileSettings() {
+        // Navigate to settings page with profile section
+        const currentPath = window.location.pathname;
+        
+        if (currentPath.includes('settings.html')) {
+            // Already on settings page, just scroll to profile section
+            window.location.hash = 'profile';
+            setTimeout(() => {
+                const profileSection = document.getElementById('profile-section') || 
+                                     document.querySelector('[data-section="profile"]') ||
+                                     document.querySelector('.profile-section');
+                if (profileSection) {
+                    profileSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        } else {
+            // Navigate to settings page with profile section
+            window.location.href = 'settings.html#profile';
+        }
+    }
     
     initLogoutButtons() {
         // Mobile logout button seulement
