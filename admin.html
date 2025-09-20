@@ -89,7 +89,7 @@
                                 <th class="col-activity sortable">
                                     <div class="header-content">
                                         <span>Dernière activité</span>
-                                        <i class="fi fi-rr-arrow-small-down sort-icon"></i>
+                                        <i class="fi fi-rr-sort sort-icon"></i>
                                     </div>
                                 </th>
                                 <th class="col-date">
@@ -299,6 +299,53 @@
                 <button class="btn-primary" id="save-user">
                     <i class="fi fi-rr-check"></i>
                     <span>Enregistrer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="modal-overlay" id="filterModal">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h3>Filtrer les utilisateurs</h3>
+                    <p class="modal-subtitle">Sélectionnez vos critères de filtrage</p>
+                </div>
+                <button class="modal-close" id="close-filter-modal">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="filter-access" class="input-label">Niveau d'accès</label>
+                        <select id="filter-access" class="form-select">
+                            <option value="">Tous les niveaux</option>
+                            <option value="admin">Administrateur</option>
+                            <option value="agent">Agent</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="filter-activity" class="input-label">Statut d'activité</label>
+                        <select id="filter-activity" class="form-select">
+                            <option value="">Tous les statuts</option>
+                            <option value="active">Actifs</option>
+                            <option value="inactive">Inactifs</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary" id="reset-filters">
+                    <span>Réinitialiser</span>
+                </button>
+                <button class="btn-primary" id="apply-filters">
+                    <i class="fi fi-rr-check"></i>
+                    <span>Appliquer</span>
                 </button>
             </div>
         </div>

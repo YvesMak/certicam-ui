@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Modales Admin - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <style>
+        body { padding: 40px; font-family: sans-serif; }
+        .debug-section { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px; 
+            border-left: 4px solid #059669;
+        }
+        .test-btn { margin: 10px; }
+        #debug-console { 
+            background: #1a1a1a; 
+            color: #00ff00; 
+            padding: 20px; 
+            border-radius: 8px; 
+            font-family: 'Courier New', monospace; 
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Debug des Modales Admin</h1>
+    
+    <div class="debug-section">
+        <h3>Tests des Modales</h3>
+        
+        <!-- Bouton original -->
+        <button class="btn-primary add-user-btn" id="add-user">
+            <i class="fi fi-rr-plus"></i>
+            <span>Ajouter utilisateur (original)</span>
+        </button>
+        
+        <!-- Boutons de test -->
+        <button class="btn-secondary test-btn" onclick="testAddModal()">
+            Test Modal Ajout
+        </button>
+        
+        <button class="btn-secondary test-btn" onclick="testFilterModal()">  
+            Test Modal Filtres
+        </button>
+        
+        <button class="btn-secondary test-btn" onclick="forceShowModal()">
+            Forcer Affichage Modal
+        </button>
+        
+        <button class="btn-secondary test-btn" onclick="inspectModal()">
+            Inspecter Modal
+        </button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Console de Debug</h3>
+        <div id="debug-console">Initialisation...\n</div>
+        <button onclick="clearDebug()">Effacer</button>
+    </div>
+
+    <!-- User Management Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h3 id="modal-title">Ajouter un utilisateur</h3>
+                    <p class="modal-subtitle">Remplissez les informations ci-dessous</p>
+                </div>
+                <button class="modal-close" id="close-modal">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            
+            <div class="modal-content">
+                <form id="user-form" class="user-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="user-name" class="input-label">Nom complet</label>
+                            <input type="text" id="user-name" name="name" class="form-input" placeholder="Ex: Jean Dupont" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="user-email" class="input-label">Adresse email</label>
+                            <input type="email" id="user-email" name="email" class="form-input" placeholder="Ex: jean.dupont@banque.com" required>
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label for="user-address" class="input-label">Adresse complète</label>
+                            <input type="text" id="user-address" name="address" class="form-input" placeholder="Ex: 123 Rue des Banques, Yaoundé" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="user-password" class="input-label">Mot de passe</label>
+                            <input type="password" id="user-password" name="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="access-level" class="input-label">Niveau d'accès</label>
+                            <select id="access-level" name="access" class="form-select" required>
+                                <option value="">Sélectionner un niveau</option>
+                                <option value="admin">Administrateur</option>
+                                <option value="agent">Agent</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-user">
+                    <span>Annuler</span>
+                </button>
+                <button class="btn-primary" id="save-user">
+                    <i class="fi fi-rr-check"></i>
+                    <span>Enregistrer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal -->
+    <div class="modal-overlay" id="filterModal">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h3>Filtrer les utilisateurs</h3>
+                    <p class="modal-subtitle">Sélectionnez vos critères de filtrage</p>
+                </div>
+                <button class="modal-close" id="close-filter-modal">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label for="filter-access" class="input-label">Niveau d'accès</label>
+                        <select id="filter-access" class="form-select">
+                            <option value="">Tous les niveaux</option>
+                            <option value="admin">Administrateur</option>
+                            <option value="agent">Agent</option>
+                        </select>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="filter-activity" class="input-label">Statut d'activité</label>
+                        <select id="filter-activity" class="form-select">
+                            <option value="">Tous les statuts</option>
+                            <option value="active">Actifs</option>
+                            <option value="inactive">Inactifs</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary" id="reset-filters">
+                    <span>Réinitialiser</span>
+                </button>
+                <button class="btn-primary" id="apply-filters">
+                    <i class="fi fi-rr-check"></i>
+                    <span>Appliquer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Console de debug
+        function debugLog(message) {
+            const console = document.getElementById('debug-console');
+            const timestamp = new Date().toLocaleTimeString();
+            console.innerHTML += `[${timestamp}] ${message}\n`;
+            console.scrollTop = console.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearDebug() {
+            document.getElementById('debug-console').innerHTML = '';
+        }
+        
+        // Tests spécifiques
+        function testAddModal() {
+            debugLog('🧪 Test modal ajout...');
+            try {
+                const modal = document.getElementById('userModal');
+                debugLog(`Modal avant test: ${modal ? 'trouvé' : 'non trouvé'}`);
+                if (modal) {
+                    debugLog(`Classes avant: ${modal.className}`);
+                    debugLog(`Display avant: ${window.getComputedStyle(modal).display}`);
+                }
+                
+                if (typeof openAddUserModal === 'function') {
+                    debugLog('Appel de openAddUserModal()...');
+                    openAddUserModal();
+                    debugLog('✅ Fonction openAddUserModal() appelée');
+                    
+                    // Vérifier l'état après
+                    setTimeout(() => {
+                        if (modal) {
+                            debugLog(`Classes après: ${modal.className}`);
+                            debugLog(`Display après: ${window.getComputedStyle(modal).display}`);
+                            debugLog(`Visible après: ${modal.offsetWidth > 0 && modal.offsetHeight > 0}`);
+                        }
+                    }, 100);
+                } else {
+                    debugLog('❌ Fonction openAddUserModal() non trouvée');
+                    debugLog(`Type de openAddUserModal: ${typeof openAddUserModal}`);
+                    debugLog(`window.openAddUserModal: ${typeof window.openAddUserModal}`);
+                }
+            } catch (error) {
+                debugLog(`❌ Erreur: ${error.message}`);
+                debugLog(`Stack: ${error.stack}`);
+            }
+        }
+        
+        function testFilterModal() {
+            debugLog('🧪 Test modal filtres...');
+            try {
+                const modal = document.getElementById('filterModal');
+                debugLog(`Modal filtres avant test: ${modal ? 'trouvé' : 'non trouvé'}`);
+                
+                if (typeof toggleFilters === 'function') {
+                    debugLog('Appel de toggleFilters()...');
+                    toggleFilters();
+                    debugLog('✅ Fonction toggleFilters() appelée');
+                    
+                    // Vérifier l'état après
+                    setTimeout(() => {
+                        if (modal) {
+                            debugLog(`Classes filtres après: ${modal.className}`);
+                            debugLog(`Display filtres après: ${window.getComputedStyle(modal).display}`);
+                        }
+                    }, 100);
+                } else {
+                    debugLog('❌ Fonction toggleFilters() non trouvée');
+                }
+            } catch (error) {
+                debugLog(`❌ Erreur filtres: ${error.message}`);
+            }
+        }
+        
+        function forceShowModal() {
+            debugLog('🔧 Forçage affichage modal...');
+            const modal = document.getElementById('userModal');
+            if (modal) {
+                debugLog('Modal trouvé, application des styles...');
+                modal.style.display = 'flex !important';
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.zIndex = '99999';
+                modal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                modal.classList.add('show');
+                
+                debugLog('✅ Modal forcée à l\'affichage');
+                debugLog(`Nouveau display: ${modal.style.display}`);
+                debugLog(`Classes: ${modal.className}`);
+                
+                // Test de visibilité
+                const rect = modal.getBoundingClientRect();
+                debugLog(`Position: top=${rect.top}, left=${rect.left}, width=${rect.width}, height=${rect.height}`);
+            } else {
+                debugLog('❌ Modal non trouvée pour forçage');
+            }
+        }
+        
+        function inspectModal() {
+            debugLog('🔍 Inspection du modal...');
+            const modal = document.getElementById('userModal');
+            if (modal) {
+                const computed = window.getComputedStyle(modal);
+                const rect = modal.getBoundingClientRect();
+                
+                debugLog(`Modal ID: ${modal.id}`);
+                debugLog(`Modal classes: "${modal.className}"`);
+                debugLog(`Style display: "${modal.style.display}"`);
+                debugLog(`Computed display: "${computed.display}"`);
+                debugLog(`Computed position: "${computed.position}"`);
+                debugLog(`Computed z-index: "${computed.zIndex}"`);
+                debugLog(`Computed visibility: "${computed.visibility}"`);
+                debugLog(`Computed opacity: "${computed.opacity}"`);
+                debugLog(`BoundingRect: w=${rect.width}, h=${rect.height}, top=${rect.top}, left=${rect.left}`);
+                debugLog(`OffsetWidth: ${modal.offsetWidth}, OffsetHeight: ${modal.offsetHeight}`);
+                debugLog(`Modal visible: ${modal.offsetWidth > 0 && modal.offsetHeight > 0}`);
+                debugLog(`Modal in viewport: ${rect.width > 0 && rect.height > 0}`);
+                
+                // Vérifier les éléments enfants
+                const container = modal.querySelector('.modal-container');
+                if (container) {
+                    const containerRect = container.getBoundingClientRect();
+                    debugLog(`Container: w=${containerRect.width}, h=${containerRect.height}`);
+                } else {
+                    debugLog('❌ Container modal non trouvé');
+                }
+            } else {
+                debugLog('❌ Modal non trouvé dans le DOM');
+            }
+            
+            // Vérifier aussi le modal de filtres
+            const filterModal = document.getElementById('filterModal');
+            if (filterModal) {
+                debugLog(`Modal filtres présent: ${filterModal.id}`);
+            } else {
+                debugLog('❌ Modal filtres non trouvé');
+            }
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('🚀 Page de debug chargée');
+            
+            // Vérification des éléments
+            const addBtn = document.getElementById('add-user');
+            const modal = document.getElementById('userModal');
+            const filterModal = document.getElementById('filterModal');
+            
+            debugLog(`Bouton ajout: ${addBtn ? '✅' : '❌'}`);
+            debugLog(`Modal utilisateur: ${modal ? '✅' : '❌'}`);
+            debugLog(`Modal filtres: ${filterModal ? '✅' : '❌'}`);
+        });
+        
+        // Surcharge console.log pour afficher dans notre console
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            debugLog(args.join(' '));
+        };
+        
+        debugLog('🎯 Console de debug prête');
+    </script>
+    
+    <!-- Chargement du script admin -->
+    <script src="js/admin.js"></script>
+</body>
+</html>

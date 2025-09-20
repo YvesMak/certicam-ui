@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 Demo Admin Interface - Certicam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .demo-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .demo-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .demo-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .demo-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .badge {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: #f8f9fa;
+        }
+        
+        .control-btn.active {
+            background: #00c36c;
+            color: white;
+        }
+        
+        .demo-frame-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .demo-frame-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .demo-dots {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .demo-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .demo-dot.red { background: #ff5f56; }
+        .demo-dot.yellow { background: #ffbd2e; }
+        .demo-dot.green { background: #27ca3f; }
+        
+        .demo-url {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #666;
+            margin-left: auto;
+        }
+        
+        .demo-iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+        }
+        
+        .feature-card li {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .feature-card li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+        
+        @media (max-width: 768px) {
+            .demo-header h1 {
+                font-size: 2rem;
+            }
+            
+            .demo-controls {
+                gap: 10px;
+            }
+            
+            .control-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .demo-iframe {
+                height: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🎯 Interface Admin Modernisée</h1>
+            <p>Découvrez la nouvelle expérience utilisateur Certicam</p>
+            
+            <div class="demo-badges">
+                <span class="badge">🎨 Flat Design</span>
+                <span class="badge">📱 Responsive</span>
+                <span class="badge">⚡ Performance</span>
+                <span class="badge">🔧 Fonctionnel</span>
+            </div>
+        </div>
+        
+        <div class="demo-controls">
+            <button class="control-btn active" onclick="setViewport('desktop')">🖥️ Desktop</button>
+            <button class="control-btn" onclick="setViewport('tablet')">📱 Tablet</button>
+            <button class="control-btn" onclick="setViewport('mobile')">📱 Mobile</button>
+            <button class="control-btn" onclick="highlightFeature('search')">🔍 Recherche</button>
+            <button class="control-btn" onclick="highlightFeature('modal')">📝 Modal</button>
+            <button class="control-btn" onclick="highlightFeature('actions')">⚙️ Actions</button>
+        </div>
+        
+        <div class="demo-frame-container">
+            <div class="demo-frame-header">
+                <div class="demo-dots">
+                    <div class="demo-dot red"></div>
+                    <div class="demo-dot yellow"></div>
+                    <div class="demo-dot green"></div>
+                </div>
+                <div class="demo-url">certicam.local/admin</div>
+            </div>
+            <iframe class="demo-iframe" id="demo-iframe" src="admin.html" title="Interface Admin Modernisée"></iframe>
+        </div>
+        
+        <div class="demo-features">
+            <div class="feature-card">
+                <h3>🎨 Design System</h3>
+                <ul>
+                    <li>Flat Design moderne</li>
+                    <li>Palette de couleurs harmonisée</li>
+                    <li>Typographie Outfit optimisée</li>
+                    <li>Micro-interactions fluides</li>
+                    <li>Variables CSS centralisées</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📊 Interface Data</h3>
+                <ul>
+                    <li>Tableau responsive optimisé</li>
+                    <li>Tri intelligent par colonnes</li>
+                    <li>Recherche en temps réel</li>
+                    <li>Actions contextuelles</li>
+                    <li>Statistiques intégrées</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>💼 Gestion Utilisateurs</h3>
+                <ul>
+                    <li>Modal moderne de création</li>
+                    <li>Édition inline intuitive</li>
+                    <li>Validation en temps réel</li>
+                    <li>Gestion des rôles/accès</li>
+                    <li>Notifications système</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📱 Experience Mobile</h3>
+                <ul>
+                    <li>Interface 100% responsive</li>
+                    <li>Touch-friendly interactions</li>
+                    <li>Navigation optimisée</li>
+                    <li>Performance améliorée</li>
+                    <li>Accessibilité renforcée</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setViewport(type) {
+            const iframe = document.getElementById('demo-iframe');
+            const buttons = document.querySelectorAll('.control-btn');
+            
+            // Reset active states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Set active button
+            event.target.classList.add('active');
+            
+            switch(type) {
+                case 'desktop':
+                    iframe.style.width = '100%';
+                    iframe.style.height = '700px';
+                    break;
+                case 'tablet':
+                    iframe.style.width = '768px';
+                    iframe.style.height = '600px';
+                    iframe.style.margin = '0 auto';
+                    break;
+                case 'mobile':
+                    iframe.style.width = '375px';
+                    iframe.style.height = '650px';
+                    iframe.style.margin = '0 auto';
+                    break;
+            }
+        }
+        
+        function highlightFeature(feature) {
+            console.log(`🎯 Test de la fonctionnalité: ${feature}`);
+            
+            const messages = {
+                'search': '🔍 Testez la recherche dans l\'iframe ci-dessus',
+                'modal': '📝 Cliquez sur "Ajouter utilisateur" pour tester le modal',
+                'actions': '⚙️ Survolez une ligne du tableau pour voir les actions'
+            };
+            
+            // Simple notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: white;
+                color: #667eea;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+                z-index: 1000;
+                font-weight: 500;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = messages[feature];
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Animation d'entrée
+        window.addEventListener('load', function() {
+            const iframe = document.getElementById('demo-iframe');
+            iframe.style.opacity = '0';
+            iframe.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+                iframe.style.transition = 'all 0.5s ease';
+                iframe.style.opacity = '1';
+                iframe.style.transform = 'scale(1)';
+            }, 500);
+        });
+    </script>
+</body>
+</html>

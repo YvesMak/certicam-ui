@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Modales Admin</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+</head>
+<body>
+    <div style="padding: 40px;">
+        <h1>Test des Modales Admin</h1>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn-primary add-user-btn" id="add-user">
+                <i class="fi fi-rr-plus"></i>
+                <span>Ajouter utilisateur</span>
+            </button>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn-secondary" onclick="testEditModal()">
+                <i class="fi fi-rr-edit"></i>
+                <span>Tester Modal Edit</span>
+            </button>
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn-secondary" onclick="showModal()">
+                <span>Forcer l'affichage de la modale</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- User Management Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h3 id="modal-title">Ajouter un utilisateur</h3>
+                    <p class="modal-subtitle">Remplissez les informations ci-dessous</p>
+                </div>
+                <button class="modal-close" id="close-modal">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            
+            <div class="modal-content">
+                <form id="user-form" class="user-form">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label for="user-name" class="input-label">Nom complet</label>
+                            <input type="text" id="user-name" name="name" class="form-input" placeholder="Ex: Jean Dupont" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="user-email" class="input-label">Adresse email</label>
+                            <input type="email" id="user-email" name="email" class="form-input" placeholder="Ex: jean.dupont@banque.com" required>
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label for="user-address" class="input-label">Adresse complète</label>
+                            <input type="text" id="user-address" name="address" class="form-input" placeholder="Ex: 123 Rue des Banques, Yaoundé" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="user-password" class="input-label">Mot de passe</label>
+                            <input type="password" id="user-password" name="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="access-level" class="input-label">Niveau d'accès</label>
+                            <select id="access-level" name="access" class="form-select" required>
+                                <option value="">Sélectionner un niveau</option>
+                                <option value="admin">Administrateur</option>
+                                <option value="agent">Agent</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancel-user">
+                    <span>Annuler</span>
+                </button>
+                <button class="btn-primary" id="save-user">
+                    <i class="fi fi-rr-check"></i>
+                    <span>Enregistrer</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test direct du modal
+        function showModal() {
+            const modal = document.getElementById('userModal');
+            modal.classList.add('show');
+            console.log('Modal forcée à s\'afficher');
+        }
+        
+        function testEditModal() {
+            // Test d'edit avec données
+            editUser(1);
+        }
+        
+        // Inclure le script admin
+        console.log('Page de test chargée');
+    </script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

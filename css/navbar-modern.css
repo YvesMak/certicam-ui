@@ -11,7 +11,7 @@
     box-shadow: none;
 }
 
-.header-content {
+.certicam-header .header-content {
     display: flex;
     align-items: center;
     justify-content: space-between;

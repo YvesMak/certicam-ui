@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Modal Ultra Simple</title>
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; }
+        .test-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .test-modal.visible {
+            display: flex !important;
+        }
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #059669;
+            color: white;
+        }
+        #log { 
+            background: #f5f5f5; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-line;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Modal Ultra Simple</h1>
+    
+    <button onclick="showTestModal()">Afficher Modal</button>
+    <button onclick="hideTestModal()">Masquer Modal</button>
+    <button onclick="testLog()">Test Log</button>
+    <button onclick="checkElements()">Vérifier Éléments</button>
+    
+    <div id="log">Logs apparaitront ici...\n</div>
+    
+    <!-- Modal Ultra Simple -->
+    <div id="testModal" class="test-modal">
+        <div class="modal-box">
+            <h3>Modal de Test</h3>
+            <p>Si vous voyez ceci, le modal fonctionne !</p>
+            <button onclick="hideTestModal()">Fermer</button>
+        </div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.textContent += `[${time}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function showTestModal() {
+            log('Tentative d\'affichage du modal...');
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                log('Modal trouvé dans le DOM');
+                modal.classList.add('visible');
+                modal.style.display = 'flex';
+                log('Classes ajoutées et style appliqué');
+                log(`Classes actuelles: ${modal.className}`);
+                log(`Display: ${modal.style.display}`);
+                
+                // Vérifier la visibilité
+                setTimeout(() => {
+                    const rect = modal.getBoundingClientRect();
+                    log(`Position: ${rect.width}x${rect.height} à (${rect.left}, ${rect.top})`);
+                    log(`Visible: ${modal.offsetWidth > 0 && modal.offsetHeight > 0}`);
+                }, 100);
+            } else {
+                log('ERREUR: Modal non trouvé !');
+            }
+        }
+        
+        function hideTestModal() {
+            log('Masquage du modal...');
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                modal.classList.remove('visible');
+                modal.style.display = 'none';
+                log('Modal masqué');
+            }
+        }
+        
+        function testLog() {
+            log('Test du système de log - OK');
+        }
+        
+        function checkElements() {
+            log('=== VÉRIFICATION DES ÉLÉMENTS ===');
+            const modal = document.getElementById('testModal');
+            log(`Modal présent: ${modal ? 'OUI' : 'NON'}`);
+            if (modal) {
+                log(`ID: ${modal.id}`);
+                log(`Classes: "${modal.className}"`);
+                log(`Style display: "${modal.style.display}"`);
+                log(`Computed display: "${window.getComputedStyle(modal).display}"`);
+                log(`Position: "${window.getComputedStyle(modal).position}"`);
+                log(`Z-index: "${window.getComputedStyle(modal).zIndex}"`);
+            }
+            
+            const box = document.querySelector('.modal-box');
+            log(`Modal box présent: ${box ? 'OUI' : 'NON'}`);
+            log('=== FIN VÉRIFICATION ===');
+        }
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            log('Page chargée - Test modal ultra simple');
+            checkElements();
+        });
+    </script>
+</body>
+</html>

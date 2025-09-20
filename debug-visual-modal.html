@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Visual Modal</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        body { padding: 40px; }
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000001;
+            max-width: 300px;
+        }
+        
+        /* Modal de debug visuel - Rouge vif pour test */
+        .modal-overlay.debug-visible {
+            display: flex !important;
+            background: rgba(255, 0, 0, 0.8) !important; /* Rouge pour voir */
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 999999 !important;
+            visibility: visible !important;
+        }
+        
+        .debug-visible .modal-container {
+            background: yellow !important; /* Jaune pour voir */
+            border: 5px solid red !important;
+            transform: none !important;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug Visual Modal</h1>
+    
+    <div class="debug-info" id="debug-info">
+        Aucune information...
+    </div>
+    
+    <button onclick="testNormalModal()" style="padding: 15px; margin: 10px; background: #059669; color: white; border: none; border-radius: 5px;">
+        Test Modal Normal
+    </button>
+    
+    <button onclick="testDebugModal()" style="padding: 15px; margin: 10px; background: #dc3545; color: white; border: none; border-radius: 5px;">
+        Test Modal Rouge Visible
+    </button>
+    
+    <button onclick="inspectModal()" style="padding: 15px; margin: 10px; background: #6c757d; color: white; border: none; border-radius: 5px;">
+        Inspecter Modal
+    </button>
+
+    <!-- Modal Test -->
+    <div class="modal-overlay" id="testModal">
+        <div class="modal-container">
+            <div style="padding: 30px; text-align: center;">
+                <h3>Modal de Test</h3>
+                <p>Si vous voyez ceci, le modal fonctionne !</p>
+                <button onclick="hideModal()" style="padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px;">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateDebugInfo(info) {
+            document.getElementById('debug-info').innerHTML = info;
+            console.log(info);
+        }
+        
+        function testNormalModal() {
+            updateDebugInfo('Test modal normal...');
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                modal.classList.remove('debug-visible');
+                modal.classList.add('show');
+                
+                const computed = window.getComputedStyle(modal);
+                const rect = modal.getBoundingClientRect();
+                
+                updateDebugInfo(`
+Modal Normal:<br>
+Display: ${computed.display}<br>
+Position: ${computed.position}<br>
+Z-index: ${computed.zIndex}<br>
+Width: ${rect.width}px<br>
+Height: ${rect.height}px<br>
+Classes: ${modal.className}
+                `);
+            }
+        }
+        
+        function testDebugModal() {
+            updateDebugInfo('Test modal rouge visible...');
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                modal.classList.remove('show');
+                modal.classList.add('debug-visible');
+                
+                updateDebugInfo(`
+Modal Rouge Forcé:<br>
+Background: Rouge<br>
+Container: Jaune<br>
+Devrait être visible !
+                `);
+            }
+        }
+        
+        function inspectModal() {
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                const computed = window.getComputedStyle(modal);
+                const rect = modal.getBoundingClientRect();
+                const container = modal.querySelector('.modal-container');
+                const containerRect = container ? container.getBoundingClientRect() : null;
+                
+                updateDebugInfo(`
+Inspection Complète:<br>
+Classes: ${modal.className}<br>
+Display: ${computed.display}<br>
+Visibility: ${computed.visibility}<br>
+Opacity: ${computed.opacity}<br>
+Position: ${rect.left},${rect.top}<br>
+Size: ${rect.width}x${rect.height}<br>
+Container: ${containerRect ? containerRect.width + 'x' + containerRect.height : 'Non trouvé'}
+                `);
+            }
+        }
+        
+        function hideModal() {
+            const modal = document.getElementById('testModal');
+            if (modal) {
+                modal.classList.remove('show', 'debug-visible');
+                updateDebugInfo('Modal fermé');
+            }
+        }
+        
+        // Auto-test au chargement
+        setTimeout(() => {
+            updateDebugInfo('Page chargée - Prêt pour les tests');
+        }, 500);
+    </script>
+</body>
+</html>

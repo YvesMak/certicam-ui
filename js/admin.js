@@ -71,7 +71,15 @@ function initAdminPage() {
     // Event listeners pour les boutons
     const addUserBtn = document.getElementById('add-user');
     if (addUserBtn) {
-        addUserBtn.addEventListener('click', openAddUserModal);
+        addUserBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Add user button clicked');
+            openAddUserModal();
+        });
+        console.log('✅ Add user button event listener attached');
+    } else {
+        console.error('❌ Add user button not found!');
     }
     
     // Event listener pour le bouton filtres
@@ -90,27 +98,54 @@ function initAdminPage() {
 // Initialisation du modal utilisateur
 function initUserModal() {
     const modal = document.getElementById('userModal');
+    if (!modal) return;
+    
     const closeBtn = document.getElementById('close-modal');
-    const cancelBtn = document.getElementById('cancel-user');
-    const saveBtn = document.getElementById('save-user');
-
     if (closeBtn) {
-        closeBtn.addEventListener('click', closeUserModal);
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeUserModal();
+        });
     }
-
+    
+    const cancelBtn = document.getElementById('cancel-user');
     if (cancelBtn) {
-        cancelBtn.addEventListener('click', closeUserModal);
+        cancelBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeUserModal();
+        });
     }
-
+    
+    // Fermer en cliquant sur l'overlay (mais pas sur le contenu)
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            closeUserModal();
+        }
+    });
+    
+    // Empêcher la fermeture en cliquant sur le contenu du modal
+    const modalContainer = modal.querySelector('.modal-container');
+    if (modalContainer) {
+        modalContainer.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+    
+    const saveBtn = document.getElementById('save-user');
     if (saveBtn) {
-        saveBtn.addEventListener('click', saveUser);
-    }
-
-    // Fermer modal en cliquant à l'extérieur
-    if (modal) {
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeUserModal();
+        saveBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('💾 Bouton Enregistrer cliqué');
+            console.log('Mode édition:', isEditMode);
+            console.log('ID édition:', editingUserId);
+            
+            if (isEditMode) {
+                updateUser();
+            } else {
+                saveUser();
             }
         });
     }
@@ -293,6 +328,7 @@ function parseDate(dateString) {
 
 // Ouvrir le modal d'ajout d'utilisateur
 function openAddUserModal() {
+    console.log('🚀 Opening add user modal...');
     isEditMode = false;
     editingUserId = null;
     
@@ -309,8 +345,32 @@ function openAddUserModal() {
     }
     
     if (modal) {
-        modal.classList.add('show');
-        modal.style.display = 'flex';
+        // Supprimer d'abord toute classe ou style existant
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        
+        // Forcer le recalcul de style
+        modal.offsetHeight;
+        
+        // Ajouter un petit délai pour éviter les conflits d'événements
+        setTimeout(() => {
+            // Ajouter la classe et le style
+            modal.classList.add('show');
+            modal.style.display = 'flex';
+            modal.style.position = 'fixed';
+            modal.style.top = '0';
+            modal.style.left = '0';
+            modal.style.width = '100%';
+            modal.style.height = '100%';
+            modal.style.zIndex = '99999';
+            modal.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+            
+            console.log('✅ Modal should be visible now');
+            console.log('Modal classList:', modal.classList.toString());
+            console.log('Modal computed style:', window.getComputedStyle(modal).display);
+        }, 50);
+    } else {
+        console.error('❌ Modal element not found!');
     }
 }
 
@@ -365,7 +425,13 @@ function closeUserModal() {
 
 // Sauvegarder un utilisateur
 function saveUser() {
+    console.log('💾 Sauvegarde utilisateur...');
     const form = document.getElementById('user-form');
+    if (!form) {
+        console.error('❌ Formulaire non trouvé');
+        return;
+    }
+    
     const formData = new FormData(form);
     
     const userData = {
@@ -375,6 +441,8 @@ function saveUser() {
         password: formData.get('password'),
         access: formData.get('access')
     };
+    
+    console.log('📝 Données du formulaire:', userData);
     
     // Validation basique
     if (!userData.name || !userData.email || !userData.address || !userData.access) {
@@ -390,33 +458,73 @@ function saveUser() {
     const currentDate = new Date();
     const dateString = `${currentDate.getDate()} ${getMonthName(currentDate.getMonth())} ${currentDate.getFullYear()}`;
     
-    if (isEditMode && editingUserId) {
-        // Modifier l'utilisateur existant
-        const userIndex = users.findIndex(u => u.id === editingUserId);
-        if (userIndex !== -1) {
-            users[userIndex] = {
-                ...users[userIndex],
-                ...userData,
-                password: userData.password || users[userIndex].password
-            };
-        }
-        showNotification('Utilisateur modifié avec succès', 'success');
-    } else {
-        // Ajouter un nouvel utilisateur
-        const newUser = {
-            id: Math.max(...users.map(u => u.id)) + 1,
-            ...userData,
-            lastActivity: 'Jamais connecté',
-            dateAdded: dateString,
-            avatar: 'img/coco-profile.jpg'
-        };
-        users.push(newUser);
-        showNotification('Utilisateur ajouté avec succès', 'success');
-    }
+    // Ajouter un nouvel utilisateur
+    const newUser = {
+        id: Math.max(...users.map(u => u.id)) + 1,
+        ...userData,
+        lastActivity: 'Jamais connecté',
+        dateAdded: dateString,
+        avatar: 'img/coco-profile.jpg'
+    };
+    
+    users.push(newUser);
+    console.log('✅ Nouvel utilisateur ajouté:', newUser);
     
     renderUsersTable();
     updatePageStats();
+    showNotification('Utilisateur ajouté avec succès', 'success');
     closeUserModal();
+}
+
+// Mettre à jour un utilisateur existant
+function updateUser() {
+    console.log('📝 Mise à jour utilisateur...');
+    console.log('ID en cours d\'édition:', editingUserId);
+    
+    const form = document.getElementById('user-form');
+    if (!form) {
+        console.error('❌ Formulaire non trouvé');
+        return;
+    }
+    
+    const formData = new FormData(form);
+    
+    const userData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        address: formData.get('address'),
+        password: formData.get('password'),
+        access: formData.get('access')
+    };
+    
+    console.log('📝 Données de mise à jour:', userData);
+    
+    // Validation basique
+    if (!userData.name || !userData.email || !userData.address || !userData.access) {
+        alert('Veuillez remplir tous les champs obligatoires');
+        return;
+    }
+    
+    // Trouver et mettre à jour l'utilisateur
+    const userIndex = users.findIndex(u => u.id === editingUserId);
+    if (userIndex !== -1) {
+        const existingUser = users[userIndex];
+        users[userIndex] = {
+            ...existingUser,
+            ...userData,
+            password: userData.password || existingUser.password
+        };
+        
+        console.log('✅ Utilisateur mis à jour:', users[userIndex]);
+        
+        renderUsersTable();
+        updatePageStats();
+        showNotification('Utilisateur modifié avec succès', 'success');
+        closeUserModal();
+    } else {
+        console.error('❌ Utilisateur non trouvé pour mise à jour');
+        alert('Erreur: Utilisateur non trouvé');
+    }
 }
 
 // Obtenir le nom du mois
@@ -475,7 +583,7 @@ function toggleFilters() {
                     <h3>Filtres avancés</h3>
                     <p class="modal-subtitle">Filtrer les utilisateurs</p>
                 </div>
-                <button class="modal-close" onclick="closeFilterModal()">
+                <button class="modal-close">
                     <i class="fi fi-rr-cross"></i>
                 </button>
             </div>
@@ -503,10 +611,10 @@ function toggleFilters() {
             </div>
             
             <div class="modal-footer">
-                <button class="btn-secondary" onclick="resetFilters()">
+                <button class="btn-secondary">
                     <span>Réinitialiser</span>
                 </button>
-                <button class="btn-primary" onclick="applyFilters()">
+                <button class="btn-primary">
                     <i class="fi fi-rr-check"></i>
                     <span>Appliquer</span>
                 </button>
@@ -515,6 +623,21 @@ function toggleFilters() {
     `;
     
     document.body.appendChild(filterModal);
+    
+    // Attacher les événements aux boutons du modal
+    const closeBtn = filterModal.querySelector('.modal-close');
+    const resetBtn = filterModal.querySelector('.btn-secondary');
+    const applyBtn = filterModal.querySelector('.btn-primary');
+    
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeFilterModal);
+    }
+    if (resetBtn) {
+        resetBtn.addEventListener('click', resetFilters);
+    }
+    if (applyBtn) {
+        applyBtn.addEventListener('click', applyFilters);
+    }
     
     // Fermer en cliquant à l'extérieur
     filterModal.addEventListener('click', function(e) {
