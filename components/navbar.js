@@ -575,67 +575,109 @@ function goToAuth() {
 
 function toggleMobileMenu() {
     const overlay = document.getElementById('mobile-menu-overlay');
-    const isVisible = overlay.style.display === 'flex';
-    
-    overlay.style.display = isVisible ? 'none' : 'flex';
+    if (overlay) {
+        overlay.classList.toggle('active');
+    }
 }
 
-// Mobile menu functionality
-document.addEventListener('DOMContentLoaded', function() {
+// Mobile menu functionality - Amélioration pour éviter les conflits
+function initMobileMenu() {
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenuClose = document.getElementById('mobile-menu-close');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
 
+    console.log('InitMobileMenu:', { mobileMenuButton, mobileMenuClose, mobileMenuOverlay });
+
+    // Supprimer les anciens event listeners s'ils existent
     if (mobileMenuButton) {
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenuOverlay.style.display = 'flex';
-        });
-    }
-
-    if (mobileMenuClose) {
-        mobileMenuClose.addEventListener('click', function() {
-            mobileMenuOverlay.style.display = 'none';
-        });
-    }
-
-    if (mobileMenuOverlay) {
-        mobileMenuOverlay.addEventListener('click', function(e) {
-            if (e.target === mobileMenuOverlay) {
-                mobileMenuOverlay.style.display = 'none';
+        // Cloner le bouton pour supprimer tous les event listeners
+        const newButton = mobileMenuButton.cloneNode(true);
+        mobileMenuButton.parentNode.replaceChild(newButton, mobileMenuButton);
+        
+        newButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Burger menu clicked');
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.classList.add('active');
             }
         });
     }
 
-    // Initialize navbar auth integration
-    window.navbarAuth = new NavbarAuth();
+    if (mobileMenuClose) {
+        const newClose = mobileMenuClose.cloneNode(true);
+        mobileMenuClose.parentNode.replaceChild(newClose, mobileMenuClose);
+        
+        newClose.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            closeMobileMenu();
+        });
+    }
+
+    if (mobileMenuOverlay) {
+        // Supprimer les anciens listeners
+        const newOverlay = mobileMenuOverlay.cloneNode(true);
+        mobileMenuOverlay.parentNode.replaceChild(newOverlay, mobileMenuOverlay);
+        
+        newOverlay.addEventListener('click', function(e) {
+            if (e.target === newOverlay) {
+                closeMobileMenu();
+            }
+        });
+    }
+}
+
+// Exposer la fonction globalement pour réinitialisation
+window.initMobileMenu = initMobileMenu;
+
+function closeMobileMenu() {
+    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+    if (mobileMenuOverlay) {
+        mobileMenuOverlay.classList.remove('active');
+    }
+}
+
+// Initialiser le menu mobile à plusieurs moments pour s'assurer qu'il fonctionne
+document.addEventListener('DOMContentLoaded', initMobileMenu);
+// Aussi l'initialiser quand la navbar est chargée
+document.addEventListener('navbarLoaded', initMobileMenu);
+// Et aussi l'initialiser si le DOM est déjà chargé
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
+} else {
+    initMobileMenu();
+}
+
+// Initialize navbar auth integration
+window.navbarAuth = new NavbarAuth();
+
+// Add setActivePage function to global Certicam object
+if (!window.Certicam) window.Certicam = {};
+window.Certicam.setActivePage = function(pageName) {
+    // Remove active class from all navigation links
+    document.querySelectorAll('.nav-link, .mobile-nav-item a').forEach(link => {
+        link.classList.remove('active');
+    });
     
-    // Add setActivePage function to global Certicam object
-    if (!window.Certicam) window.Certicam = {};
-    window.Certicam.setActivePage = function(pageName) {
-        // Remove active class from all navigation links
-        document.querySelectorAll('.nav-link, .mobile-nav-item a').forEach(link => {
-            link.classList.remove('active');
-        });
-        
-        // Find and activate the correct link based on page name
-        const pageMap = {
-            'index.html': ['dashboard', 'accueil', 'home'],
-            'admin.html': ['admin', 'administration'],
-            'transactions.html': ['transactions'],
-            'settings.html': ['settings', 'paramètres'],
-            'support.html': ['support', 'aide'],
-            'checker.html': ['checker', 'vérification'],
-            'agent-dashboard.html': ['agent']
-        };
-        
-        const keywords = pageMap[pageName] || [pageName.replace('.html', '')];
-        
-        keywords.forEach(keyword => {
-            const links = document.querySelectorAll(`[href*="${keyword}"], [data-page="${keyword}"]`);
-            links.forEach(link => link.classList.add('active'));
-        });
+    // Find and activate the correct link based on page name
+    const pageMap = {
+        'index.html': ['dashboard', 'accueil', 'home'],
+        'admin.html': ['admin', 'administration'],
+        'transactions.html': ['transactions'],
+        'settings.html': ['settings', 'paramètres'],
+        'support.html': ['support', 'aide'],
+        'checker.html': ['checker', 'vérification'],
+        'agent-dashboard.html': ['agent']
     };
-});
+    
+    const keywords = pageMap[pageName] || [pageName.replace('.html', '')];
+    
+    keywords.forEach(keyword => {
+        const links = document.querySelectorAll(`[href*="${keyword}"], [data-page="${keyword}"]`);
+        links.forEach(link => link.classList.add('active'));
+    });
+};
 
 // Export for use in other modules
 if (typeof module !== 'undefined' && module.exports) {
