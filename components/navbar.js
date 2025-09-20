@@ -613,8 +613,8 @@ function initMobileMenu() {
 
     // Vérifier que les éléments existent
     if (!mobileMenuButton || !mobileMenuClose || !mobileMenuOverlay) {
-        console.warn('Éléments du menu mobile introuvables, nouvelle tentative dans 500ms...');
-        setTimeout(() => initMobileMenu(), 500);
+        console.warn('Éléments du menu mobile introuvables, nouvelle tentative rapide...');
+        setTimeout(() => initMobileMenu(), 100);
         return;
     }
 
@@ -633,13 +633,12 @@ function initMobileMenu() {
     mobileMenuClose.parentNode.replaceChild(cleanClose, mobileMenuClose);
     mobileMenuOverlay.parentNode.replaceChild(cleanOverlay, mobileMenuOverlay);
 
-    // Ajouter les nouveaux event listeners
+    // Ajouter les nouveaux event listeners - réaction immédiate
     cleanButton.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         console.log('Burger menu clicked - opening overlay (navbar.js)');
         cleanOverlay.classList.add('active');
-        console.log('Overlay classes after click:', cleanOverlay.className);
     });
 
     cleanClose.addEventListener('click', function(e) {
@@ -677,31 +676,25 @@ function closeMobileMenu() {
 }
 
 // Initialiser le menu mobile à plusieurs moments pour s'assurer qu'il fonctionne
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initMobileMenu, 100);
-});
+document.addEventListener('DOMContentLoaded', initMobileMenu);
 
 // Aussi l'initialiser quand la navbar est chargée
-document.addEventListener('navbarLoaded', () => {
-    setTimeout(initMobileMenu, 100);
-});
+document.addEventListener('navbarLoaded', initMobileMenu);
 
 // Et aussi l'initialiser si le DOM est déjà chargé
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initMobileMenu, 100);
-    });
+    document.addEventListener('DOMContentLoaded', initMobileMenu);
 } else {
-    setTimeout(initMobileMenu, 100);
+    initMobileMenu();
 }
 
-// Initialisation plus tardive pour être sûr que tous les éléments sont en place
+// Une seule vérification tardive sans délai excessif
 setTimeout(() => {
     if (!document.getElementById('mobile-menu-button')?.hasAttribute('data-navbar-js-initialized')) {
-        console.log('Initialisation tardive du menu mobile...');
+        console.log('Initialisation de rattrapage du menu mobile...');
         initMobileMenu();
     }
-}, 1000);
+}, 200);
 
 // Initialize navbar auth integration
 window.navbarAuth = new NavbarAuth();

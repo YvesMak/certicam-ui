@@ -239,19 +239,18 @@
     line-height: 1.2;
 }
 
-/* === MENU MOBILE MODERNISÉ === */
+/* === MENU MOBILE FLAT DESIGN === */
 .mobile-menu-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.4);
     z-index: 9999;
     opacity: 0;
     visibility: hidden;
-    transition: all 0.3s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .mobile-menu-overlay.active {
@@ -262,15 +261,15 @@
 .mobile-menu {
     position: absolute;
     top: 0;
-    right: 0;
-    width: min(400px, 85vw);
+    left: 0;
+    width: min(350px, 80vw);
     height: 100vh;
     background: var(--color-surface-primary);
     display: flex;
     flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    box-shadow: var(--shadow-xl);
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .mobile-menu-overlay.active .mobile-menu {
@@ -497,15 +496,6 @@
 }
 
 /* === ANIMATIONS === */
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -519,8 +509,4 @@
 
 .profile-dropdown-menu.active {
     animation: fadeIn 0.2s ease forwards;
-}
-
-.mobile-menu-overlay.active .mobile-menu {
-    animation: slideInRight 0.3s ease forwards;
 }
