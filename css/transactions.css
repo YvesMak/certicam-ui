@@ -25,7 +25,7 @@
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
     font-family: var(--font-family);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-body-md);
 }
 
 .transaction-date {
@@ -79,7 +79,7 @@
 }
 
 .transactions-table td {
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-body-md);
     color: var(--color-text-primary);
     vertical-align: middle;
     height: 85px;
@@ -107,7 +107,7 @@
     gap: var(--spacing-xs);
     font-family: var(--font-family);
     font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-body-md);
     white-space: nowrap;
 }
 
@@ -192,7 +192,9 @@
     justify-content: center;
     width: 28px;
     height: 28px;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 1;
 }
 
 .dropdown-toggle:hover,
@@ -212,25 +214,10 @@
     color: inherit;
 }
 
-/* Le texte de fallback (⋮) doit être visible */
-.dropdown-toggle,
-.action-button {
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 1;
-}
-
-/* Si l'icône est présente, masquer le texte */
+/* Si l'icône est présente, masquer le texte de fallback */
 .dropdown-toggle i + *,
 .action-button i + * {
     display: none;
-}
-
-/* Si l'icône n'est pas chargée, le texte reste visible */
-.dropdown-toggle:not(:has(i:not(:empty))),
-.action-button:not(:has(i:not(:empty))) {
-    justify-content: center;
-    align-items: center;
 }
 
 /* Dropdown menu */
@@ -239,7 +226,7 @@
     right: 0;
     top: 100%;
     background: var(--color-white);
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
     z-index: 1000;
@@ -473,7 +460,7 @@
 .receipt-number,
 .receipt-date {
     margin: 0;
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-body-md);
     color: var(--color-text-secondary);
     font-family: var(--font-family);
 }
@@ -509,7 +496,7 @@
 .detail-value.amount {
     font-weight: var(--font-weight-bold);
     color: var(--color-green);
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-body-lg);
 }
 
 .receipt-footer {
@@ -520,7 +507,7 @@
 .receipt-total {
     margin-bottom: var(--spacing-lg);
     text-align: center;
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-body-lg);
     font-family: var(--font-family);
 }
 
@@ -534,7 +521,7 @@
 }
 
 .company-info {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-body-sm);
     color: var(--color-text-secondary);
 }
 
