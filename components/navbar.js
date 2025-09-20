@@ -7,9 +7,8 @@ class NavbarAuth {
     }
 
     init() {
-        // Initialisation optimisée sans délais
+        // Initialisation optimisée sans délais - navbar épurée
         this.setupAuthState();
-        this.initProfileDropdown();
         this.initLogoutButtons();
         this.highlightCurrentPage();
         
@@ -402,110 +401,10 @@ class NavbarAuth {
         }
     }
 
-    // === NOUVELLES MÉTHODES POUR NAVBAR MODERNE ===
-    
-    initProfileDropdown() {
-        const trigger = document.getElementById('profile-dropdown-trigger');
-        const menu = document.getElementById('profile-dropdown-menu');
-        const profileSettingsLink = document.getElementById('profile-settings-link');
-        
-        if (!trigger || !menu) return;
-        
-        // Toggle dropdown on click
-        trigger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleProfileDropdown();
-        });
-        
-        // Handle profile click to go to settings#profile
-        if (profileSettingsLink) {
-            profileSettingsLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.goToProfileSettings();
-            });
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!trigger.contains(e.target) && !menu.contains(e.target)) {
-                this.closeProfileDropdown();
-            }
-        });
-        
-        // Close on escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.profileDropdownOpen) {
-                this.closeProfileDropdown();
-            }
-        });
-    }
-    
-    goToProfileSettings() {
-        // Close dropdown first
-        this.closeProfileDropdown();
-        
-        // Navigate to settings page with profile section
-        window.location.href = 'settings.html#profile';
-        
-        // If already on settings page, just scroll to profile section
-        if (window.location.pathname.includes('settings.html')) {
-            setTimeout(() => {
-                const profileSection = document.getElementById('profile-section') || 
-                                     document.querySelector('[data-section="profile"]') ||
-                                     document.querySelector('.profile-section');
-                if (profileSection) {
-                    profileSection.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 100);
-        }
-    }
-    
-    toggleProfileDropdown() {
-        const trigger = document.getElementById('profile-dropdown-trigger');
-        const menu = document.getElementById('profile-dropdown-menu');
-        
-        if (!trigger || !menu) return;
-        
-        if (this.profileDropdownOpen) {
-            this.closeProfileDropdown();
-        } else {
-            this.openProfileDropdown();
-        }
-    }
-    
-    openProfileDropdown() {
-        const trigger = document.getElementById('profile-dropdown-trigger');
-        const menu = document.getElementById('profile-dropdown-menu');
-        
-        if (!trigger || !menu) return;
-        
-        trigger.setAttribute('aria-expanded', 'true');
-        menu.classList.add('active');
-        this.profileDropdownOpen = true;
-    }
-    
-    closeProfileDropdown() {
-        const trigger = document.getElementById('profile-dropdown-trigger');
-        const menu = document.getElementById('profile-dropdown-menu');
-        
-        if (!trigger || !menu) return;
-        
-        trigger.setAttribute('aria-expanded', 'false');
-        menu.classList.remove('active');
-        this.profileDropdownOpen = false;
-    }
+    // === MÉTHODES POUR NAVBAR ÉPURÉE ===
     
     initLogoutButtons() {
-        // Desktop logout button
-        const desktopLogout = document.getElementById('desktop-logout-btn');
-        if (desktopLogout) {
-            desktopLogout.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.handleLogout();
-            });
-        }
-        
-        // Mobile logout button
+        // Mobile logout button seulement
         const mobileLogout = document.getElementById('mobile-menu-logout');
         if (mobileLogout) {
             mobileLogout.addEventListener('click', (e) => {
