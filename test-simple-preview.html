@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple - Boutons d'Aperçu</title>
+    <style>
+        .action-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .action-button.view {
+            background: #007bff;
+            color: white;
+        }
+        .action-button.pay {
+            background: #28a745;
+            color: white;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .status.valid {
+            color: green;
+        }
+        .status.not-valid {
+            color: red;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header h3 {
+            margin: 0 0 20px 0;
+        }
+        .modal-close {
+            float: right;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Simple des Boutons d'Aperçu</h1>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Document</th>
+                <th>Type</th>
+                <th>Institution</th>
+                <th>Validité</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="document-info">
+                        <span class="document-name">CNI Test</span>
+                        <span class="document-date">Mis en ligne le 20 Sep 2025</span>
+                    </div>
+                </td>
+                <td>Identité</td>
+                <td>DGSN</td>
+                <td>20 Sep 2030</td>
+                <td><span class="status valid">Validé</span></td>
+                <td>
+                    <button class="action-button view">
+                        <i class="fi fi-rr-eye"></i> Aperçu
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="document-info">
+                        <span class="document-name">Passeport Test</span>
+                        <span class="document-date">Mis en ligne le 19 Sep 2025</span>
+                    </div>
+                </td>
+                <td>Identité</td>
+                <td>DGSN</td>
+                <td>19 Sep 2029</td>
+                <td><span class="status not-valid">Pas validé</span></td>
+                <td>
+                    <button class="action-button pay">Payer</button>
+                    <button class="action-button view">
+                        <i class="fi fi-rr-eye"></i> Aperçu
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal d'aperçu -->
+    <div id="document-preview-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Aperçu du document</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Document :</strong> <span id="preview-document-name">-</span></p>
+                <p><strong>Type :</strong> <span id="preview-document-type">-</span></p>
+                <p><strong>Institution :</strong> <span id="preview-institution">-</span></p>
+                <p><strong>Validité :</strong> <span id="preview-validity">-</span></p>
+                <p><strong>Statut :</strong> <span id="preview-document-status">-</span></p>
+                <p><strong>Date upload :</strong> <span id="preview-upload-date">-</span></p>
+                <p><strong>Prix :</strong> <span id="preview-price">-</span></p>
+            </div>
+            <div class="modal-footer">
+                <button id="close-preview">Fermer</button>
+                <button id="pay-from-preview" style="display: none;">Payer</button>
+                <button id="download-from-preview" style="display: none;">Télécharger</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="log" style="background: #f0f0f0; padding: 20px; margin: 20px 0; font-family: monospace; white-space: pre-wrap; max-height: 300px; overflow-y: auto;"></div>
+
+    <script>
+        // Logger simple
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.textContent += `[${timestamp}] ${message}\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        // Simuler les fonctions de base nécessaires
+        function getDocumentPrice(name, type) {
+            return type === 'Identité' ? '2500 FCFA' : '1500 FCFA';
+        }
+
+        function openDocumentPreview(documentData) {
+            log(`📖 Ouverture aperçu: ${documentData.name}`);
+            
+            const modal = document.getElementById('document-preview-modal');
+            
+            // Remplir les données
+            document.getElementById('preview-document-name').textContent = documentData.name || '-';
+            document.getElementById('preview-document-type').textContent = documentData.type || '-';
+            document.getElementById('preview-institution').textContent = documentData.institution || '-';
+            document.getElementById('preview-validity').textContent = documentData.validityDate || '-';
+            document.getElementById('preview-document-status').textContent = documentData.status || '-';
+            document.getElementById('preview-upload-date').textContent = documentData.uploadDate || '-';
+            document.getElementById('preview-price').textContent = documentData.price || '-';
+            
+            // Afficher le modal
+            modal.classList.add('active');
+            log(`✅ Modal d'aperçu affiché`);
+        }
+
+        function closeDocumentPreview() {
+            log('🔒 Fermeture du modal');
+            document.getElementById('document-preview-modal').classList.remove('active');
+        }
+
+        // Notre fonction d'initialisation des boutons
+        function initializeButtonEvents() {
+            log('🔧 Initialisation des événements de boutons...');
+            
+            // Nettoyer les anciens gestionnaires
+            const allButtons = document.querySelectorAll('.action-button');
+            log(`🧹 Nettoyage de ${allButtons.length} boutons`);
+            
+            allButtons.forEach(button => {
+                const newButton = button.cloneNode(true);
+                button.parentNode.replaceChild(newButton, button);
+            });
+            
+            setTimeout(() => {
+                // Gestion des boutons de visualisation
+                document.querySelectorAll('.action-button.view').forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        log('🔍 Clic sur bouton d\'aperçu détecté');
+                        
+                        const row = e.target.closest('tr');
+                        if (!row) {
+                            log('❌ Impossible de trouver la ligne du document');
+                            return;
+                        }
+                        
+                        const documentName = row.querySelector('.document-name')?.textContent;
+                        const documentType = row.cells[1]?.textContent;
+                        const institution = row.cells[2]?.textContent;
+                        const validityDate = row.cells[3]?.textContent;
+                        const statusElement = row.querySelector('.status');
+                        const status = statusElement ? statusElement.textContent.trim() : 'Inconnu';
+                        const uploadDate = row.querySelector('.document-date')?.textContent.replace('Mis en ligne le ', '');
+                        const documentPrice = getDocumentPrice(documentName, documentType);
+                        
+                        log(`📄 Données du document: ${documentName} - ${status}`);
+                        
+                        openDocumentPreview({
+                            name: documentName,
+                            type: documentType,
+                            institution: institution,
+                            validityDate: validityDate,
+                            status: status,
+                            uploadDate: uploadDate,
+                            price: documentPrice
+                        });
+                    });
+                });
+                
+                log(`✅ ${document.querySelectorAll('.action-button.view').length} boutons d'aperçu initialisés`);
+            }, 50);
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', function() {
+            log('📄 DOM chargé');
+            
+            setTimeout(() => {
+                log('🚀 Lancement de l\'initialisation...');
+                initializeButtonEvents();
+                
+                // Bouton de fermeture du modal
+                document.querySelector('.modal-close').addEventListener('click', closeDocumentPreview);
+                document.getElementById('close-preview').addEventListener('click', closeDocumentPreview);
+                
+                log('✅ Initialisation terminée');
+            }, 100);
+        });
+        
+        log('🎯 Script chargé');
+    </script>
+</body>
+</html>

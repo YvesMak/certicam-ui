@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnostic des Conflits - Index</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div style="padding: 20px; background: #f0f0f0; margin: 20px;">
+        <h2>🔍 Page de Diagnostic des Conflits</h2>
+        <p>Ouvrez la console (F12) pour voir les résultats du diagnostic.</p>
+        <p>Cette page charge votre `js/main.js` et teste tous les éléments.</p>
+    </div>
+
+    <!-- Quelques boutons de test simples -->
+    <div style="margin: 20px;">
+        <h3>Test des boutons :</h3>
+        <table style="border-collapse: collapse;">
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 10px;">
+                        <div class="document-info">
+                            <span class="document-name">Test CNI</span>
+                            <span class="document-date">Mis en ligne le 20 Sep 2025</span>
+                        </div>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">Identité</td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">DGSN</td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">20 Sep 2030</td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">
+                        <span class="status valid">Validé</span>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">
+                        <button class="action-button download">Télécharger</button>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 10px;">
+                        <button class="action-button view">
+                            <i class="fi fi-rr-eye"></i> Aperçu
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal basique pour test -->
+    <div id="document-preview-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Aperçu du document</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Document :</strong> <span id="preview-document-name">-</span></p>
+                <p><strong>Type :</strong> <span id="preview-document-type">-</span></p>
+                <p><strong>Institution :</strong> <span id="preview-institution">-</span></p>
+                <p><strong>Validité :</strong> <span id="preview-validity">-</span></p>
+                <p><strong>Statut :</strong> <span id="preview-document-status">-</span></p>
+                <p><strong>Date upload :</strong> <span id="preview-upload-date">-</span></p>
+                <p><strong>Prix :</strong> <span id="preview-price">-</span></p>
+            </div>
+            <div class="modal-footer">
+                <button id="close-preview">Fermer</button>
+                <button id="pay-from-preview" style="display: none;">Payer</button>
+                <button id="download-from-preview" style="display: none;">Télécharger</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chargement des scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/diagnostic.js"></script>
+</body>
+</html>

@@ -63,8 +63,10 @@
 .transactions-table th:nth-child(7), /* Colonne Actions */
 .transactions-table td:nth-child(7) {
     text-align: center;
-    width: 60px;
-    padding: var(--spacing-md) var(--spacing-sm);
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding: var(--spacing-md) var(--spacing-xs);
 }
 
 .transactions-table th {
@@ -132,6 +134,7 @@
 .status {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     padding: var(--spacing-xs) var(--spacing-md);
     border-radius: var(--radius-lg);
     font-size: var(--font-size-label-sm);
@@ -139,6 +142,8 @@
     font-family: var(--font-family);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    text-align: center;
+    min-width: 80px;
 }
 
 .status.valid {
@@ -186,8 +191,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
 }
 
 .dropdown-toggle:hover {
@@ -198,18 +204,16 @@
 /* Dropdown menu */
 .dropdown-menu {
     position: absolute;
-    top: 100%;
     right: 0;
-    background: var(--color-surface-primary);
-    border: 1px solid var(--color-gray-200);
+    top: 100%;
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    min-width: 180px;
     z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.2s ease;
+    min-width: 120px;
+    padding: var(--spacing-xs) 0;
+    margin-top: 2px;
 }
 
 .dropdown-menu.active {
