@@ -206,9 +206,13 @@
                                             <i class="fi fi-rr-eye"></i>
                                             Voir la transaction
                                         </button>
-                                        <button class="dropdown-item retry-payment">
-                                            <i class="fi fi-rr-refresh"></i>
-                                            Réessayer le paiement
+                                        <button class="dropdown-item cancel-transaction">
+                                            <i class="fi fi-rr-cross"></i>
+                                            Annuler la transaction
+                                        </button>
+                                        <button class="dropdown-item contact-support">
+                                            <i class="fi fi-rr-envelope"></i>
+                                            Contacter le support
                                         </button>
                                     </div>
                                 </div>
@@ -246,7 +250,11 @@
                                         </button>
                                         <button class="dropdown-item retry-payment">
                                             <i class="fi fi-rr-refresh"></i>
-                                            Réessayer le paiement
+                                            Relancer le paiement
+                                        </button>
+                                        <button class="dropdown-item contact-support">
+                                            <i class="fi fi-rr-envelope"></i>
+                                            Contacter le support
                                         </button>
                                     </div>
                                 </div>
@@ -567,6 +575,98 @@
             <div class="modal-actions">
                 <button class="btn-secondary" id="modal-cancel">Annuler</button>
                 <button class="btn-primary" id="modal-confirm">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale moderne pour voir la facture -->
+    <div id="receiptModal" class="modal-overlay">
+        <div class="modal receipt-modal">
+            <div class="modal-header">
+                <h3>Facture de transaction</h3>
+                <button class="modal-close" id="receiptModalClose">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="receipt-content">
+                    <!-- En-tête avec logo -->
+                    <div class="receipt-header">
+                        <div class="receipt-logo">
+                            <img src="img/certicam-main-logo.png" alt="Certicam">
+                        </div>
+                        <div class="receipt-info">
+                            <h4>Reçu de paiement</h4>
+                            <p class="receipt-number">Facture #<span id="receiptNumber">TXN-5423</span></p>
+                            <p class="receipt-date">Date: <span id="receiptDate">12 Mai 2025</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Détails de la transaction -->
+                    <div class="receipt-details">
+                        <div class="detail-row">
+                            <span class="detail-label">Service</span>
+                            <span class="detail-value" id="receiptService">Relevé bancaire</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Institution</span>
+                            <span class="detail-value" id="receiptInstitution">Banque XYZ</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Mode de paiement</span>
+                            <span class="detail-value" id="receiptPayment">Orange Money</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Statut</span>
+                            <span class="detail-value" id="receiptStatus">
+                                <span class="status valid">Réussite</span>
+                            </span>
+                        </div>
+                        <div class="detail-row total-row">
+                            <span class="detail-label">Montant total</span>
+                            <span class="detail-value amount-total" id="receiptAmount">1500 FCFA</span>
+                        </div>
+                    </div>
+
+                    <!-- Pied de page -->
+                    <div class="receipt-footer">
+                        <div class="receipt-signature">
+                            <p><strong>Certicam</strong></p>
+                            <p class="company-info">Plateforme de certification de documents officiels</p>
+                            <p class="company-info">contact@certicam.com | +237 XXX XXX XXX</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-secondary" id="closeReceiptModal">Fermer</button>
+                <button class="btn-primary" id="downloadReceipt">
+                    <i class="fi fi-rr-download"></i>
+                    Télécharger
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale de confirmation pour les actions -->
+    <div id="actionModal" class="modal-overlay">
+        <div class="modal action-modal">
+            <div class="modal-header">
+                <h3 id="actionModalTitle">Confirmer l'action</h3>
+                <button class="modal-close" id="actionModalClose">
+                    <i class="fi fi-rr-cross"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <p id="actionModalMessage">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancelAction">Annuler</button>
+                <button class="btn-primary" id="confirmAction">Confirmer</button>
             </div>
         </div>
     </div>
