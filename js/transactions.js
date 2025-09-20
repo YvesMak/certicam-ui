@@ -369,8 +369,9 @@ function updatePageNumbers() {
     });
 }
 
-// Gestion des dropdowns d'actions
-function initTransactionDropdowns() {
+// Gestion des actions de transaction avec dropdowns intégrés
+function attachTransactionButtonEvents() {
+    // Gestion des clics sur les boutons dropdown
     document.addEventListener('click', function(e) {
         // Fermer tous les dropdowns ouverts
         document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
@@ -386,14 +387,12 @@ function initTransactionDropdowns() {
             const dropdown = button.closest('.dropdown');
             const menu = dropdown.querySelector('.dropdown-menu');
             
-            menu.classList.add('active');
+            if (menu) {
+                menu.classList.add('active');
+            }
         }
-    });
-}
-
-// Gestion des actions de transaction
-function attachTransactionButtonEvents() {
-    document.addEventListener('click', function(e) {
+        
+        // Gestion des actions dans les dropdowns
         if (e.target.closest('.dropdown-item')) {
             e.preventDefault();
             e.stopPropagation();
@@ -719,27 +718,6 @@ function getStatusLabel(status) {
     return labels[status] || status;
 }
 
-// Gestion des modales
-function initReceiptModal() {
-    const modal = document.getElementById('action-modal');
-    if (!modal) return;
-
-    // Fermer la modale en cliquant sur la croix
-    const closeBtn = document.getElementById('modal-close');
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            modal.classList.remove('active');
-        });
-    }
-    
-    // Fermer en cliquant sur l'overlay
-    modal.addEventListener('click', (e) => {
-        if (e.target.id === 'action-modal') {
-            e.target.classList.remove('active');
-        }
-    });
-}
-
 // Initialiser tout au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initialisation de la page transactions...');
@@ -749,8 +727,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTransactionMobileMenu();
     initTransactionRowsPerPageSelector();
     initTransactionPaginationButtons();
-    initTransactionDropdowns();
-    initReceiptModal();
     initModals();
     attachTransactionButtonEvents();
     console.log('Page transactions initialisée');
