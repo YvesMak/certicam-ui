@@ -346,7 +346,7 @@ function showPage(pageNumber) {
     updatePaginationButtons();
     
     // Réattacher les événements après changement de page
-    attachButtonEvents();
+    initializeButtonEvents();
 }
 
 // Mettre à jour l'état des boutons de pagination
@@ -670,11 +670,15 @@ function initModal() {
     }
 }
 
-// Gestion des notifications
+// Gestion des notifications (avec vérification d'existence)
 const notificationIcon = document.querySelector('.notification-icon');
-notificationIcon.addEventListener('click', () => {
-    alert('Aucune nouvelle notification');
-});
+if (notificationIcon) {
+    notificationIcon.addEventListener('click', () => {
+        alert('Aucune nouvelle notification');
+    });
+} else {
+    console.log('⚠️ Élément .notification-icon non trouvé - ignoré');
+}
 
 // Fonction pour télécharger un document
 function downloadDocument(documentData) {
@@ -761,30 +765,6 @@ function showDownloadNotification(documentName) {
             }
         }, 300);
     }, 4000);
-}
-
-// Fonction pour initialiser tous les événements des boutons
-function initializeButtonEvents() {
-    // Réinitialiser les événements pour les boutons de paiement
-    document.querySelectorAll('.action-button.pay').forEach(button => {
-        // Supprimer les anciens événements
-        button.replaceWith(button.cloneNode(true));
-    });
-    
-    // Réinitialiser les événements pour les boutons de téléchargement
-    document.querySelectorAll('.action-button.download').forEach(button => {
-        // Supprimer les anciens événements
-        button.replaceWith(button.cloneNode(true));
-    });
-    
-    // Réinitialiser les événements pour les boutons de visualisation
-    document.querySelectorAll('.action-button.view').forEach(button => {
-        // Supprimer les anciens événements
-        button.replaceWith(button.cloneNode(true));
-    });
-    
-    // Réattacher les nouveaux événements
-    attachButtonEvents();
 }
 
 // Fonction pour attacher les événements aux boutons avec gestion des conflits
@@ -905,83 +885,6 @@ function initializeButtonEvents() {
         
         console.log('✅ Événements de boutons initialisés');
     }, 50);
-}
-
-// Fonction pour attacher les événements aux boutons
-function attachButtonEvents() {
-    // Gestion des boutons de paiement
-    document.querySelectorAll('.action-button.pay').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const row = e.target.closest('tr');
-            const documentName = row.querySelector('.document-name').textContent;
-            const documentType = row.cells[1].textContent;
-            const institution = row.cells[2].textContent;
-            const validityDate = row.cells[3].textContent;
-            const status = row.querySelector('.status').textContent;
-            const documentPrice = getDocumentPrice(documentName, documentType);
-            
-            sessionStorage.setItem('selectedDocument', JSON.stringify({
-                name: documentName,
-                type: documentType,
-                institution: institution,
-                validityDate: validityDate,
-                status: status,
-                price: documentPrice
-            }));
-            
-            window.location.href = 'edit.html';
-        });
-    });
-    
-    // Gestion des boutons de téléchargement
-    document.querySelectorAll('.action-button.download').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const row = e.target.closest('tr');
-            const documentName = row.querySelector('.document-name').textContent;
-            const documentType = row.cells[1].textContent;
-            const institution = row.cells[2].textContent;
-            const validityDate = row.cells[3].textContent;
-            const status = row.querySelector('.status').textContent;
-            const uploadDate = row.querySelector('.document-date').textContent.replace('Mis en ligne le ', '');
-            const documentPrice = getDocumentPrice(documentName, documentType);
-            
-            const documentData = {
-                name: documentName,
-                type: documentType,
-                institution: institution,
-                validityDate: validityDate,
-                status: status,
-                uploadDate: uploadDate,
-                price: documentPrice
-            };
-            
-            downloadDocument(documentData);
-        });
-    });
-    
-    // Gestion des boutons de visualisation
-    document.querySelectorAll('.action-button.view').forEach(button => {
-        button.addEventListener('click', function(e) {
-            const row = e.target.closest('tr');
-            const documentName = row.querySelector('.document-name').textContent;
-            const documentType = row.cells[1].textContent;
-            const institution = row.cells[2].textContent;
-            const validityDate = row.cells[3].textContent;
-            const status = row.querySelector('.status').textContent.trim();
-            const uploadDate = row.querySelector('.document-date').textContent.replace('Mis en ligne le ', '');
-            const documentPrice = getDocumentPrice(documentName, documentType);
-            
-            openDocumentPreview({
-                name: documentName,
-                type: documentType,
-                institution: institution,
-                validityDate: validityDate,
-                status: status,
-                uploadDate: uploadDate,
-                price: documentPrice
-            });
-        });
-    });
 }
 
 // Gestion simple des filtres
@@ -1534,7 +1437,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         sortRowsByDate(); // Trier dès le chargement
         initPagination();
-        attachButtonEvents(); // Garde l'ancienne fonction en backup
         initFilters();
         initModal();
         initMobileMenu(); // Restauré pour la compatibilité

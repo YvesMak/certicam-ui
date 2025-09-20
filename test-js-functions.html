@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test des fonctions JavaScript</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-result { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>Test des fonctions JavaScript</h1>
+    <div id="test-results"></div>
+
+    <!-- Table de test simplifiée -->
+    <table style="display: none;">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="document-info">
+                        <span class="document-name">Test Document</span>
+                        <span class="document-date">Mis en ligne le 12 Mai 2025</span>
+                    </div>
+                </td>
+                <td>Banque</td>
+                <td>Banque Test</td>
+                <td>12 Mai 2026</td>
+                <td><span class="status not-valid">Pas validé</span></td>
+                <td class="actions">
+                    <button class="action-button view"><i class="fi fi-rr-eye"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="js/main.js"></script>
+    <script>
+        const results = document.getElementById('test-results');
+        
+        function addResult(message, isSuccess = true) {
+            const div = document.createElement('div');
+            div.className = `test-result ${isSuccess ? 'success' : 'error'}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        // Test 1: Vérifier que les variables globales existent
+        try {
+            if (typeof currentPage !== 'undefined' && typeof isInitialized !== 'undefined') {
+                addResult('✅ Variables globales définies');
+            } else {
+                addResult('❌ Variables globales manquantes', false);
+            }
+        } catch(e) {
+            addResult('❌ Erreur variables globales: ' + e.message, false);
+        }
+
+        // Test 2: Vérifier que les fonctions principales existent
+        try {
+            if (typeof initializeButtonEvents === 'function' && 
+                typeof initializePageComponents === 'function') {
+                addResult('✅ Fonctions principales définies');
+            } else {
+                addResult('❌ Fonctions principales manquantes', false);
+            }
+        } catch(e) {
+            addResult('❌ Erreur fonctions principales: ' + e.message, false);
+        }
+
+        // Test 3: Vérifier que parseFrenchDate fonctionne
+        try {
+            const testDate = parseFrenchDate('12 Mai 2025');
+            if (testDate && testDate.getFullYear() === 2025) {
+                addResult('✅ Fonction parseFrenchDate fonctionne');
+            } else {
+                addResult('❌ Fonction parseFrenchDate défaillante', false);
+            }
+        } catch(e) {
+            addResult('❌ Erreur parseFrenchDate: ' + e.message, false);
+        }
+
+        // Test 4: Tester l'initialisation
+        try {
+            initializePageComponents();
+            addResult('✅ Initialisation des composants réussie');
+        } catch(e) {
+            addResult('❌ Erreur initialisation: ' + e.message, false);
+        }
+
+        addResult('🎯 Tests terminés - Vérifiez la console pour plus de détails');
+    </script>
+</body>
+</html>
