@@ -1,0 +1,42 @@
+# Fichiers de test et debug
+test-*.html
+debug-*.html
+demo-*.html
+*-test.html
+*-debug.html
+ultra-simple-*.html
+simple-*.html
+
+# Fichiers temporaires et de sauvegarde  
+*-old.*
+*-backup.*
+*-temp.*
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# IDE et éditeurs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependances (si applicable)
+node_modules/
+.npm
+.yarn-integrity
+
+# Builds (si applicable)
+dist/
+build/
+.next/
+.nuxt/
+.cache/
