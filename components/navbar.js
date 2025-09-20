@@ -425,6 +425,7 @@ class NavbarAuth {
     initProfileDropdown() {
         const trigger = document.getElementById('profile-dropdown-trigger');
         const menu = document.getElementById('profile-dropdown-menu');
+        const profileSettingsLink = document.getElementById('profile-settings-link');
         
         if (!trigger || !menu) return;
         
@@ -433,6 +434,14 @@ class NavbarAuth {
             e.stopPropagation();
             this.toggleProfileDropdown();
         });
+        
+        // Handle profile click to go to settings#profile
+        if (profileSettingsLink) {
+            profileSettingsLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.goToProfileSettings();
+            });
+        }
         
         // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
@@ -447,6 +456,26 @@ class NavbarAuth {
                 this.closeProfileDropdown();
             }
         });
+    }
+    
+    goToProfileSettings() {
+        // Close dropdown first
+        this.closeProfileDropdown();
+        
+        // Navigate to settings page with profile section
+        window.location.href = 'settings.html#profile';
+        
+        // If already on settings page, just scroll to profile section
+        if (window.location.pathname.includes('settings.html')) {
+            setTimeout(() => {
+                const profileSection = document.getElementById('profile-section') || 
+                                     document.querySelector('[data-section="profile"]') ||
+                                     document.querySelector('.profile-section');
+                if (profileSection) {
+                    profileSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            }, 100);
+        }
     }
     
     toggleProfileDropdown() {
@@ -575,50 +604,64 @@ function initMobileMenu() {
     const mobileMenuClose = document.getElementById('mobile-menu-close');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
 
-    console.log('InitMobileMenu:', { mobileMenuButton, mobileMenuClose, mobileMenuOverlay });
+    console.log('InitMobileMenu called from navbar.js:', { 
+        mobileMenuButton: !!mobileMenuButton, 
+        mobileMenuClose: !!mobileMenuClose, 
+        mobileMenuOverlay: !!mobileMenuOverlay,
+        location: window.location.pathname 
+    });
 
     // Vérifier que les éléments existent
     if (!mobileMenuButton || !mobileMenuClose || !mobileMenuOverlay) {
         console.warn('Éléments du menu mobile introuvables, nouvelle tentative dans 500ms...');
-        setTimeout(initMobileMenu, 500);
+        setTimeout(() => initMobileMenu(), 500);
         return;
     }
 
-    // Éviter de réinitialiser si déjà initialisé
-    if (mobileMenuButton.hasAttribute('data-mobile-menu-initialized')) {
-        console.log('Menu mobile déjà initialisé');
+    // Éviter de réinitialiser si déjà initialisé par ce script
+    if (mobileMenuButton.hasAttribute('data-navbar-js-initialized')) {
+        console.log('Menu mobile déjà initialisé par navbar.js');
         return;
     }
 
-    // Ajouter les event listeners avec une seule initialisation
-    mobileMenuButton.addEventListener('click', function(e) {
+    // Supprimer les anciens event listeners potentiellement ajoutés par navbar-loader.js
+    const cleanButton = mobileMenuButton.cloneNode(true);
+    const cleanClose = mobileMenuClose.cloneNode(true);
+    const cleanOverlay = mobileMenuOverlay.cloneNode(true);
+    
+    mobileMenuButton.parentNode.replaceChild(cleanButton, mobileMenuButton);
+    mobileMenuClose.parentNode.replaceChild(cleanClose, mobileMenuClose);
+    mobileMenuOverlay.parentNode.replaceChild(cleanOverlay, mobileMenuOverlay);
+
+    // Ajouter les nouveaux event listeners
+    cleanButton.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Burger menu clicked - opening overlay');
-        mobileMenuOverlay.classList.add('active');
-        console.log('Overlay classes after click:', mobileMenuOverlay.className);
+        console.log('Burger menu clicked - opening overlay (navbar.js)');
+        cleanOverlay.classList.add('active');
+        console.log('Overlay classes after click:', cleanOverlay.className);
     });
 
-    mobileMenuClose.addEventListener('click', function(e) {
+    cleanClose.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Close button clicked');
-        closeMobileMenu();
+        console.log('Close button clicked (navbar.js)');
+        cleanOverlay.classList.remove('active');
     });
 
-    mobileMenuOverlay.addEventListener('click', function(e) {
-        if (e.target === mobileMenuOverlay) {
-            console.log('Overlay background clicked');
-            closeMobileMenu();
+    cleanOverlay.addEventListener('click', function(e) {
+        if (e.target === cleanOverlay) {
+            console.log('Overlay background clicked (navbar.js)');
+            cleanOverlay.classList.remove('active');
         }
     });
 
     // Marquer comme initialisé
-    mobileMenuButton.setAttribute('data-mobile-menu-initialized', 'true');
-    mobileMenuClose.setAttribute('data-mobile-menu-initialized', 'true');
-    mobileMenuOverlay.setAttribute('data-mobile-menu-initialized', 'true');
+    cleanButton.setAttribute('data-navbar-js-initialized', 'true');
+    cleanClose.setAttribute('data-navbar-js-initialized', 'true');
+    cleanOverlay.setAttribute('data-navbar-js-initialized', 'true');
     
-    console.log('Menu mobile initialisé avec succès');
+    console.log('Menu mobile initialisé avec succès par navbar.js');
 }
 
 // Exposer la fonction globalement pour réinitialisation
@@ -634,15 +677,31 @@ function closeMobileMenu() {
 }
 
 // Initialiser le menu mobile à plusieurs moments pour s'assurer qu'il fonctionne
-document.addEventListener('DOMContentLoaded', initMobileMenu);
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initMobileMenu, 100);
+});
+
 // Aussi l'initialiser quand la navbar est chargée
-document.addEventListener('navbarLoaded', initMobileMenu);
+document.addEventListener('navbarLoaded', () => {
+    setTimeout(initMobileMenu, 100);
+});
+
 // Et aussi l'initialiser si le DOM est déjà chargé
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMobileMenu);
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initMobileMenu, 100);
+    });
 } else {
-    initMobileMenu();
+    setTimeout(initMobileMenu, 100);
 }
+
+// Initialisation plus tardive pour être sûr que tous les éléments sont en place
+setTimeout(() => {
+    if (!document.getElementById('mobile-menu-button')?.hasAttribute('data-navbar-js-initialized')) {
+        console.log('Initialisation tardive du menu mobile...');
+        initMobileMenu();
+    }
+}, 1000);
 
 // Initialize navbar auth integration
 window.navbarAuth = new NavbarAuth();
