@@ -63,9 +63,9 @@
 .transactions-table th:nth-child(7), /* Colonne Actions */
 .transactions-table td:nth-child(7) {
     text-align: center;
-    width: 30px;
-    min-width: 30px;
-    max-width: 30px;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     padding: var(--spacing-md) var(--spacing-xs);
 }
 
@@ -180,25 +180,58 @@
 
 .dropdown-toggle,
 .action-button {
-    background: none;
-    border: none;
+    background: rgba(0, 0, 0, 0.05); /* Fond léger pour voir le bouton */
+    border: 1px solid var(--color-gray-200);
     cursor: pointer;
     padding: var(--spacing-xs);
     border-radius: var(--radius-sm);
-    color: var(--color-text-secondary);
+    color: var(--color-text-primary);
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    font-size: 16px;
+    width: 28px;
+    height: 28px;
+    font-size: 18px;
 }
 
 .dropdown-toggle:hover,
 .action-button:hover {
-    background: var(--color-gray-50);
+    background: var(--color-gray-100);
+    border-color: var(--color-gray-300);
     color: var(--color-text-primary);
+}
+
+/* Style spécifique pour l'icône des 3 points */
+.dropdown-toggle i,
+.action-button i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: inherit;
+}
+
+/* Fallback si l'icône ne s'affiche pas */
+.dropdown-toggle::before,
+.action-button::before {
+    content: "⋮";
+    font-size: 20px;
+    line-height: 1;
+    display: none;
+}
+
+/* Afficher le fallback si l'icône n'est pas chargée */
+.dropdown-toggle:not(:has(i)),
+.action-button:not(:has(i)) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dropdown-toggle:not(:has(i))::before,
+.action-button:not(:has(i))::before {
+    display: block;
 }
 
 /* Dropdown menu */
