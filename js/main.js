@@ -3,6 +3,13 @@ let currentPage = 1;
 let rowsPerPage = 8;
 let allRows = [];
 
+// Variables globales pour la gestion des gestionnaires d'événements
+let documentClickHandler = null;
+let filterClickHandler = null;
+let documentsPerPage = 10;
+let filteredDocuments = [];
+let isInitialized = false;
+
 // Fonction pour parser les dates en français (format: "DD Mois YYYY")
 function parseFrenchDate(dateString) {
     if (!dateString || dateString === 'Permanent') return null;
@@ -115,6 +122,24 @@ function initRowsPerPageSelector() {
             console.log(`Documents par page mis à jour: ${rowsPerPage}`);
         });
     });
+}
+
+// Fonction principale d'initialisation avec protection contre les doubles appels
+function initializePageComponents() {
+    if (isInitialized) {
+        console.log('⚠️ Page déjà initialisée, éviter la double initialisation');
+        return;
+    }
+    
+    console.log('🚀 Initialisation des composants de la page...');
+    
+    try {
+        initializeButtonEvents();
+        console.log('✅ Initialisation terminée avec succès');
+        isInitialized = true;
+    } catch (error) {
+        console.error('❌ Erreur lors de l\'initialisation:', error);
+    }
 }
 
 // Cette fonction n'est plus nécessaire - supprimée
@@ -762,6 +787,126 @@ function initializeButtonEvents() {
     attachButtonEvents();
 }
 
+// Fonction pour attacher les événements aux boutons avec gestion des conflits
+function initializeButtonEvents() {
+    console.log('🔧 Initialisation des événements de boutons...');
+    
+    // Nettoyer les anciens gestionnaires d'événements pour éviter les doublons
+    const allButtons = document.querySelectorAll('.action-button');
+    allButtons.forEach(button => {
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+    });
+    
+    setTimeout(() => {
+        // Gestion des boutons de paiement
+        document.querySelectorAll('.action-button.pay').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const row = e.target.closest('tr');
+                if (!row) return;
+                
+                const documentName = row.querySelector('.document-name')?.textContent;
+                const documentType = row.cells[1]?.textContent;
+                const institution = row.cells[2]?.textContent;
+                const validityDate = row.cells[3]?.textContent;
+                const statusElement = row.querySelector('.status');
+                const status = statusElement ? statusElement.textContent : 'Inconnu';
+                const documentPrice = getDocumentPrice(documentName, documentType);
+                
+                sessionStorage.setItem('selectedDocument', JSON.stringify({
+                    name: documentName,
+                    type: documentType,
+                    institution: institution,
+                    validityDate: validityDate,
+                    status: status,
+                    price: documentPrice
+                }));
+                
+                window.location.href = 'edit.html';
+            });
+        });
+
+        // Gestion des boutons de téléchargement
+        document.querySelectorAll('.action-button.download').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const row = e.target.closest('tr');
+                if (!row) return;
+                
+                const documentName = row.querySelector('.document-name')?.textContent;
+                const documentType = row.cells[1]?.textContent;
+                const institution = row.cells[2]?.textContent;
+                const validityDate = row.cells[3]?.textContent;
+                const statusElement = row.querySelector('.status');
+                const status = statusElement ? statusElement.textContent : 'Inconnu';
+                const uploadDate = row.querySelector('.document-date')?.textContent.replace('Mis en ligne le ', '');
+                const documentPrice = getDocumentPrice(documentName, documentType);
+                
+                const documentData = {
+                    name: documentName,
+                    type: documentType,
+                    institution: institution,
+                    validityDate: validityDate,
+                    status: status,
+                    uploadDate: uploadDate,
+                    price: documentPrice
+                };
+                
+                downloadDocument(documentData);
+            });
+        });
+
+        // Gestion des boutons de visualisation avec protection contre les conflits
+        document.querySelectorAll('.action-button.view').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log('🔍 Clic sur bouton d\'aperçu détecté');
+                
+                const row = e.target.closest('tr');
+                if (!row) {
+                    console.error('❌ Impossible de trouver la ligne du document');
+                    return;
+                }
+                
+                const documentName = row.querySelector('.document-name')?.textContent;
+                const documentType = row.cells[1]?.textContent;
+                const institution = row.cells[2]?.textContent;
+                const validityDate = row.cells[3]?.textContent;
+                const statusElement = row.querySelector('.status');
+                const status = statusElement ? statusElement.textContent.trim() : 'Inconnu';
+                const uploadDate = row.querySelector('.document-date')?.textContent.replace('Mis en ligne le ', '');
+                const documentPrice = getDocumentPrice(documentName, documentType);
+                
+                console.log('📄 Données du document:', {
+                    name: documentName,
+                    type: documentType,
+                    institution: institution,
+                    status: status
+                });
+                
+                openDocumentPreview({
+                    name: documentName,
+                    type: documentType,
+                    institution: institution,
+                    validityDate: validityDate,
+                    status: status,
+                    uploadDate: uploadDate,
+                    price: documentPrice
+                });
+            });
+        });
+        
+        console.log('✅ Événements de boutons initialisés');
+    }, 50);
+}
+
 // Fonction pour attacher les événements aux boutons
 function attachButtonEvents() {
     // Gestion des boutons de paiement
@@ -1283,12 +1428,18 @@ function showAllDocuments() {
 }
 
 function updateVisibleRowsAfterFilter() {
+    console.log('🔄 Mise à jour des lignes visibles après filtrage...');
     const visibleRows = Array.from(document.querySelectorAll('tbody tr:not([style*="display: none"])'));
     allRows = visibleRows;
     currentPage = 1;
     showPage(1);
     updatePaginationButtons();
-    attachButtonEvents();
+    
+    // Réattacher les événements avec notre fonction améliorée
+    setTimeout(() => {
+        initializeButtonEvents();
+        console.log('✅ Événements réattachés après filtrage');
+    }, 100);
 }
 
 // Gestion du menu mobile
@@ -1372,13 +1523,23 @@ function initMobileMenu() {
 
 // Initialiser la pagination et les événements au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initialisation de la page index...');
-    sortRowsByDate(); // Trier dès le chargement
-    initPagination();
-    attachButtonEvents();
-    initFilters();
-    initModal();
-    initMobileMenu(); // Restauré pour la compatibilité
-    initRowsPerPageSelector();
-    console.log('Page index initialisée');
+    console.log('📄 DOM chargé, lancement de l\'initialisation...');
+    
+    // Petit délai pour s'assurer que tous les éléments sont prêts
+    setTimeout(() => {
+        console.log('🚀 Initialisation des composants...');
+        
+        // Utiliser notre nouvelle fonction d'initialisation
+        initializePageComponents();
+        
+        sortRowsByDate(); // Trier dès le chargement
+        initPagination();
+        attachButtonEvents(); // Garde l'ancienne fonction en backup
+        initFilters();
+        initModal();
+        initMobileMenu(); // Restauré pour la compatibilité
+        initRowsPerPageSelector();
+        
+        console.log('✅ Page index initialisée');
+    }, 100);
 });

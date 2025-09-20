@@ -14,7 +14,6 @@ body {
     background-color: var(--color-surface-secondary);
     color: var(--color-text-primary);
     font-size: var(--font-size-body-md);
-    padding-top: 80px; /* Compensation pour la navbar sticky */
 }
 
 /* Header */
