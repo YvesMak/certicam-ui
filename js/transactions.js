@@ -378,11 +378,11 @@ function initTransactionDropdowns() {
         });
 
         // Si on a cliqué sur un bouton dropdown
-        if (e.target.closest('.dropdown-toggle')) {
+        if (e.target.closest('.dropdown-toggle') || e.target.closest('.action-button')) {
             e.preventDefault();
             e.stopPropagation();
             
-            const button = e.target.closest('.dropdown-toggle');
+            const button = e.target.closest('.dropdown-toggle') || e.target.closest('.action-button');
             const dropdown = button.closest('.dropdown');
             const menu = dropdown.querySelector('.dropdown-menu');
             
@@ -396,9 +396,11 @@ function attachTransactionButtonEvents() {
     document.addEventListener('click', function(e) {
         if (e.target.closest('.dropdown-item')) {
             e.preventDefault();
+            e.stopPropagation();
+            
             const item = e.target.closest('.dropdown-item');
             const dropdown = item.closest('.dropdown');
-            const button = dropdown.querySelector('.dropdown-toggle');
+            const button = dropdown.querySelector('.dropdown-toggle') || dropdown.querySelector('.action-button');
             const transactionId = button.getAttribute('data-transaction');
             const transaction = transactionData[transactionId];
             
