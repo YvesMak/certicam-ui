@@ -928,6 +928,8 @@ function initFilters() {
     const resetBtn = document.getElementById('reset-filters');
     if (resetBtn) {
         resetBtn.addEventListener('click', function() {
+            console.log('🔄 Réinitialisation des filtres...');
+            
             // Reset radio buttons
             document.querySelectorAll('input[name="status-filter"]').forEach(radio => {
                 radio.checked = radio.value === 'all';
@@ -941,9 +943,21 @@ function initFilters() {
                 window.resetDateRangePicker();
             }
             
-            // Réafficher tous les documents
+            // Reset de la barre de recherche
+            const searchInput = document.getElementById('search-input');
+            const searchClear = document.getElementById('search-clear');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            if (searchClear) {
+                searchClear.style.display = 'none';
+            }
+            
+            // Réafficher tous les documents dans l'ordre d'origine
             showAllDocuments();
             filterToggle.classList.remove('has-filters');
+            
+            console.log('✅ Filtres réinitialisés, ordre chronologique restauré');
         });
     }
 
@@ -1323,11 +1337,22 @@ function filterDocuments() {
 }
 
 function showAllDocuments() {
+    console.log('🔄 Réinitialisation: affichage de tous les documents...');
+    
+    // D'abord, afficher toutes les lignes
     const rows = document.querySelectorAll('tbody tr');
     rows.forEach(row => {
         row.style.display = 'table-row';
     });
+    
+    // Ensuite, restaurer l'ordre chronologique d'origine (du plus récent au plus ancien)
+    console.log('📅 Restauration de l\'ordre chronologique original...');
+    sortRowsByDate();
+    
+    // Puis mettre à jour la pagination
     updateVisibleRowsAfterFilter();
+    
+    console.log('✅ Tous les documents affichés dans l\'ordre d\'origine');
 }
 
 function updateVisibleRowsAfterFilter() {
