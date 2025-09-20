@@ -45,47 +45,21 @@
 .transactions-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: fixed; /* Force le respect des largeurs définies */
 }
 
-/* Largeurs spécifiques des colonnes */
-.transactions-table th:nth-child(1), /* Numéro de transaction */
-.transactions-table td:nth-child(1) {
-    width: 15%;
-}
-
-.transactions-table th:nth-child(2), /* Type de paiement */
-.transactions-table td:nth-child(2) {
-    width: 18%;
-}
-
-.transactions-table th:nth-child(3), /* Montant */
-.transactions-table td:nth-child(3) {
-    width: 12%;
-}
-
-.transactions-table th:nth-child(4), /* Frais */
-.transactions-table td:nth-child(4) {
-    width: 10%;
-}
-
-.transactions-table th:nth-child(5), /* Total */
-.transactions-table td:nth-child(5) {
-    width: 12%;
-}
-
-.transactions-table th:nth-child(6), /* Statut */
+/* Alignement spécifique des colonnes */
+.transactions-table th:nth-child(6), /* Colonne Statut */
 .transactions-table td:nth-child(6) {
-    width: 15%;
     text-align: center;
 }
 
-.transactions-table th:nth-child(7), /* Actions */
+.transactions-table th:nth-child(7), /* Colonne Actions */
 .transactions-table td:nth-child(7) {
-    width: 18%;
     text-align: center;
-    min-width: 50px;
-    padding: var(--spacing-md) var(--spacing-sm);
+    width: 30px;
+    min-width: 30px;
+    max-width: 30px;
+    padding: var(--spacing-md) var(--spacing-xs);
 }
 
 /* Padding par défaut pour toutes les cellules */
@@ -209,18 +183,16 @@
     background: rgba(0, 0, 0, 0.05); /* Fond léger pour voir le bouton */
     border: 1px solid var(--color-gray-200);
     cursor: pointer;
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xxs);
     border-radius: var(--radius-sm);
     color: var(--color-text-primary);
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 28px;
-    height: 28px;
-    font-size: 20px;
-    font-weight: bold;
-    line-height: 1;
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
 }
 
 .dropdown-toggle:hover,
@@ -236,14 +208,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
     color: inherit;
-}
-
-/* Si l'icône est présente, masquer le texte de fallback */
-.dropdown-toggle i + *,
-.action-button i + * {
-    display: none;
 }
 
 /* Dropdown menu */
