@@ -212,26 +212,25 @@
     color: inherit;
 }
 
-/* Fallback si l'icône ne s'affiche pas */
-.dropdown-toggle::before,
-.action-button::before {
-    content: "⋮";
+/* Le texte de fallback (⋮) doit être visible */
+.dropdown-toggle,
+.action-button {
     font-size: 20px;
+    font-weight: bold;
     line-height: 1;
+}
+
+/* Si l'icône est présente, masquer le texte */
+.dropdown-toggle i + *,
+.action-button i + * {
     display: none;
 }
 
-/* Afficher le fallback si l'icône n'est pas chargée */
-.dropdown-toggle:not(:has(i)),
-.action-button:not(:has(i)) {
-    display: flex;
-    align-items: center;
+/* Si l'icône n'est pas chargée, le texte reste visible */
+.dropdown-toggle:not(:has(i:not(:empty))),
+.action-button:not(:has(i:not(:empty))) {
     justify-content: center;
-}
-
-.dropdown-toggle:not(:has(i))::before,
-.action-button:not(:has(i))::before {
-    display: block;
+    align-items: center;
 }
 
 /* Dropdown menu */
