@@ -1,9 +1,6 @@
-// Variables globales pour la pagination des transactions
-let transactionCurrentPage = 1;
-let transactionRowsPerPage = 8;
-let transactionAllRows = [];
+console.log('transactions.js loaded');
 
-// Données de transactions correspondant au screenshot
+// Données de transactions
 const transactionData = {
     '5423': {
         number: '5423',
@@ -58,22 +55,22 @@ const transactionData = {
     '9082': {
         number: '9082',
         date: '12 Mai 2025',
-        product: 'CNI',
+        product: 'Passeport',
         category: 'Identité',
         institution: 'DGSN',
-        paymentType: 'Orange Money',
-        amount: '1000 FCFA',
-        status: 'valid'
+        paymentType: 'MTN MoMo',
+        amount: '2500 FCFA',
+        status: 'pending'
     },
     '6237': {
         number: '6237',
         date: '12 Mai 2025',
-        product: 'CNI',
-        category: 'Identité',
-        institution: 'DGSN',
+        product: 'Relevé bancaire',
+        category: 'Banque',
+        institution: 'Banque ABC',
         paymentType: 'Orange Money',
-        amount: '1000 FCFA',
-        status: 'valid'
+        amount: '1500 FCFA',
+        status: 'failed'
     },
     '4502': {
         number: '4502',
@@ -81,725 +78,324 @@ const transactionData = {
         product: 'CNI',
         category: 'Identité',
         institution: 'DGSN',
-        paymentType: 'Orange Money',
+        paymentType: 'MTN MoMo',
         amount: '1000 FCFA',
         status: 'valid'
     }
 };
 
-// Gestion du sélecteur de documents par page
-function initTransactionRowsPerPageSelector() {
-    const selectorWrapper = document.querySelector('.selector-wrapper');
-    const currentSelection = document.querySelector('.current-selection');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+// Fonctions utilitaires
+function getStatusClass(status) {
+    switch (status) {
+        case 'valid': return 'success';
+        case 'pending': return 'warning';  
+        case 'failed': return 'error';
+        default: return 'neutral';
+    }
+}
 
-    if (!selectorWrapper || !currentSelection || !dropdownItems.length) {
-        console.log('Éléments du sélecteur de transactions introuvables');
+function getStatusText(status) {
+    switch (status) {
+        case 'valid': return 'Réussi';
+        case 'pending': return 'En attente';
+        case 'failed': return 'Échec';
+        default: return status;
+    }
+}
+
+// Fonction principale pour afficher la modal
+function showTransactionReceipt(transaction) {
+    console.log('Ouverture modal pour transaction:', transaction);
+    
+    if (!transaction) {
+        console.error('Aucune donnée de transaction');
         return;
     }
-
-    // Toggle du dropdown au clic sur le sélecteur
-    selectorWrapper.addEventListener('click', function(e) {
-        e.stopPropagation();
-        selectorWrapper.classList.toggle('active');
-    });
-
-    // Fermer le dropdown quand on clique ailleurs
-    document.addEventListener('click', function(e) {
-        if (!selectorWrapper.contains(e.target)) {
-            selectorWrapper.classList.remove('active');
-        }
-    });
-
-    // Gérer la sélection d'un élément
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const value = this.getAttribute('data-value');
-            const text = this.textContent;
-            
-            currentSelection.textContent = text;
-            selectorWrapper.classList.remove('active');
-            
-            // Mettre à jour le nombre de lignes par page
-            transactionRowsPerPage = parseInt(value);
-            
-            // Réafficher les transactions avec le nouveau nombre
-            displayTransactionPage(transactionCurrentPage);
-        });
-    });
-}
-
-// Gestion des filtres
-function initTransactionFilters() {
-    const filterToggle = document.getElementById('transaction-filter-toggle');
-    const filterPanel = document.getElementById('transaction-filter-panel');
-    const filterClose = document.getElementById('transaction-filter-close');
-    const applyFilters = document.getElementById('transaction-apply-filters');
-    const resetFilters = document.getElementById('transaction-reset-filters');
-
-    if (!filterToggle || !filterPanel) return;
-
-    // Ouvrir le panneau de filtres
-    filterToggle.addEventListener('click', function() {
-        filterPanel.classList.add('active');
-    });
-
-    // Fermer le panneau de filtres
-    if (filterClose) {
-        filterClose.addEventListener('click', function() {
-            filterPanel.classList.remove('active');
-        });
-    }
-
-    // Appliquer les filtres
-    if (applyFilters) {
-        applyFilters.addEventListener('click', function() {
-            applyTransactionFilters();
-            filterPanel.classList.remove('active');
-        });
-    }
-
-    // Réinitialiser les filtres
-    if (resetFilters) {
-        resetFilters.addEventListener('click', function() {
-            resetTransactionFilters();
-        });
-    }
-
-    // Fermer en cliquant en dehors
-    filterPanel.addEventListener('click', function(e) {
-        if (e.target === filterPanel) {
-            filterPanel.classList.remove('active');
-        }
-    });
-}
-
-// Appliquer les filtres
-function applyTransactionFilters() {
-    const statusFilter = document.querySelector('input[name="transaction-status-filter"]:checked')?.value || 'all';
-    const paymentFilter = document.querySelector('input[name="transaction-payment-filter"]:checked')?.value || 'all';
-    const categoryFilter = document.querySelector('input[name="transaction-category-filter"]:checked')?.value || 'all';
-
-    const rows = document.querySelectorAll('.transactions-table tbody tr');
     
-    rows.forEach(row => {
-        let showRow = true;
+    const modal = document.getElementById('receiptModal');
+    if (!modal) {
+        console.error('Modal receiptModal non trouvée dans le DOM');
+        return;
+    }
+    
+    try {
+        // Remplir les données de la modal
+        const receiptNumber = document.getElementById('receiptNumber');
+        const receiptDate = document.getElementById('receiptDate');
+        const receiptService = document.getElementById('receiptService');
+        const receiptInstitution = document.getElementById('receiptInstitution');
+        const receiptPayment = document.getElementById('receiptPayment');
+        const receiptAmount = document.getElementById('receiptAmount');
+        const receiptStatus = document.getElementById('receiptStatus');
         
-        // Filtre par statut
-        if (statusFilter !== 'all') {
-            const status = row.querySelector('.status');
-            const statusClass = status.className.split(' ').find(cls => ['valid', 'pending', 'failed'].includes(cls));
-            if (statusClass !== statusFilter) {
-                showRow = false;
-            }
+        if (receiptNumber) receiptNumber.textContent = `TXN-${transaction.number}`;
+        if (receiptDate) receiptDate.textContent = transaction.date;
+        if (receiptService) receiptService.textContent = transaction.product;
+        if (receiptInstitution) receiptInstitution.textContent = transaction.institution;
+        if (receiptPayment) receiptPayment.textContent = transaction.paymentType;
+        if (receiptAmount) receiptAmount.textContent = transaction.amount;
+        
+        // Statut avec style approprié
+        if (receiptStatus) {
+            const statusClass = getStatusClass(transaction.status);
+            const statusText = getStatusText(transaction.status);
+            receiptStatus.innerHTML = `<span class="status ${statusClass}">${statusText}</span>`;
         }
-
-        // Filtre par type de paiement
-        if (paymentFilter !== 'all') {
-            const paymentType = row.querySelector('.payment-type').textContent.toLowerCase().replace(' ', '-');
-            if (!paymentType.includes(paymentFilter.replace('-', ' '))) {
-                showRow = false;
-            }
-        }
-
-        // Filtre par catégorie
-        if (categoryFilter !== 'all') {
-            const category = row.querySelector('.document-category').textContent;
-            if (category !== categoryFilter) {
-                showRow = false;
-            }
-        }
-
-        row.style.display = showRow ? '' : 'none';
-    });
-}
-
-// Réinitialiser les filtres
-function resetTransactionFilters() {
-    // Réinitialiser tous les boutons radio
-    document.querySelectorAll('input[name^="transaction-"][value="all"]').forEach(radio => {
-        radio.checked = true;
-    });
-
-    // Afficher toutes les lignes
-    document.querySelectorAll('.transactions-table tbody tr').forEach(row => {
-        row.style.display = '';
-    });
-}
-
-// Gestion de la recherche
-function initRealTimeFilters() {
-    const searchInput = document.getElementById('transaction-search');
-    const clearButton = document.getElementById('transaction-search-clear');
-
-    if (!searchInput) return;
-
-    searchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('.transactions-table tbody tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
-        });
-
-        // Afficher/masquer le bouton de suppression
-        if (clearButton) {
-            clearButton.style.display = searchTerm ? 'block' : 'none';
-        }
-    });
-
-    // Vider la recherche
-    if (clearButton) {
-        clearButton.addEventListener('click', function() {
-            searchInput.value = '';
-            searchInput.dispatchEvent(new Event('input'));
-        });
+        
+        // Afficher la modal
+        modal.classList.add('active');
+        console.log('Modal ouverte avec succès');
+        
+    } catch (error) {
+        console.error('Erreur lors du remplissage de la modal:', error);
     }
 }
 
-// Gestion du menu mobile
-function initTransactionMobileMenu() {
-    const menuButton = document.querySelector('.menu-button');
-    const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
-    const mobileMenuClose = document.querySelector('.mobile-menu-close');
-
-    if (!menuButton || !mobileMenuOverlay) return;
-
-    // Ouvrir le menu
-    menuButton.addEventListener('click', function() {
-        mobileMenuOverlay.classList.add('active');
-    });
-
-    // Fermer le menu
-    if (mobileMenuClose) {
-        mobileMenuClose.addEventListener('click', function() {
-            mobileMenuOverlay.classList.remove('active');
-        });
-    }
-
-    // Fermer en cliquant sur l'overlay
-    mobileMenuOverlay.addEventListener('click', function(e) {
-        if (e.target === mobileMenuOverlay) {
-            mobileMenuOverlay.classList.remove('active');
-        }
-    });
-}
-
-// Gestion de la pagination
-function initTransactionPagination() {
-    const table = document.querySelector('.transactions-table tbody');
-    if (!table) return;
-
-    transactionAllRows = Array.from(table.querySelectorAll('tr'));
-    displayTransactionPage(1);
-}
-
-function displayTransactionPage(page) {
-    const startIndex = (page - 1) * transactionRowsPerPage;
-    const endIndex = startIndex + transactionRowsPerPage;
-
-    transactionAllRows.forEach((row, index) => {
-        row.style.display = (index >= startIndex && index < endIndex) ? '' : 'none';
-    });
-
-    transactionCurrentPage = page;
-    updateTransactionPaginationInfo();
-}
-
-function updateTransactionPaginationInfo() {
-    const totalRows = transactionAllRows.length;
-    const startIndex = (transactionCurrentPage - 1) * transactionRowsPerPage + 1;
-    const endIndex = Math.min(transactionCurrentPage * transactionRowsPerPage, totalRows);
-
-    const infoElement = document.querySelector('.pagination-info span');
-    if (infoElement) {
-        infoElement.textContent = `Affichage de ${startIndex}-${endIndex} sur ${totalRows} transactions`;
-    }
-}
-
-// Gestion des boutons de pagination
-function initTransactionPaginationButtons() {
-    const prevButton = document.querySelector('.prev-button');
-    const nextButton = document.querySelector('.next-button');
-    const pageNumbers = document.querySelectorAll('.page-numbers span');
-
-    if (prevButton) {
-        prevButton.addEventListener('click', function() {
-            if (transactionCurrentPage > 1) {
-                displayTransactionPage(transactionCurrentPage - 1);
-                updatePageNumbers();
-            }
-        });
-    }
-
-    if (nextButton) {
-        nextButton.addEventListener('click', function() {
-            const totalPages = Math.ceil(transactionAllRows.length / transactionRowsPerPage);
-            if (transactionCurrentPage < totalPages) {
-                displayTransactionPage(transactionCurrentPage + 1);
-                updatePageNumbers();
-            }
-        });
-    }
-
-    pageNumbers.forEach(pageSpan => {
-        if (!pageSpan.classList.contains('dots')) {
-            pageSpan.addEventListener('click', function() {
-                const pageNum = parseInt(this.textContent);
-                if (!isNaN(pageNum)) {
-                    displayTransactionPage(pageNum);
-                    updatePageNumbers();
-                }
+// Gestion des événements
+function attachTransactionButtonEvents() {
+    console.log('Initialisation des événements...');
+    
+    document.addEventListener('click', function(e) {
+        // Fermer dropdowns si clic ailleurs
+        if (!e.target.closest('.dropdown')) {
+            document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
+                menu.classList.remove('active');
             });
         }
-    });
-}
-
-function updatePageNumbers() {
-    const pageNumbers = document.querySelectorAll('.page-numbers span');
-    pageNumbers.forEach(span => {
-        if (!span.classList.contains('dots')) {
-            span.classList.remove('active');
-            if (parseInt(span.textContent) === transactionCurrentPage) {
-                span.classList.add('active');
-            }
-        }
-    });
-}
-
-// Gestion des actions de transaction avec dropdowns intégrés
-function attachTransactionButtonEvents() {
-    // Gestion des clics sur les boutons dropdown
-    document.addEventListener('click', function(e) {
-        // Fermer tous les dropdowns ouverts
-        document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-            menu.classList.remove('active');
-        });
-
-        // Si on a cliqué sur un bouton dropdown
-        if (e.target.closest('.dropdown-toggle') || e.target.closest('.action-button')) {
+        
+        // Ouvrir/fermer dropdown
+        if (e.target.closest('.dropdown-toggle')) {
             e.preventDefault();
             e.stopPropagation();
             
-            const button = e.target.closest('.dropdown-toggle') || e.target.closest('.action-button');
+            const button = e.target.closest('.dropdown-toggle');
             const dropdown = button.closest('.dropdown');
             const menu = dropdown.querySelector('.dropdown-menu');
             
+            // Fermer autres menus
+            document.querySelectorAll('.dropdown-menu.active').forEach(otherMenu => {
+                if (otherMenu !== menu) {
+                    otherMenu.classList.remove('active');
+                }
+            });
+            
+            // Toggle menu actuel
             if (menu) {
-                menu.classList.add('active');
+                menu.classList.toggle('active');
             }
         }
         
-        // Gestion des actions dans les dropdowns
+        // Actions dans dropdown
         if (e.target.closest('.dropdown-item')) {
             e.preventDefault();
             e.stopPropagation();
             
             const item = e.target.closest('.dropdown-item');
             const dropdown = item.closest('.dropdown');
-            const button = dropdown.querySelector('.dropdown-toggle') || dropdown.querySelector('.action-button');
+            const button = dropdown.querySelector('.dropdown-toggle');
             const transactionId = button.getAttribute('data-transaction');
             const transaction = transactionData[transactionId];
             
-            // Fermer le dropdown
+            console.log('Action sélectionnée. Classes:', item.className);
+            console.log('ID transaction:', transactionId);
+            console.log('Données transaction:', transaction);
+            
+            // Fermer dropdown
             dropdown.querySelector('.dropdown-menu').classList.remove('active');
             
             if (item.classList.contains('view-receipt')) {
+                console.log('Déclenchement "Voir facture"');
                 showTransactionReceipt(transaction);
             } else if (item.classList.contains('download-receipt')) {
+                console.log('Déclenchement "Télécharger facture"');
                 downloadReceipt(transaction);
             } else if (item.classList.contains('retry-payment')) {
-                showRetryPaymentModal(transaction);
+                console.log('Déclenchement "Relancer paiement"');
+                retryPayment(transaction);
             } else if (item.classList.contains('cancel-transaction')) {
-                showCancelTransactionModal(transaction);
+                console.log('Déclenchement "Annuler transaction"');
+                cancelTransaction(transaction);
             } else if (item.classList.contains('contact-support')) {
-                contactSupport(transaction);
+                console.log('Redirection vers support');
+                window.location.href = '/support.html';
             }
         }
     });
 }
 
-// Afficher la modale de reçu
-function showTransactionReceipt(transaction) {
-    const modal = document.getElementById('receiptModal');
-    
-    // Remplir les données
-    document.getElementById('receiptNumber').textContent = `TXN-${transaction.number}`;
-    document.getElementById('receiptDate').textContent = transaction.date;
-    document.getElementById('receiptService').textContent = transaction.product;
-    document.getElementById('receiptInstitution').textContent = transaction.institution;
-    document.getElementById('receiptPayment').textContent = transaction.paymentType;
-    document.getElementById('receiptAmount').textContent = transaction.amount;
-    
-    // Statut avec style approprié
-    const statusElement = document.getElementById('receiptStatus');
-    const statusClass = getStatusClass(transaction.status);
-    const statusText = getStatusText(transaction.status);
-    statusElement.innerHTML = `<span class="status ${statusClass}">${statusText}</span>`;
-    
-    // Afficher la modale
-    modal.classList.add('active');
-}
-
-// Fermer la modale de reçu
-function closeReceiptModal() {
-    const modal = document.getElementById('receiptModal');
-    modal.classList.remove('active');
-}
-
-// Télécharger le reçu
+// Fonction pour télécharger la facture
 function downloadReceipt(transaction) {
-    // Simulation du téléchargement
-    const fileName = `Facture_${transaction.number}_${transaction.date.replace(/ /g, '_')}.pdf`;
+    console.log('Téléchargement de la facture pour transaction:', transaction.number);
     
-    // Créer un blob simulé (en production, cela viendrait du serveur)
-    const content = generateReceiptContent(transaction);
-    const blob = new Blob([content], { type: 'application/pdf' });
+    // Simuler le téléchargement d'un PDF
+    showNotification('Téléchargement de la facture en cours...', 'info');
     
-    // Créer un lien de téléchargement
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = fileName;
-    
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    
-    // Notification de succès
-    showNotification('Téléchargement du reçu en cours...', 'success');
-}
-
-// Générer le contenu du reçu (simulation)
-function generateReceiptContent(transaction) {
-    return `Reçu de paiement Certicam
-Transaction: ${transaction.number}
-Date: ${transaction.date}
-Service: ${transaction.product}
-Institution: ${transaction.institution}
-Mode de paiement: ${transaction.paymentType}
-Montant: ${transaction.amount}
-Statut: ${getStatusText(transaction.status)}
-
-Merci d'avoir utilisé Certicam !`;
-}
-
-// Afficher la modale de confirmation d'action
-function showActionModal(title, message, actionCallback) {
-    const modal = document.getElementById('actionModal');
-    document.getElementById('actionModalTitle').textContent = title;
-    document.getElementById('actionModalMessage').textContent = message;
-    
-    // Stocker le callback pour l'utiliser lors de la confirmation
-    modal.actionCallback = actionCallback;
-    
-    modal.classList.add('active');
-}
-
-// Relancer un paiement échoué
-function showRetryPaymentModal(transaction) {
-    showActionModal(
-        'Relancer le paiement', 
-        `Voulez-vous relancer le paiement pour la transaction ${transaction.number} ?`,
-        () => retryPayment(transaction)
-    );
-}
-
-function retryPayment(transaction) {
-    // Simulation du relancement
-    showNotification(`Relancement du paiement pour la transaction ${transaction.number}...`, 'info');
-    
-    // En production, faire appel à l'API
+    // Dans un vrai cas, on ferait un appel API pour générer/télécharger le PDF
     setTimeout(() => {
-        showNotification('Le paiement a été relancé avec succès !', 'success');
-        // Actualiser le statut dans l'interface
-        updateTransactionStatus(transaction.number, 'pending');
-    }, 2000);
-}
-
-// Annuler une transaction en cours
-function showCancelTransactionModal(transaction) {
-    showActionModal(
-        'Annuler la transaction', 
-        `Êtes-vous sûr de vouloir annuler la transaction ${transaction.number} ?`,
-        () => cancelTransaction(transaction)
-    );
-}
-
-function cancelTransaction(transaction) {
-    showNotification(`Annulation de la transaction ${transaction.number}...`, 'info');
-    
-    setTimeout(() => {
-        showNotification('Transaction annulée avec succès !', 'success');
-        updateTransactionStatus(transaction.number, 'failed');
+        showNotification(`Facture TXN-${transaction.number} téléchargée avec succès!`, 'success');
+        
+        // Simulation du téléchargement
+        const link = document.createElement('a');
+        link.href = '#'; // URL réelle du PDF
+        link.download = `Facture-TXN-${transaction.number}.pdf`;
+        // link.click(); // Décommenter pour vraiment télécharger
     }, 1500);
 }
 
-// Contacter le support
-function contactSupport(transaction) {
-    const subject = encodeURIComponent(`Support - Transaction ${transaction.number}`);
-    const body = encodeURIComponent(`Bonjour,\n\nJ'ai besoin d'aide concernant la transaction ${transaction.number} du ${transaction.date}.\n\nCordialement`);
+// Fonction pour relancer un paiement
+function retryPayment(transaction) {
+    console.log('Relance du paiement pour transaction:', transaction.number);
     
-    window.open(`mailto:support@certicam.com?subject=${subject}&body=${body}`);
-    showNotification('Ouverture de votre client email...', 'info');
+    // Préparer les paramètres de paiement
+    const paymentParams = new URLSearchParams({
+        retry: 'true',
+        transactionId: transaction.number,
+        product: transaction.product,
+        amount: transaction.amount.replace(' FCFA', ''),
+        institution: transaction.institution,
+        category: transaction.category
+    });
+    
+    showNotification('Redirection vers la page de paiement...', 'info');
+    
+    // Redirection vers la page de paiement avec les paramètres
+    setTimeout(() => {
+        window.location.href = `/payment.html?${paymentParams.toString()}`;
+    }, 1000);
 }
 
-// Utilitaires pour les statuts
-function getStatusClass(status) {
-    const statusMap = {
-        'valid': 'valid',
-        'pending': 'pending', 
-        'failed': 'failed',
-        'not-valid': 'not-valid'
-    };
-    return statusMap[status] || 'pending';
-}
-
-function getStatusText(status) {
-    const statusMap = {
-        'valid': 'Réussite',
-        'pending': 'En cours',
-        'failed': 'Échec',
-        'not-valid': 'Échec'
-    };
-    return statusMap[status] || 'En cours';
-}
-
-// Mettre à jour le statut d'une transaction dans l'interface
-function updateTransactionStatus(transactionNumber, newStatus) {
-    // Mettre à jour dans les données
-    if (transactionData[transactionNumber]) {
-        transactionData[transactionNumber].status = newStatus;
+// Fonction pour annuler une transaction (seulement si applicable)
+function cancelTransaction(transaction) {
+    console.log('Tentative d\'annulation pour transaction:', transaction.number, 'Statut:', transaction.status);
+    
+    // Vérifier si l'annulation est possible
+    if (transaction.status === 'pending') {
+        showNotification('Impossible d\'annuler une transaction en attente. Veuillez patienter ou contacter le support.', 'warning');
+        return;
     }
     
-    // Mettre à jour dans l'interface
-    const button = document.querySelector(`[data-transaction="${transactionNumber}"]`);
-    if (button) {
-        const row = button.closest('tr');
-        const statusCell = row.querySelector('.status');
-        if (statusCell) {
-            const statusClass = getStatusClass(newStatus);
-            const statusText = getStatusText(newStatus);
-            statusCell.className = `status ${statusClass}`;
-            statusCell.textContent = statusText;
-        }
+    if (transaction.status === 'valid') {
+        showNotification('Impossible d\'annuler une transaction réussie. Contactez le support pour un remboursement.', 'warning');
+        return;
+    }
+    
+    // Pour les transactions échouées, on peut proposer d'autres actions
+    if (transaction.status === 'failed') {
+        showNotification('Transaction déjà échouée. Utilisez "Relancer le paiement" pour réessayer.', 'info');
+        return;
     }
 }
 
-// Afficher une notification
-function showNotification(message, type = 'info') {
-    // Créer la notification
+// Fonction pour afficher les notifications
+function showNotification(message, type = 'info', duration = 5000) {
+    // Créer l'élément de notification
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.innerHTML = `
-        <i class="fi fi-rr-${type === 'success' ? 'check' : type === 'error' ? 'cross' : 'info'}"></i>
-        <span>${message}</span>
-    `;
-    
-    // Ajouter au DOM
-    document.body.appendChild(notification);
-    
-    // Animation d'entrée
-    setTimeout(() => notification.classList.add('show'), 100);
-    
-    // Suppression automatique
-    setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => document.body.removeChild(notification), 300);
-    }, 4000);
-}
-
-// Afficher les détails d'une transaction
-function showTransactionDetails(transaction) {
-    if (!transaction) return;
-    
-    const modal = document.getElementById('action-modal');
-    const title = document.getElementById('modal-title');
-    const message = document.getElementById('modal-message');
-    const confirmBtn = document.getElementById('modal-confirm');
-    const cancelBtn = document.getElementById('modal-cancel');
-    
-    if (!modal) {
-        alert(`Détails de la transaction ${transaction.number}:\n\nProduit: ${transaction.product}\nInstitution: ${transaction.institution}\nDate: ${transaction.date}\nMontant: ${transaction.amount}\nMode de paiement: ${transaction.paymentType}\nStatut: ${getStatusLabel(transaction.status)}`);
-        return;
-    }
-    
-    title.textContent = `Transaction ${transaction.number}`;
-    message.innerHTML = `
-        <div style="text-align: left;">
-            <p><strong>Produit:</strong> ${transaction.product}</p>
-            <p><strong>Institution:</strong> ${transaction.institution}</p>
-            <p><strong>Date:</strong> ${transaction.date}</p>
-            <p><strong>Montant:</strong> ${transaction.amount}</p>
-            <p><strong>Mode de paiement:</strong> ${transaction.paymentType}</p>
-            <p><strong>Statut:</strong> ${getStatusLabel(transaction.status)}</p>
+        <div class="notification-content">
+            <span class="notification-message">${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                <i class="fi fi-rr-cross-small"></i>
+            </button>
         </div>
     `;
     
-    confirmBtn.textContent = 'Fermer';
-    confirmBtn.onclick = () => modal.classList.remove('active');
-    cancelBtn.style.display = 'none';
-    
-    modal.classList.add('active');
-}
-
-// Télécharger le reçu
-function downloadReceipt(transaction) {
-    if (!transaction) return;
-    
-    const modal = document.getElementById('action-modal');
-    if (!modal) {
-        alert(`Téléchargement du reçu pour la transaction ${transaction.number} en cours...`);
-        return;
+    // Ajouter au conteneur de notifications
+    let container = document.getElementById('notification-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'notification-container';
+        document.body.appendChild(container);
     }
     
-    const title = document.getElementById('modal-title');
-    const message = document.getElementById('modal-message');
-    const confirmBtn = document.getElementById('modal-confirm');
-    const cancelBtn = document.getElementById('modal-cancel');
+    container.appendChild(notification);
     
-    title.textContent = 'Télécharger le reçu';
-    message.textContent = `Voulez-vous télécharger le reçu de la transaction ${transaction.number} ?`;
+    // Animation d'entrée
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
     
-    confirmBtn.textContent = 'Télécharger';
-    confirmBtn.onclick = () => {
-        alert(`Téléchargement du reçu pour la transaction ${transaction.number} en cours...`);
-        modal.classList.remove('active');
-    };
-    
-    cancelBtn.style.display = 'inline-block';
-    cancelBtn.onclick = () => modal.classList.remove('active');
-    
-    modal.classList.add('active');
+    // Suppression automatique
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }
+    }, duration);
 }
 
-// Réessayer le paiement
-function retryPayment(transaction) {
-    if (!transaction) return;
+// Fonction utilitaire pour récupérer une transaction par son numéro
+function getTransactionByNumber(number) {
+    return Object.values(transactionData).find(transaction => transaction.number === number);
+}
+
+// Fermeture des modals
+function initModalClosing() {
+    // Boutons de fermeture génériques
+    document.querySelectorAll('.modal-close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            const modal = this.closest('.modal-overlay') || this.closest('.modal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        });
+    });
     
-    const modal = document.getElementById('action-modal');
-    if (!modal) {
-        alert(`Relance du paiement pour la transaction ${transaction.number}...`);
-        return;
+    // Boutons de fermeture spécifiques
+    const closeReceiptModal = document.getElementById('closeReceiptModal');
+    if (closeReceiptModal) {
+        closeReceiptModal.addEventListener('click', function() {
+            const modal = document.getElementById('receiptModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
+        });
     }
     
-    const title = document.getElementById('modal-title');
-    const message = document.getElementById('modal-message');
-    const confirmBtn = document.getElementById('modal-confirm');
-    const cancelBtn = document.getElementById('modal-cancel');
-    
-    title.textContent = 'Réessayer le paiement';
-    message.textContent = `Voulez-vous relancer le paiement pour la transaction ${transaction.number} ?`;
-    
-    confirmBtn.textContent = 'Réessayer';
-    confirmBtn.onclick = () => {
-        alert(`Relance du paiement pour la transaction ${transaction.number}...`);
-        modal.classList.remove('active');
-    };
-    
-    cancelBtn.style.display = 'inline-block';
-    cancelBtn.onclick = () => modal.classList.remove('active');
-    
-    modal.classList.add('active');
-}
-
-// Obtenir le libellé du statut
-function getStatusLabel(status) {
-    const labels = {
-        'valid': 'Réussite',
-        'pending': 'En cours',
-        'failed': 'Échec',
-        'not-valid': 'Non valide'
-    };
-    return labels[status] || status;
-}
-
-// Initialiser tout au chargement de la page
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Initialisation de la page transactions...');
-    initTransactionPagination();
-    initTransactionFilters();
-    initRealTimeFilters();
-    initTransactionMobileMenu();
-    initTransactionRowsPerPageSelector();
-    initTransactionPaginationButtons();
-    initModals();
-    attachTransactionButtonEvents();
-    console.log('Page transactions initialisée');
-});
-
-// Initialiser les modales
-function initModals() {
-    // Modale de reçu
-    const receiptModal = document.getElementById('receiptModal');
-    const receiptModalClose = document.getElementById('receiptModalClose');
-    const closeReceiptModalBtn = document.getElementById('closeReceiptModal');
+    // Bouton de téléchargement spécifique
     const downloadReceiptBtn = document.getElementById('downloadReceipt');
-    
-    // Modale d'action
-    const actionModal = document.getElementById('actionModal');
-    const actionModalClose = document.getElementById('actionModalClose');
-    const cancelActionBtn = document.getElementById('cancelAction');
-    const confirmActionBtn = document.getElementById('confirmAction');
-    
-    // Fermeture de la modale de reçu
-    if (receiptModalClose) {
-        receiptModalClose.addEventListener('click', closeReceiptModal);
-    }
-    if (closeReceiptModalBtn) {
-        closeReceiptModalBtn.addEventListener('click', closeReceiptModal);
-    }
-    
-    // Téléchargement depuis la modale
     if (downloadReceiptBtn) {
         downloadReceiptBtn.addEventListener('click', function() {
-            const transactionNumber = document.getElementById('receiptNumber').textContent.replace('TXN-', '');
-            const transaction = transactionData[transactionNumber];
-            if (transaction) {
-                downloadReceipt(transaction);
+            // Récupérer les données de la transaction actuelle
+            const receiptNumber = document.getElementById('receiptNumber').textContent.replace('TXN-', '');
+            const transactionData = getTransactionByNumber(receiptNumber);
+            if (transactionData) {
+                downloadReceipt(transactionData);
             }
         });
     }
     
-    // Fermeture de la modale d'action
-    if (actionModalClose) {
-        actionModalClose.addEventListener('click', closeActionModal);
-    }
-    if (cancelActionBtn) {
-        cancelActionBtn.addEventListener('click', closeActionModal);
-    }
-    
-    // Confirmation d'action
-    if (confirmActionBtn) {
-        confirmActionBtn.addEventListener('click', function() {
-            if (actionModal.actionCallback) {
-                actionModal.actionCallback();
-                closeActionModal();
+    // Clic sur overlay
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
             }
         });
-    }
-    
-    // Fermeture au clic sur l'overlay
-    receiptModal.addEventListener('click', function(e) {
-        if (e.target === receiptModal) {
-            closeReceiptModal();
-        }
     });
     
-    actionModal.addEventListener('click', function(e) {
-        if (e.target === actionModal) {
-            closeActionModal();
+    // Touche Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.active, .modal.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
         }
     });
 }
 
-// Fermer la modale d'action
-function closeActionModal() {
-    const modal = document.getElementById('actionModal');
-    modal.classList.remove('active');
-    modal.actionCallback = null;
+// Initialisation de la page
+function initTransactionsPage() {
+    console.log('Initialisation de la page transactions...');
+    attachTransactionButtonEvents();
+    initModalClosing();
+    console.log('Page transactions initialisée avec succès');
 }
+
+// Démarrage automatique
+document.addEventListener('DOMContentLoaded', initTransactionsPage);

@@ -141,6 +141,12 @@ class NavbarAuth {
     }
 
     updateNotificationBadge() {
+        // Vérifier si SessionManager existe
+        if (typeof SessionManager === 'undefined') {
+            console.log('SessionManager non disponible pour les notifications');
+            return;
+        }
+        
         const session = SessionManager.getSession();
         if (!session) return;
 
@@ -227,7 +233,7 @@ class NavbarAuth {
                 .logout-modal {
                     background: var(--color-white);
                     border-radius: var(--radius-lg);
-                    box-shadow: var(--shadow-2xl);
+                    box-shadow: none;
                     max-width: 400px;
                     width: calc(100% - var(--spacing-lg));
                     animation: slideUp 0.3s ease;

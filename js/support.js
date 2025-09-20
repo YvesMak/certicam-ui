@@ -360,7 +360,7 @@ function showCallModal() {
             max-width: 400px;
             width: 90%;
             overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: none;
             animation: slideUp 0.3s ease-out;
         }
         

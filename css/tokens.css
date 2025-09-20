@@ -92,9 +92,32 @@
   --line-height-heading-xl: 28.8px;
   --line-height-heading-2xl: 36px;
   
+  /* === STATUS COLORS === */
+  /* Status Success (Réussi) */
+  --color-status-success: #10B981;
+  --color-status-success-bg: #D1FAE5;
+  --color-status-success-text: #065F46;
+  
+  /* Status Warning (En attente) */
+  --color-status-warning: #F59E0B;
+  --color-status-warning-bg: #FEF3C7;
+  --color-status-warning-text: #92400E;
+  
+  /* Status Error (Échec) */
+  --color-status-error: #EF4444;
+  --color-status-error-bg: #FEE2E2;
+  --color-status-error-text: #991B1B;
+  
+  /* Status Neutral (Défaut) */
+  --color-status-neutral: #6B7280;
+  --color-status-neutral-bg: #F3F4F6;
+  --color-status-neutral-text: #374151;
+  
   /* === SHADOWS === */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* Note: Flat design - toutes les ombres sont désactivées */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-2xl: none;
 }

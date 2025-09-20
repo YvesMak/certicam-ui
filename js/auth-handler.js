@@ -641,7 +641,7 @@ class AuthHandler {
                 right: 20px;
                 padding: 16px 20px;
                 border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                box-shadow: none;
                 z-index: 10000;
                 transform: translateX(100%);
                 opacity: 0;

@@ -21,7 +21,7 @@ body {
     background: var(--color-surface-primary);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    box-shadow: var(--shadow-xl);
+    box-shadow: none;
     min-height: 700px;
 }
 
@@ -166,7 +166,7 @@ body {
 .verify-btn:hover {
     background: var(--color-gray-700);
     transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+    box-shadow: none;
 }
 
 .verify-btn:active {
@@ -308,7 +308,7 @@ body {
     height: 250px;
     background: var(--color-surface-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: none;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -549,7 +549,7 @@ body {
     border-radius: var(--border-radius-lg);
     color: white;
     font-size: var(--font-size-sm);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    box-shadow: none;
     animation: messageGlow 2s ease-in-out infinite;
     backdrop-filter: blur(10px);
     max-width: 90%;
@@ -557,11 +557,11 @@ body {
 
 @keyframes messageGlow {
     0%, 100% {
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        box-shadow: none;
         transform: scale(1);
     }
     50% {
-        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+        box-shadow: none;
         transform: scale(1.02);
     }
 }
@@ -621,7 +621,7 @@ body {
     justify-content: center;
     color: white;
     font-size: 18px;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    box-shadow: none;
     animation: badgePulse 2.5s ease-in-out infinite;
     transform: translateZ(25px);
 }
@@ -629,10 +629,10 @@ body {
 @keyframes badgePulse {
     0%, 100% {
         transform: translateZ(25px) scale(1) rotate(0deg);
-        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        box-shadow: none;
     }
     50% {
         transform: translateZ(30px) scale(1.1) rotate(10deg);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+        box-shadow: none;
     }
 }

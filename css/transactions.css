@@ -40,6 +40,7 @@
     border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-lg);
     margin-bottom: var(--spacing-xl);
+    overflow-y: hidden;
 }
 
 .transactions-table {
@@ -167,7 +168,7 @@
     color: var(--color-text-primary);
 }
 
-/* Statut aligné avec le DS - Style chip similaire aux documents */
+/* Statut aligné avec le DS - Style chip harmonisé */
 .status {
     display: inline-flex;
     align-items: center;
@@ -177,33 +178,44 @@
     font-size: var(--font-size-label-sm);
     font-weight: var(--font-weight-medium);
     font-family: var(--font-family);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.025em;
     text-align: center;
-    min-width: 80px;
+    min-width: 100px;
+    white-space: nowrap;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
 }
 
+/* Status Success - Harmonisé avec index.html */
+.status.success,
 .status.valid {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background: var(--color-status-success-bg);
+    color: var(--color-status-success-text);
+    border-color: var(--color-status-success);
 }
 
+/* Status Warning - Harmonisé avec index.html */
+.status.warning,
 .status.pending {
-    background: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeaa7;
+    background: var(--color-status-warning-bg);
+    color: var(--color-status-warning-text);
+    border-color: var(--color-status-warning);
 }
 
-.status.failed {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
+/* Status Error - Harmonisé avec index.html */
+.status.error,
+.status.failed,
 .status.not-valid {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background: var(--color-status-error-bg);
+    color: var(--color-status-error-text);
+    border-color: var(--color-status-error);
+}
+
+/* Status Neutral - Harmonisé avec index.html */
+.status.neutral {
+    background: var(--color-status-neutral-bg);
+    color: var(--color-status-neutral-text);
+    border-color: var(--color-status-neutral);
 }
 
 /* Actions avec dropdown */
@@ -257,7 +269,6 @@
     background: var(--color-white);
     border: 1px solid var(--color-gray-200);
     border-radius: var(--radius-md);
-    box-shadow: var(--shadow-lg);
     z-index: 1000;
     min-width: 180px;
     padding: var(--spacing-xs) 0;
@@ -325,7 +336,7 @@
 .modal {
     background: var(--color-surface-primary);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--color-gray-200);
     max-width: 500px;
     width: 90%;
     max-height: 80vh;
@@ -564,6 +575,224 @@
     color: var(--color-text-secondary);
 }
 
+/* Modale de facture - Améliorations UX/UI */
+.receipt-modal {
+    max-width: 600px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--color-surface-primary);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-gray-200);
+}
+
+.modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-gray-200);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: var(--font-size-heading-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+}
+
+.modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--color-text-secondary);
+    font-size: 18px;
+}
+
+.modal-close:hover {
+    background: var(--color-gray-100);
+    color: var(--color-text-primary);
+    transform: scale(1.05);
+}
+
+.modal-close:active {
+    transform: scale(0.95);
+}
+
+.modal-body {
+    padding: 0;
+}
+
+.receipt-content {
+    padding: var(--spacing-xl);
+}
+
+.receipt-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--color-gray-200);
+}
+
+.receipt-logo img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+    padding: var(--spacing-sm);
+}
+
+.receipt-info {
+    flex: 1;
+}
+
+.receipt-title {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: var(--font-size-heading-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+}
+
+.receipt-number,
+.receipt-date {
+    margin: var(--spacing-xs) 0;
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+}
+
+.receipt-number span,
+.receipt-date span {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.receipt-details {
+    margin-bottom: var(--spacing-xl);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px solid var(--color-gray-100);
+}
+
+.detail-row.total-row {
+    border: 2px solid var(--color-gray-200);
+    background: var(--color-surface-secondary);
+    margin: 0 calc(-1 * var(--spacing-xl));
+    padding: var(--spacing-lg) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    margin-top: var(--spacing-md);
+}
+
+.detail-label {
+    font-size: var(--font-size-body-md);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+}
+
+.detail-value {
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    text-align: right;
+}
+
+.amount-total {
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.receipt-footer {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 2px solid var(--color-gray-200);
+    text-align: center;
+}
+
+.company-name {
+    margin: 0 0 var(--spacing-sm) 0;
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+}
+
+.company-info {
+    margin: var(--spacing-xs) 0;
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family);
+}
+
+.modal-actions {
+    padding: var(--spacing-lg);
+    background: var(--color-surface-secondary);
+    border-top: 1px solid var(--color-gray-200);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: flex-end;
+}
+
+.modal-actions .btn {
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family);
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-body-md);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.modal-actions .btn-secondary {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--color-gray-300);
+}
+
+.modal-actions .btn-secondary:hover {
+    background: var(--color-gray-100);
+    color: var(--color-text-primary);
+    border-color: var(--color-gray-400);
+}
+
+.modal-actions .btn-primary {
+    background: var(--color-green);
+    color: var(--color-surface-primary);
+    border-color: var(--color-green);
+}
+
+.modal-actions .btn-primary:hover {
+    background: #00a559;
+    transform: translateY(-1px);
+    border-color: #00a559;
+}
+
 /* Modale d'action */
 .action-modal {
     max-width: 450px;
@@ -577,8 +806,8 @@
     right: 20px;
     padding: var(--spacing-md) var(--spacing-lg);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
     background: var(--color-surface-primary);
+    border: 1px solid var(--color-gray-200);
     border-left: 4px solid;
     display: flex;
     align-items: center;
