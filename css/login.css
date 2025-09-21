@@ -468,7 +468,7 @@ body {
     .login-btn,
     .form-options,
     .demo-accounts {
-        max-width: none;
+        max-width: 400px;
     }
 }
 

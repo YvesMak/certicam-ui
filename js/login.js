@@ -15,12 +15,22 @@ class LoginForm {
             'demo@user.com': {
                 password: 'user123',
                 role: 'user',
-                redirect: 'dashboard.html'
+                redirect: 'index.html'
             },
             'demo@admin.com': {
                 password: 'admin123',
                 role: 'admin',
                 redirect: 'admin.html'
+            },
+            'demo@agent.com': {
+                password: 'agent123',
+                role: 'agent',
+                redirect: 'agent-dashboard.html'
+            },
+            'demo@checker.com': {
+                password: 'checker123',
+                role: 'checker',
+                redirect: 'checker-dashboard.html'
             }
         };
         
@@ -361,19 +371,25 @@ class LoginForm {
                 e.preventDefault();
                 const email = btn.dataset.email;
                 const password = btn.dataset.password;
+                const redirect = btn.dataset.redirect;
                 
-                this.fillDemoAccount(email, password);
+                this.fillDemoAccount(email, password, redirect);
             });
         });
     }
 
-    fillDemoAccount(email, password) {
+    fillDemoAccount(email, password, redirect = null) {
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         
         if (emailInput && passwordInput) {
             emailInput.value = email;
             passwordInput.value = password;
+            
+            // Store redirect URL for later use
+            if (redirect) {
+                this.tempRedirect = redirect;
+            }
             
             // Clear any existing errors
             this.clearAllErrors();
@@ -485,10 +501,16 @@ class LoginForm {
         // Show success feedback
         this.showSuccessFeedback();
         
+        // Use tempRedirect if available (from demo button), otherwise use account redirect
+        const redirectUrl = this.tempRedirect || account.redirect;
+        
         // Redirect after short delay
         setTimeout(() => {
-            window.location.href = account.redirect;
+            window.location.href = redirectUrl;
         }, 1000);
+        
+        // Clear tempRedirect after use
+        this.tempRedirect = null;
     }
 
     storeUserSession(userData) {

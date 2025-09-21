@@ -1,336 +1,282 @@
-// Agent Dashboard functionality
-class AgentDashboard {
+/**
+ * Checker Instructions Page
+ * Modern JavaScript implementation following UX best practices
+ */
+
+class CheckerInstructions {
     constructor() {
-        this.users = [];
-        this.checkers = [];
-        this.alerts = [];
         this.init();
     }
 
     init() {
-        // Require agent role
-        AuthGuard.requireRole('agent');
+        console.log('🔍 Page d\'instructions vérificateur initialisée');
         
-        this.loadData();
-        this.loadUsers();
-        this.loadCheckers();
-        this.loadAlerts();
-        this.startRealTimeUpdates();
+        // Initialize components
+        this.setupQRCodeInteraction();
+        this.setupInstructionAnimations();
+        this.trackPageView();
+        this.setupAccessibility();
     }
 
-    loadData() {
-        // Simulate real-time data updates
-        this.updateMetrics();
+    /**
+     * Setup QR Code interactions and hover effects
+     */
+    setupQRCodeInteraction() {
+        const qrCode = document.querySelector('.qr-code');
+        
+        if (qrCode) {
+            // Add click handler for mobile devices
+            qrCode.addEventListener('click', () => {
+                this.handleQRCodeInteraction();
+            });
+
+            // Add keyboard support
+            qrCode.setAttribute('tabindex', '0');
+            qrCode.setAttribute('role', 'button');
+            qrCode.setAttribute('aria-label', 'Code QR pour accéder à l\'application de vérification');
+            
+            qrCode.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.handleQRCodeInteraction();
+                }
+            });
+        }
     }
 
-    updateMetrics() {
-        // Simulate API calls for metrics
-        const metrics = {
-            totalUsers: 1247 + Math.floor(Math.random() * 10),
-            activeToday: 342 + Math.floor(Math.random() * 20),
-            newUsers: 89 + Math.floor(Math.random() * 5),
-            pendingVerifications: 127 - Math.floor(Math.random() * 10),
-            completedToday: 89 + Math.floor(Math.random() * 15),
-            approvalRate: (92.4 + Math.random() * 2).toFixed(1),
-            revenueToday: (2847 + Math.random() * 500).toFixed(0),
-            revenueMonth: (45230 + Math.random() * 1000).toFixed(0),
-            avgRevenue: (36.30 + Math.random() * 5).toFixed(2)
+    /**
+     * Handle QR code interaction (click/tap)
+     */
+    handleQRCodeInteraction() {
+        // In a real implementation, this could:
+        // 1. Show a modal with the QR code enlarged
+        // 2. Copy the URL to clipboard
+        // 3. Open the verification app URL
+        
+        console.log('🔗 QR Code interaction - ouverture de l\'application de vérification');
+        
+        // Example: Copy URL to clipboard (would be the actual app URL)
+        const appUrl = window.location.origin + '/verification-app';
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(appUrl).then(() => {
+                this.showToast('URL copiée dans le presse-papier !');
+            }).catch(err => {
+                console.log('Erreur lors de la copie:', err);
+            });
+        }
+    }
+
+    /**
+     * Setup smooth scroll animations for instruction steps
+     */
+    setupInstructionAnimations() {
+        // Intersection Observer for animating steps on scroll
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
         };
 
-        // Update DOM
-        Object.keys(metrics).forEach(key => {
-            const element = document.getElementById(key.replace(/([A-Z])/g, '-$1').toLowerCase());
-            if (element) {
-                if (key.includes('revenue') || key.includes('avg')) {
-                    element.textContent = metrics[key] + (key.includes('avg') ? '€' : '€');
-                } else if (key.includes('rate')) {
-                    element.textContent = metrics[key] + '%';
-                } else {
-                    element.textContent = metrics[key];
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all instruction steps
+        const steps = document.querySelectorAll('.instruction-step');
+        steps.forEach((step, index) => {
+            // Initial state for animation
+            step.style.opacity = '0';
+            step.style.transform = 'translateY(20px)';
+            step.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            
+            observer.observe(step);
+        });
+
+        // Observe QR section
+        const qrSection = document.querySelector('.qr-section');
+        if (qrSection) {
+            qrSection.style.opacity = '0';
+            qrSection.style.transform = 'scale(0.95)';
+            qrSection.style.transition = 'opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s';
+            observer.observe(qrSection);
+        }
+
+        // Observe success banner
+        const successBanner = document.querySelector('.success-banner');
+        if (successBanner) {
+            successBanner.style.opacity = '0';
+            successBanner.style.transform = 'translateY(20px)';
+            successBanner.style.transition = 'opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s';
+            observer.observe(successBanner);
+        }
+    }
+
+    /**
+     * Setup accessibility enhancements
+     */
+    setupAccessibility() {
+        // Add skip link for keyboard navigation
+        this.addSkipLink();
+        
+        // Enhance device instructions with better ARIA labels
+        const deviceOptions = document.querySelectorAll('.device-option');
+        deviceOptions.forEach((option, index) => {
+            option.setAttribute('role', 'region');
+            option.setAttribute('aria-labelledby', `device-${index}-title`);
+            
+            const title = option.querySelector('h4');
+            if (title) {
+                title.id = `device-${index}-title`;
+            }
+        });
+    }
+
+    /**
+     * Add skip link for accessibility
+     */
+    addSkipLink() {
+        const skipLink = document.createElement('a');
+        skipLink.href = '#main-content';
+        skipLink.textContent = 'Passer au contenu principal';
+        skipLink.className = 'skip-link';
+        skipLink.style.cssText = `
+            position: absolute;
+            top: -40px;
+            left: 6px;
+            background: var(--color-text-primary);
+            color: var(--color-surface-primary);
+            padding: 8px;
+            text-decoration: none;
+            z-index: 1000;
+            border-radius: 4px;
+            transition: top 0.3s;
+        `;
+        
+        skipLink.addEventListener('focus', () => {
+            skipLink.style.top = '6px';
+        });
+        
+        skipLink.addEventListener('blur', () => {
+            skipLink.style.top = '-40px';
+        });
+        
+        document.body.insertBefore(skipLink, document.body.firstChild);
+        
+        // Add id to main content
+        const mainContent = document.querySelector('.checker-page');
+        if (mainContent) {
+            mainContent.id = 'main-content';
+        }
+    }
+
+    /**
+     * Show toast notification
+     */
+    showToast(message) {
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-text-primary);
+            color: var(--color-surface-primary);
+            padding: 12px 24px;
+            border-radius: 8px;
+            z-index: 1000;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        `;
+        
+        document.body.appendChild(toast);
+        
+        // Animate in
+        setTimeout(() => {
+            toast.style.opacity = '1';
+        }, 100);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    /**
+     * Track page view for analytics
+     */
+    trackPageView() {
+        // Analytics tracking
+        console.log('📊 Page vue trackée: Instructions vérificateur');
+        
+        // Track scroll depth
+        let maxScroll = 0;
+        window.addEventListener('scroll', () => {
+            const scrollPercent = Math.round(
+                (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+            );
+            
+            if (scrollPercent > maxScroll) {
+                maxScroll = scrollPercent;
+                
+                // Track milestones
+                if (maxScroll === 25 || maxScroll === 50 || maxScroll === 75 || maxScroll === 100) {
+                    console.log(`📊 Scroll milestone: ${maxScroll}%`);
                 }
             }
         });
-    }
-
-    loadUsers() {
-        // Simulate user data
-        this.users = [
-            {
-                id: 'user_001',
-                name: 'Marie Dubois',
-                email: 'marie.dubois@email.com',
-                status: 'active',
-                lastActive: '2024-01-15T11:30:00Z',
-                verifications: 12
-            },
-            {
-                id: 'user_002',
-                name: 'Jean Martin',
-                email: 'jean.martin@email.com',
-                status: 'active',
-                lastActive: '2024-01-15T10:15:00Z',
-                verifications: 8
-            },
-            {
-                id: 'user_003',
-                name: 'Sophie Lambert',
-                email: 'sophie.lambert@email.com',
-                status: 'inactive',
-                lastActive: '2024-01-14T16:45:00Z',
-                verifications: 3
-            },
-            {
-                id: 'user_004',
-                name: 'Pierre Durand',
-                email: 'pierre.durand@email.com',
-                status: 'suspended',
-                lastActive: '2024-01-13T14:20:00Z',
-                verifications: 0
-            }
-        ];
-
-        this.renderUsers();
-    }
-
-    loadCheckers() {
-        // Simulate checker data
-        this.checkers = [
-            {
-                id: 'checker_001',
-                name: 'Alice Robert',
-                email: 'alice.robert@certicam.com',
-                status: 'active',
-                verificationsToday: 15,
-                approvalRate: 94.2
-            },
-            {
-                id: 'checker_002',
-                name: 'Bob Moreau',
-                email: 'bob.moreau@certicam.com',
-                status: 'active',
-                verificationsToday: 12,
-                approvalRate: 91.8
-            },
-            {
-                id: 'checker_003',
-                name: 'Claire Petit',
-                email: 'claire.petit@certicam.com',
-                status: 'inactive',
-                verificationsToday: 0,
-                approvalRate: 96.1
-            }
-        ];
-
-        this.renderCheckers();
-    }
-
-    loadAlerts() {
-        // Simulate alerts
-        this.alerts = [
-            {
-                id: 'alert_001',
-                type: 'error',
-                title: 'Erreur de connexion base de données',
-                message: 'Connexion intermittente détectée à 11:45',
-                time: '2024-01-15T11:45:00Z'
-            },
-            {
-                id: 'alert_002',
-                type: 'warning',
-                title: 'File de vérification surchargée',
-                message: 'Plus de 150 documents en attente',
-                time: '2024-01-15T11:30:00Z'
-            },
-            {
-                id: 'alert_003',
-                type: 'info',
-                title: 'Nouveau vérificateur connecté',
-                message: 'Alice Robert a commencé sa session',
-                time: '2024-01-15T11:00:00Z'
-            }
-        ];
-
-        this.renderAlerts();
-    }
-
-    renderUsers() {
-        const container = document.getElementById('user-list');
-        container.innerHTML = '';
-
-        this.users.forEach(user => {
-            const userItem = this.createUserItem(user);
-            container.appendChild(userItem);
+        
+        // Track time on page
+        this.startTime = Date.now();
+        
+        window.addEventListener('beforeunload', () => {
+            const timeSpent = Math.round((Date.now() - this.startTime) / 1000);
+            console.log(`⏱️ Temps passé sur la page: ${timeSpent}s`);
         });
     }
 
-    createUserItem(user) {
-        const div = document.createElement('div');
-        div.className = 'user-item';
+    /**
+     * Handle reduced motion preference
+     */
+    respectMotionPreference() {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
-        const initials = user.name.split(' ').map(n => n[0]).join('');
-        const lastActive = this.getTimeAgo(user.lastActive);
-
-        div.innerHTML = `
-            <div class="user-info">
-                <div class="user-avatar">${initials}</div>
-                <div class="user-details">
-                    <h5>${user.name}</h5>
-                    <p>${user.email} • ${user.verifications} vérifications</p>
-                </div>
-            </div>
-            <div>
-                <span class="user-status status-${user.status}">
-                    ${user.status === 'active' ? 'Actif' : 
-                      user.status === 'inactive' ? 'Inactif' : 'Suspendu'}
-                </span>
-            </div>
-        `;
-
-        div.addEventListener('click', () => this.viewUserDetails(user.id));
-        return div;
-    }
-
-    renderCheckers() {
-        const container = document.getElementById('checker-list');
-        container.innerHTML = '';
-
-        this.checkers.forEach(checker => {
-            const checkerItem = this.createCheckerItem(checker);
-            container.appendChild(checkerItem);
-        });
-    }
-
-    createCheckerItem(checker) {
-        const div = document.createElement('div');
-        div.className = 'checker-item';
-        
-        const initials = checker.name.split(' ').map(n => n[0]).join('');
-
-        div.innerHTML = `
-            <div class="user-info">
-                <div class="user-avatar">${initials}</div>
-                <div class="user-details">
-                    <h5>${checker.name}</h5>
-                    <p>${checker.verificationsToday} vérifications • ${checker.approvalRate}% approbation</p>
-                </div>
-            </div>
-            <div>
-                <span class="user-status status-${checker.status}">
-                    ${checker.status === 'active' ? 'En ligne' : 'Hors ligne'}
-                </span>
-            </div>
-        `;
-
-        div.addEventListener('click', () => this.viewCheckerDetails(checker.id));
-        return div;
-    }
-
-    renderAlerts() {
-        const container = document.getElementById('alerts-container');
-        container.innerHTML = '';
-
-        if (this.alerts.length === 0) {
-            container.innerHTML = '<p style="color: var(--text-color-muted); text-align: center;">Aucune alerte active</p>';
-            return;
+        if (prefersReducedMotion) {
+            // Disable animations for users who prefer reduced motion
+            const style = document.createElement('style');
+            style.textContent = `
+                .instruction-step,
+                .qr-section,
+                .success-banner,
+                .qr-code {
+                    transition: none !important;
+                    animation: none !important;
+                }
+            `;
+            document.head.appendChild(style);
         }
-
-        this.alerts.forEach(alert => {
-            const alertItem = this.createAlertItem(alert);
-            container.appendChild(alertItem);
-        });
-    }
-
-    createAlertItem(alert) {
-        const div = document.createElement('div');
-        div.className = `alert-item ${alert.type}`;
-        
-        const icons = {
-            error: '⚠️',
-            warning: '⚡',
-            info: 'ℹ️'
-        };
-
-        div.innerHTML = `
-            <div class="alert-icon">${icons[alert.type]}</div>
-            <div>
-                <h5>${alert.title}</h5>
-                <p>${alert.message}</p>
-                <small style="color: var(--text-color-muted);">${this.getTimeAgo(alert.time)}</small>
-            </div>
-        `;
-
-        return div;
-    }
-
-    viewUserDetails(userId) {
-        // Simulate opening user details modal
-        SessionManager.showNotification('Ouverture des détails utilisateur...', 'info');
-    }
-
-    viewCheckerDetails(checkerId) {
-        // Simulate opening checker details
-        SessionManager.showNotification('Ouverture des détails vérificateur...', 'info');
-    }
-
-    getTimeAgo(dateString) {
-        const diff = Date.now() - new Date(dateString).getTime();
-        const minutes = Math.floor(diff / 60000);
-        const hours = Math.floor(minutes / 60);
-        const days = Math.floor(hours / 24);
-        
-        if (days > 0) return `il y a ${days}j`;
-        if (hours > 0) return `il y a ${hours}h`;
-        return `il y a ${minutes}min`;
-    }
-
-    startRealTimeUpdates() {
-        // Update metrics every 30 seconds
-        setInterval(() => {
-            this.updateMetrics();
-        }, 30000);
-
-        // Reload data every 5 minutes
-        setInterval(() => {
-            this.loadUsers();
-            this.loadCheckers();
-            this.loadAlerts();
-        }, 300000);
     }
 }
 
-// Global functions
-function openUserManagement() {
-    window.location.href = 'admin-users.html';
-}
-
-function manageCheckers() {
-    window.location.href = 'admin-checkers.html';
-}
-
-function generateReport() {
-    SessionManager.showNotification('Génération du rapport en cours...', 'info');
-}
-
-function manageSettings() {
-    window.location.href = 'admin-settings.html';
-}
-
-function viewLogs() {
-    SessionManager.showNotification('Ouverture des journaux système...', 'info');
-}
-
-function backupData() {
-    if (confirm('Lancer une sauvegarde complète des données ?')) {
-        SessionManager.showNotification('Sauvegarde en cours...', 'info');
-        // Simulate backup process
-        setTimeout(() => {
-            SessionManager.showNotification('Sauvegarde terminée avec succès', 'success');
-        }, 3000);
-    }
-}
-
-// Initialize dashboard
-let agentDashboard;
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    agentDashboard = new AgentDashboard();
+    new CheckerInstructions();
 });
+
+// Export for potential external use
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = CheckerInstructions;
+}
