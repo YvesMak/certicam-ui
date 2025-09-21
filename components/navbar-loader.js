@@ -8,13 +8,20 @@ class NavbarLoader {
         this.authIntegrated = false;
         this.options = {
             autoInit: true,
-            excludePages: ['login.html', 'register.html', 'auth.html', 'checker-dashboard.html'], // Pages sans navbar ou auth
+            excludePages: ['login.html', 'register.html', 'auth.html'], // Pages sans navbar
+            publicPages: ['checker-dashboard.html'], // Pages publiques avec navbar mais sans auth
             loadCSS: true,
             loadJS: true,
             ...options
         };
         
         // Auto-initialisation si nécessaire
+        console.log('🎯 NavbarLoader constructor:', {
+            autoInit: this.options.autoInit,
+            shouldLoad: this.shouldLoadNavbar(),
+            currentPage: window.location.pathname.split('/').pop()
+        });
+        
         if (this.options.autoInit && this.shouldLoadNavbar()) {
             this.init();
         }
@@ -34,7 +41,13 @@ class NavbarLoader {
     
     shouldLoadNavbar() {
         const currentPage = window.location.pathname.split('/').pop();
-        return !this.options.excludePages.includes(currentPage);
+        const shouldLoad = !this.options.excludePages.includes(currentPage);
+        console.log('🔍 shouldLoadNavbar check:', {
+            currentPage,
+            excludePages: this.options.excludePages,
+            shouldLoad
+        });
+        return shouldLoad;
     }
     
     async init() {
@@ -376,6 +389,13 @@ class NavbarLoader {
     }
     
     async initAuthIntegration() {
+        // Vérifier si c'est une page publique
+        const currentPage = window.location.pathname.split('/').pop();
+        if (this.options.publicPages && this.options.publicPages.includes(currentPage)) {
+            console.log('ℹ️ Page publique détectée, pas d\'intégration auth requise');
+            return;
+        }
+        
         // Attendre que les scripts d'authentification soient chargés
         await this.waitForAuthScripts();
         
