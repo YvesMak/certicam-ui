@@ -8,7 +8,7 @@ class NavbarLoader {
         this.authIntegrated = false;
         this.options = {
             autoInit: true,
-            excludePages: ['login.html', 'register.html', 'auth.html'], // Pages sans navbar
+            excludePages: ['login.html', 'register.html', 'auth.html', 'checker-dashboard.html'], // Pages sans navbar ou auth
             loadCSS: true,
             loadJS: true,
             ...options
