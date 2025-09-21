@@ -2,11 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width    </main>
-
-    <script src="js/document-upload.js"></script>
-</body>
-</html>le=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter un document - Certicam</title>
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/style.css">
@@ -86,16 +82,24 @@
                     </button>
                 </div>
 
-                <!-- Action buttons -->
-                <div class="button-container">
-                    <button type="button" class="btn btn-cancel" id="cancel-btn">
-                        <i class="fi fi-rr-cross-small"></i>
-                        Annuler
-                    </button>
-                    <button type="button" class="btn btn-submit" id="submit-btn" disabled>
-                        <i class="fi fi-rr-plus"></i>
-                        Ajouter
-                    </button>
+                <!-- Bottom section with category and actions -->
+                <div class="bottom-section">
+                    <!-- Category selection area -->
+                    <div class="category-area">
+                        <!-- Category section will be moved here by JavaScript -->
+                    </div>
+                    
+                    <!-- Action buttons -->
+                    <div class="button-container">
+                        <button type="button" class="btn btn-cancel" id="cancel-btn">
+                            <i class="fi fi-rr-cross-small"></i>
+                            Annuler
+                        </button>
+                        <button type="button" class="btn btn-submit" id="submit-btn" disabled>
+                            <i class="fi fi-rr-plus"></i>
+                            Ajouter
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -118,6 +122,29 @@
                     <button class="btn btn-primary" id="understood">
                         <i class="fi fi-rr-check"></i>
                         Compris !
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal-overlay" id="cancel-modal-overlay">
+        <div class="modal cancel-modal">
+            <div class="modal-content">
+                <div class="warning-icon">
+                    <i class="fi fi-rr-exclamation"></i>
+                </div>
+                <h3 class="cancel-modal-title">Annuler l'ajout de document ?</h3>
+                <p class="cancel-modal-subtitle">Les données saisies seront perdues définitivement.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="cancel-stay">
+                        <i class="fi fi-rr-arrow-left"></i>
+                        Continuer l'ajout
+                    </button>
+                    <button class="btn btn-danger" id="cancel-confirm">
+                        <i class="fi fi-rr-cross"></i>
+                        Annuler définitivement
                     </button>
                 </div>
             </div>

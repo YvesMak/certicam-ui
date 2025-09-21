@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const categoryText = document.getElementById('category-text');
     const categoryItems = document.querySelectorAll('.category-item');
     
+    // Category area for relocation
+    const categoryArea = document.querySelector('.category-area');
+    
     // Tag elements
     const categoryTag = document.getElementById('category-tag');
     const tagText = document.getElementById('tag-text');
@@ -29,6 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalOverlay = document.getElementById('modal-overlay');
     const addAnotherBtn = document.getElementById('add-another');
     const understoodBtn = document.getElementById('understood');
+
+    // Cancel modal elements
+    const cancelModalOverlay = document.getElementById('cancel-modal-overlay');
+    const cancelStayBtn = document.getElementById('cancel-stay');
+    const cancelConfirmBtn = document.getElementById('cancel-confirm');
 
     // State
     let currentFile = null;
@@ -81,10 +89,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // Simulate upload
         simulateUpload();
         
-        // Show category selection
+        // Move category section to category area and show it
         setTimeout(() => {
-            categorySection.style.display = 'block';
+            if (categoryArea && categorySection) {
+                // Move the category section to the category area
+                categoryArea.appendChild(categorySection);
+                categorySection.style.display = 'block';
+                
+                // Add animation class
+                categorySection.classList.add('category-moved');
+                
+                // Reset category selection
+                categorySection.style.marginBottom = '0';
+            }
         }, 1000);
+        
+        // Update submit button state
+        updateSubmitButton();
     }
 
     function simulateUpload() {
@@ -102,7 +123,32 @@ document.addEventListener('DOMContentLoaded', function() {
     // Category dropdown
     categoryBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
-        categoryMenu.classList.toggle('show');
+        const isOpen = categoryMenu.classList.contains('open');
+        
+        if (isOpen) {
+            categoryMenu.classList.remove('open');
+            categoryBtn.classList.remove('open');
+        } else {
+            categoryMenu.classList.add('open');
+            categoryBtn.classList.add('open');
+        }
+    });
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        categoryMenu.classList.remove('open');
+        categoryBtn.classList.remove('open');
+    });
+
+    // Handle Escape key for modals
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (cancelModalOverlay.classList.contains('show')) {
+                hideCancelModal();
+            } else if (modalOverlay.classList.contains('show')) {
+                hideModal();
+            }
+        }
     });
 
     // Category selection
@@ -119,9 +165,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function selectCategory(name, value) {
         selectedCategory = value;
         
-        // Hide dropdown and category section
-        categoryMenu.classList.remove('show');
-        categorySection.style.display = 'none';
+        // Hide dropdown menu
+        categoryMenu.classList.remove('open');
+        categoryBtn.classList.remove('open');
+        
+        // Update button text
+        categoryText.textContent = name;
         
         // Show selected tag
         tagText.textContent = name;
@@ -130,12 +179,30 @@ document.addEventListener('DOMContentLoaded', function() {
         // Enable submit button
         updateSubmitButton();
     }
+    
+    function updateSubmitButton() {
+        if (currentFile && selectedCategory) {
+            submitBtn.disabled = false;
+            submitBtn.classList.add('ready');
+        } else {
+            submitBtn.disabled = true;
+            submitBtn.classList.remove('ready');
+        }
+    }
 
     // Tag close
     tagClose?.addEventListener('click', () => {
         selectedCategory = null;
         categoryTag.style.display = 'none';
-        categorySection.style.display = 'block';
+        
+        // Reset category button text
+        categoryText.textContent = 'Choisissez la catégorie du document';
+        
+        // Show category section again if file is present
+        if (currentFile) {
+            categorySection.style.display = 'block';
+        }
+        
         updateSubmitButton();
     });
 
@@ -143,6 +210,40 @@ document.addEventListener('DOMContentLoaded', function() {
     removeFileBtn?.addEventListener('click', () => {
         resetForm();
     });
+    
+    function resetForm() {
+        currentFile = null;
+        selectedCategory = null;
+        
+        // Hide file preview
+        filePreview.style.display = 'none';
+        
+        // Hide category tag
+        categoryTag.style.display = 'none';
+        
+        // Move category section back to original position and hide it
+        const originalParent = document.querySelector('.upload-section');
+        const filePreviewElement = document.getElementById('file-preview');
+        
+        if (categorySection && originalParent && filePreviewElement) {
+            originalParent.insertBefore(categorySection, filePreviewElement.nextSibling);
+            categorySection.style.display = 'none';
+            categorySection.classList.remove('category-moved');
+            categorySection.style.marginBottom = 'var(--spacing-lg)';
+        }
+        
+        // Reset category text
+        categoryText.textContent = 'Choisissez la catégorie du document';
+        
+        // Reset progress bar
+        progressFill.style.width = '0%';
+        
+        // Reset file input
+        fileInput.value = '';
+        
+        // Update submit button
+        updateSubmitButton();
+    }
 
     // Submit button
     submitBtn?.addEventListener('click', () => {
@@ -153,11 +254,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Cancel button
     cancelBtn?.addEventListener('click', () => {
-        if (confirm('Voulez-vous vraiment annuler ? Les modifications seront perdues.')) {
-            resetForm();
-            // Redirect or close
-            window.history.back();
+        // Check if there's any data to lose
+        if (currentFile || selectedCategory) {
+            showCancelModal();
+        } else {
+            // Direct redirection if no data
+            window.location.href = 'agent-dashboard.html';
         }
+    });
+
+    // Cancel modal handlers
+    cancelStayBtn?.addEventListener('click', () => {
+        hideCancelModal();
+    });
+
+    cancelConfirmBtn?.addEventListener('click', () => {
+        hideCancelModal();
+        // Redirect to agent dashboard
+        window.location.href = 'agent-dashboard.html';
     });
 
     // Modal handlers
@@ -168,8 +282,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     understoodBtn?.addEventListener('click', () => {
         hideModal();
-        // Redirect back to checker dashboard
-        window.location.href = 'checker.html';
+        // Redirect back to agent dashboard
+        window.location.href = 'agent-dashboard.html';
+    });
+
+    // Cancel button
+    cancelBtn?.addEventListener('click', () => {
+        // Check if there's any data to lose
+        if (currentFile || selectedCategory) {
+            showCancelModal();
+        } else {
+            // Direct redirection if no data
+            window.location.href = 'agent-dashboard.html';
+        }
+    });
+
+    // Cancel modal handlers
+    cancelStayBtn?.addEventListener('click', () => {
+        hideCancelModal();
+    });
+
+    cancelConfirmBtn?.addEventListener('click', () => {
+        hideCancelModal();
+        // Redirect to agent dashboard
+        window.location.href = 'agent-dashboard.html';
     });
 
     // Update submit button state
@@ -179,6 +315,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show success modal
     function showSuccessModal() {
+        // Update modal content with current file and category
+        if (currentFile && selectedCategory) {
+            const modalTitle = document.getElementById('modal-title');
+            const modalSubtitle = document.getElementById('modal-subtitle');
+            
+            if (modalTitle) {
+                modalTitle.textContent = currentFile.name;
+            }
+            
+            if (modalSubtitle) {
+                // Get the selected category name from the tag text
+                const categoryName = tagText.textContent || 'Document';
+                modalSubtitle.textContent = `${categoryName} ajouté avec succès au portefeuille !`;
+            }
+        }
+        
         modalOverlay.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
@@ -186,6 +338,18 @@ document.addEventListener('DOMContentLoaded', function() {
     // Hide modal
     function hideModal() {
         modalOverlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    // Show cancel confirmation modal
+    function showCancelModal() {
+        cancelModalOverlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Hide cancel modal
+    function hideCancelModal() {
+        cancelModalOverlay.classList.remove('show');
         document.body.style.overflow = '';
     }
 

@@ -175,7 +175,7 @@ html, body {
 
 /* Section activité */
 .activity-section {
-    background: #f5f5f5;
+    background: var(--color-gray-100);
     padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-lg) var(--spacing-2xl);
     margin: 0;
     flex: 1;
@@ -183,7 +183,7 @@ html, body {
     flex-direction: column;
     position: relative;
     border-radius: var(--border-radius-md);
-  border: 1px solid var(--color-border-light);
+    border: 1px solid var(--color-gray-200);
     overflow: hidden;
 }
 

@@ -1,237 +1,258 @@
-/* NIU Entry CSS - Design moderne pleine page */
+/* NIU Entry CSS - Design System Clean avec UX améliorée */
+
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Body */
 body {
     font-family: var(--font-family);
-    min-height: 100vh;
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    color: var(--color-text-primary);
-}
-
-.niu-main {
+    background: #fafafa;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-md);
+    color: var(--color-text-primary);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Main container */
+.niu-main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--spacing-xl);
 }
 
 .niu-container {
-    width: 100%;
-    max-width: 1200px;
-    background: var(--color-surface-primary);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.9);
-    overflow: hidden;
-    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.input-section {
-    padding: var(--spacing-4xl) var(--spacing-3xl);
     text-align: center;
+    max-width: 600px;
+    width: 100%;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(32px) scale(0.96);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 }
 
+.input-section {
+    padding: var(--spacing-2xl);
+}
+
+/* Typography */
 .niu-title {
-    font-size: var(--font-size-heading-lg);
-    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-medium);
     color: var(--color-text-primary);
-    margin-bottom: var(--spacing-sm);
-    line-height: 1.2;
+    margin-bottom: var(--spacing-xxs);
+    line-height: 1.3;
 }
 
 .niu-subtitle {
-    font-size: var(--font-size-body-lg);
+    font-size: var(--font-size-body-sm);
     font-weight: var(--font-weight-regular);
     color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-3xl);
+    margin-bottom: var(--spacing-2xl);
 }
 
+.niu-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+/* NIU inputs container */
 .niu-inputs-container {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-4xl);
+    margin-bottom: var(--spacing-2xl);
     flex-wrap: wrap;
-    padding: var(--spacing-2xl) var(--spacing-xl);
-    background: var(--color-surface-secondary);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: var(--spacing-4xl);
 }
 
-.niu-input {
-    width: 64px;
-    height: 64px;
-    border: 2px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    text-align: center;
-    font-size: var(--font-size-heading-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
-    background: var(--color-surface-primary);
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    outline: none;
+.niu-label{
     font-family: var(--font-family);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-md);
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.niu-input::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, var(--color-green), #00b360);
-    opacity: 0;
-    z-index: -1;
-    transition: opacity 0.4s ease;
+/* NIU circular inputs avec UX améliorée */
+.niu-input {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius-md);
+    background: var(--color-surface-primary);
+    text-align: center;
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    font-family: var(--font-family);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: text;
+}
+
+/* États améliorés pour les inputs */
+.niu-input:hover:not(:focus) {
+    border-color: var(--color-gray-400);
+    transform: translateY(-1px);
 }
 
 .niu-input:focus {
     border-color: var(--color-green);
-    transform: scale(1.08) translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 195, 108, 0.15);
-    background: var(--color-surface-primary);
-}
-
-.niu-input:focus::before {
-    opacity: 1;
+    transform: scale(1.05);
+    z-index: 2;
 }
 
 .niu-input.filled {
     border-color: var(--color-green);
-    background: #f0fdf4;
-    transform: scale(1.02);
+    background: rgba(0, 195, 108, 0.05);
     color: var(--color-green);
 }
 
-.niu-input:hover:not(:focus) {
-    border-color: var(--color-gray-300);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+.niu-input.error {
+    border-color: var(--color-red);
+    background: rgba(244, 33, 47, 0.05);
+    animation: shake 0.4s ease-in-out;
 }
 
-.niu-input:invalid {
-    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
-}
-
+/* Animation shake pour les erreurs */
 @keyframes shake {
     0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-4px); }
-    40% { transform: translateX(4px); }
-    60% { transform: translateX(-2px); }
-    80% { transform: translateX(2px); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
 }
 
+/* Indicateur de progression */
+.niu-progress {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: var(--spacing-md);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.niu-progress.visible {
+    opacity: 1;
+}
+
+.progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--border-radius-md);
+    background: var(--color-gray-300);
+    transition: background 0.3s ease;
+}
+
+.progress-dot.active {
+    background: var(--color-green);
+}
+
+/* Button container */
 .button-container {
     display: flex;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-md);
     justify-content: center;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: var(--spacing-2xl) 0;
+    align-items: center;
+    margin-top: var(--spacing-lg);
 }
 
+/* Buttons avec UX améliorée */
 .btn {
-    flex: 1;
-    padding: var(--spacing-lg) var(--spacing-2xl);
+    padding: var(--spacing-md) var(--spacing-2xl);
     border: none;
-    border-radius: var(--radius-lg);
-    font-size: var(--font-size-body-lg);
-    font-weight: var(--font-weight-semibold);
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    min-width: 160px;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-medium);
     font-family: var(--font-family);
-    position: relative;
-    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    gap: var(--spacing-xs);
+    position: relative;
+    overflow: hidden;
 }
 
-.btn i {
-    font-size: 18px;
-    transition: transform 0.3s ease;
-}
-
-.btn:hover i {
-    transform: scale(1.1);
-}
-
-.btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn:hover::before {
-    left: 100%;
+.btn:active {
+    transform: translateY(1px);
 }
 
 .btn-cancel {
     background: var(--color-gray-800);
     color: var(--color-white);
-    border: 2px solid transparent;
 }
 
 .btn-cancel:hover {
-    background: var(--color-gray-700);
+    background: var(--color-gray-900);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.btn-cancel:active {
-    transform: translateY(0);
 }
 
 .btn-submit {
-    background: linear-gradient(135deg, var(--color-green), #00b360);
+    background: var(--color-green);
     color: var(--color-white);
-    border: 2px solid transparent;
 }
 
-.btn-submit:hover {
-    background: linear-gradient(135deg, #00b360, #009954);
+.btn-submit:hover:not(:disabled) {
+    background: rgba(0, 195, 108, 0.9);
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 195, 108, 0.25);
 }
 
-.btn-submit:active {
-    transform: translateY(0);
+.btn-submit:disabled {
+    background: var(--color-gray-300);
+    color: var(--color-gray-500);
+    cursor: not-allowed;
+    transform: none !important;
 }
 
-.btn:focus-visible {
-    outline: 2px solid var(--color-green);
-    outline-offset: 2px;
+.btn-submit.ready {
+    animation: pulse 2s infinite;
 }
 
-/* Loading state */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
 .btn.loading {
     pointer-events: none;
     position: relative;
@@ -242,144 +263,64 @@ body {
     position: absolute;
     width: 16px;
     height: 16px;
-    margin: auto;
     border: 2px solid transparent;
     border-top-color: currentColor;
     border-radius: 50%;
     animation: spin 1s linear infinite;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    right: 12px;
 }
 
 @keyframes spin {
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
-/* Responsive avec amélioration UX */
-@media (max-width: 768px) {
-    .niu-container {
-        padding: var(--spacing-2xl) var(--spacing-lg);
-        margin: var(--spacing-sm);
-    }
+/* Animation d'entrée pour les inputs */
+.niu-input.animate-in {
+    opacity: 0;
+    animation: slideInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.niu-input.focused {
+    border-color: var(--color-green);
+}
+
+.niu-input.pasting {
+    opacity: 0.5;
+    transform: scale(0.95);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
     .niu-inputs-container {
         gap: var(--spacing-xxs);
-        padding: var(--spacing-md) 0;
     }
-
+    
     .niu-input {
-        width: 48px;
-        height: 48px;
-        font-size: var(--font-size-body-md);
+        width: 36px;
+        height: 36px;
+        font-size: var(--font-size-body-sm);
     }
-
+    
     .button-container {
         flex-direction: column;
         gap: var(--spacing-sm);
-        max-width: none;
     }
-
+    
     .btn {
-        min-width: none;
-        padding: var(--spacing-md) var(--spacing-lg);
+        width: 100%;
+        max-width: 280px;
     }
-}
-
-@media (max-width: 600px) {
-    .niu-inputs-container {
-        gap: 2px;
-    }
-
-    .niu-input {
-        width: 42px;
-        height: 42px;
-        font-size: var(--font-size-body-sm);
-    }
-
-    .niu-title {
-        font-size: var(--font-size-body-md);
-    }
-
-    .niu-subtitle {
-        font-size: var(--font-size-body-sm);
-    }
-}
-
-/* États d'accessibilité améliorés */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* Focus amélioré pour l'accessibilité */
-.niu-input:focus-visible {
-    outline: 2px solid var(--color-green);
-    outline-offset: 2px;
-}
-
-/* Amélioration pour les écrans tactiles */
-@media (pointer: coarse) {
-    .niu-input {
-        width: 72px;
-        height: 72px;
-        font-size: var(--font-size-heading-sm);
-    }
-
-    .btn {
-        padding: var(--spacing-xl) var(--spacing-2xl);
-        min-height: 48px;
-    }
-}
-
-/* Feedback visuel pour les erreurs */
-.niu-input.error {
-    border-color: var(--color-red);
-    background: #fef2f2;
-    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
-}
-
-.niu-input.success {
-    border-color: var(--color-green);
-    background: #f0fdf4;
-}
-
-/* Message d'erreur */
-.error-message {
-    color: var(--color-red);
-    font-size: var(--font-size-body-sm);
-    text-align: center;
-    margin-top: var(--spacing-sm);
-    opacity: 0;
-    transform: translateY(-8px);
-    transition: all 0.3s ease;
-}
-
-.error-message.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Indicateur de progression */
-.progress-indicator {
-    position: absolute;
-    top: var(--spacing-lg);
-    right: var(--spacing-lg);
-    display: flex;
-    gap: var(--spacing-xs);
-}
-
-.progress-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--color-border);
-    transition: background 0.3s ease;
-}
-
-.progress-dot.active {
-    background: var(--color-green);
 }
