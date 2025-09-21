@@ -543,7 +543,6 @@ body {
 .modal {
     background: var(--color-white);
     border-radius: var(--border-radius-lg);
-    max-width: 400px;
     width: 90%;
     padding: var(--spacing-xl);
     text-align: center;
@@ -637,6 +636,11 @@ body {
     display: flex;
     gap: var(--spacing-md);
     justify-content: center;
+}
+
+.modal-actions .btn {
+    min-width: 160px;
+    flex: 1;
 }
 
 .btn-secondary {

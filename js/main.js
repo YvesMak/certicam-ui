@@ -2,6 +2,7 @@
 let currentPage = 1;
 let rowsPerPage = 8;
 let allRows = [];
+let originalRowsOrder = []; // Stocker l'ordre original
 
 // Variables globales pour la gestion des gestionnaires d'événements
 let documentClickHandler = null;
@@ -75,6 +76,52 @@ function sortRowsByDate() {
     
     // Réinsérer les lignes triées
     rows.forEach(row => tbody.appendChild(row));
+}
+
+// Fonction pour stocker l'ordre original des lignes
+function storeOriginalOrder() {
+    const tbody = document.querySelector('tbody');
+    if (!tbody) return;
+    
+    originalRowsOrder = Array.from(tbody.querySelectorAll('tr'));
+    console.log('✅ Ordre original du tableau stocké (' + originalRowsOrder.length + ' éléments)');
+    
+    // Debug: afficher les 3 premiers noms de documents
+    const firstThree = originalRowsOrder.slice(0, 3).map(row => {
+        const nameElement = row.querySelector('.document-name');
+        return nameElement ? nameElement.textContent.trim() : 'N/A';
+    });
+    console.log('🎯 3 premiers documents stockés:', firstThree);
+}
+
+// Fonction pour restaurer l'ordre original des lignes
+function restoreOriginalOrder() {
+    const tbody = document.querySelector('tbody');
+    if (!tbody || originalRowsOrder.length === 0) {
+        console.log('⚠️ Impossible de restaurer l\'ordre original');
+        return;
+    }
+    
+    // Debug: afficher les 3 premiers noms avant restauration
+    const currentFirst = Array.from(tbody.querySelectorAll('tr')).slice(0, 3).map(row => {
+        const nameElement = row.querySelector('.document-name');
+        return nameElement ? nameElement.textContent.trim() : 'N/A';
+    });
+    console.log('🔍 3 premiers documents AVANT restauration:', currentFirst);
+    
+    // Restaurer l'ordre original en réinsérant les lignes
+    originalRowsOrder.forEach(row => {
+        tbody.appendChild(row);
+    });
+    
+    // Debug: afficher les 3 premiers noms après restauration
+    const restoredFirst = Array.from(tbody.querySelectorAll('tr')).slice(0, 3).map(row => {
+        const nameElement = row.querySelector('.document-name');
+        return nameElement ? nameElement.textContent.trim() : 'N/A';
+    });
+    console.log('🎯 3 premiers documents APRÈS restauration:', restoredFirst);
+    
+    console.log('✅ Ordre original restauré');
 }
 
 // Gestion du sélecteur de documents par page
@@ -296,8 +343,14 @@ function applySearchAndFilters(searchTerm) {
         filterToggle.classList.remove('has-filters');
     }
     
-    // Trier les lignes visibles par date (du plus récent au plus ancien)
-    sortRowsByDate();
+    // Trier seulement s'il y a des filtres actifs, sinon garder l'ordre original
+    if (hasFilters) {
+        console.log('🔄 Filtres actifs détectés - tri par date appliqué');
+        sortRowsByDate();
+    } else {
+        console.log('🏠 Aucun filtre actif - ordre original préservé');
+        // Pas de tri, on garde l'ordre original
+    }
     
     // Recalculer pagination
     updateVisibleRowsAfterFilter();
@@ -1345,9 +1398,9 @@ function showAllDocuments() {
         row.style.display = 'table-row';
     });
     
-    // Ensuite, restaurer l'ordre chronologique d'origine (du plus récent au plus ancien)
-    console.log('📅 Restauration de l\'ordre chronologique original...');
-    sortRowsByDate();
+    // Restaurer l'ordre original au lieu de trier par date
+    console.log('📅 Restauration de l\'ordre original du tableau...');
+    restoreOriginalOrder();
     
     // Puis mettre à jour la pagination
     updateVisibleRowsAfterFilter();
@@ -1457,16 +1510,20 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         console.log('🚀 Initialisation des composants...');
         
+        // Stocker l'ordre original AVANT toute manipulation
+        storeOriginalOrder();
+        
         // Utiliser notre nouvelle fonction d'initialisation
         initializePageComponents();
         
-        sortRowsByDate(); // Trier dès le chargement
+        // Ne PAS trier au chargement pour préserver l'ordre original
+        // sortRowsByDate(); // Commenté pour préserver l'ordre HTML
         initPagination();
         initFilters();
         initModal();
         initMobileMenu(); // Restauré pour la compatibilité
         initRowsPerPageSelector();
         
-        console.log('✅ Page index initialisée');
+        console.log('✅ Page index initialisée avec ordre original préservé');
     }, 100);
 });

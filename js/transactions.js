@@ -84,6 +84,154 @@ const transactionData = {
     }
 };
 
+// Variables globales pour le système de filtrage
+let originalTransactionRowsOrder = [];
+
+// Fonctions de gestion de l'ordre original des transactions
+function storeOriginalTransactionOrder() {
+    const rows = document.querySelectorAll('#transactions-table tbody tr');
+    originalTransactionRowsOrder = Array.from(rows);
+    console.log('🏠 Ordre original des transactions sauvegardé:', originalTransactionRowsOrder.length, 'lignes');
+}
+
+function restoreOriginalTransactionOrder() {
+    const tbody = document.querySelector('#transactions-table tbody');
+    if (tbody && originalTransactionRowsOrder.length > 0) {
+        console.log('🔄 Restauration de l\'ordre original des transactions');
+        originalTransactionRowsOrder.forEach(row => {
+            tbody.appendChild(row);
+        });
+    }
+}
+
+// Fonction de filtrage des transactions
+function applyTransactionFilters(searchTerm = '') {
+    const statusFilter = document.querySelector('input[name="transaction-status-filter"]:checked')?.value || 'all';
+    const paymentFilter = document.querySelector('input[name="transaction-payment-filter"]:checked')?.value || 'all';
+    const categoryFilter = document.querySelector('input[name="transaction-category-filter"]:checked')?.value || 'all';
+    
+    const rows = document.querySelectorAll('#transactions-table tbody tr');
+    let hasFilters = statusFilter !== 'all' || paymentFilter !== 'all' || categoryFilter !== 'all' || searchTerm.length > 0;
+    
+    console.log('🔍 Application des filtres transactions:', {
+        statut: statusFilter,
+        paiement: paymentFilter,
+        categorie: categoryFilter,
+        recherche: searchTerm,
+        hasFilters
+    });
+    
+    rows.forEach((row, index) => {
+        let show = true;
+        
+        // Filtre par recherche textuelle
+        if (searchTerm.length > 0) {
+            const text = row.textContent.toLowerCase();
+            show = text.includes(searchTerm.toLowerCase());
+            if (!show) {
+                row.style.display = 'none';
+                return;
+            }
+        }
+        
+        // Filtre par statut
+        if (statusFilter !== 'all' && show) {
+            const statusElement = row.querySelector('.status');
+            if (statusElement) {
+                const statusText = statusElement.textContent.trim().toLowerCase();
+                
+                if (statusFilter === 'valid') {
+                    show = statusText === 'réussite' || statusText === 'réussi';
+                } else if (statusFilter === 'pending') {
+                    show = statusText === 'en cours' || statusText === 'en attente';
+                } else if (statusFilter === 'failed') {
+                    show = statusText === 'échec';
+                }
+            }
+        }
+        
+        // Filtre par type de paiement
+        if (paymentFilter !== 'all' && show) {
+            const paymentCell = row.querySelector('.payment-type');
+            if (paymentCell) {
+                const paymentText = paymentCell.textContent.toLowerCase();
+                
+                if (paymentFilter === 'orange-money') {
+                    show = paymentText.includes('orange money');
+                } else if (paymentFilter === 'mtn-momo') {
+                    show = paymentText.includes('mtn momo');
+                }
+            }
+        }
+        
+        // Filtre par catégorie
+        if (categoryFilter !== 'all' && show) {
+            const categoryElement = row.querySelector('.document-category');
+            if (categoryElement) {
+                const categoryText = categoryElement.textContent.trim().toLowerCase();
+                show = categoryText === categoryFilter.toLowerCase();
+            }
+        }
+        
+        row.style.display = show ? 'table-row' : 'none';
+    });
+    
+    // Mettre à jour le bouton filtre
+    const filterToggle = document.getElementById('transaction-filter-toggle');
+    if (filterToggle) {
+        if (hasFilters) {
+            filterToggle.classList.add('has-filters');
+        } else {
+            filterToggle.classList.remove('has-filters');
+        }
+    }
+    
+    // Ne pas trier si aucun filtre n'est appliqué, garder l'ordre original
+    if (!hasFilters) {
+        console.log('🏠 Aucun filtre actif - ordre original préservé');
+        restoreOriginalTransactionOrder();
+    } else {
+        console.log('🔄 Filtres actifs - ordre filtré maintenu');
+    }
+}
+
+// Fonction pour réinitialiser tous les filtres des transactions
+function resetTransactionFilters() {
+    console.log('🔄 Réinitialisation des filtres transactions');
+    
+    // Réinitialiser tous les filtres radio
+    document.querySelectorAll('input[name="transaction-status-filter"]').forEach(input => {
+        input.checked = input.value === 'all';
+    });
+    
+    document.querySelectorAll('input[name="transaction-payment-filter"]').forEach(input => {
+        input.checked = input.value === 'all';
+    });
+    
+    document.querySelectorAll('input[name="transaction-category-filter"]').forEach(input => {
+        input.checked = input.value === 'all';
+    });
+    
+    // Vider la barre de recherche
+    const searchInput = document.getElementById('transaction-search');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    
+    // Restaurer l'ordre original et afficher toutes les lignes
+    restoreOriginalTransactionOrder();
+    const rows = document.querySelectorAll('#transactions-table tbody tr');
+    rows.forEach(row => row.style.display = 'table-row');
+    
+    // Retirer l'indicateur de filtres actifs
+    const filterToggle = document.getElementById('transaction-filter-toggle');
+    if (filterToggle) {
+        filterToggle.classList.remove('has-filters');
+    }
+    
+    console.log('✅ Filtres transactions réinitialisés');
+}
+
 // Fonctions utilitaires
 function getStatusClass(status) {
     switch (status) {
@@ -389,11 +537,118 @@ function initModalClosing() {
     });
 }
 
+// Initialisation du système de filtrage
+function initTransactionFiltering() {
+    console.log('🔧 Initialisation du système de filtrage des transactions');
+    
+    // Gestion du bouton toggle des filtres
+    const filterToggle = document.getElementById('transaction-filter-toggle');
+    const filterPanel = document.getElementById('transaction-filter-panel');
+    const filterClose = document.getElementById('transaction-filter-close');
+    
+    console.log('🔍 Éléments trouvés:', {
+        filterToggle: !!filterToggle,
+        filterPanel: !!filterPanel,
+        filterClose: !!filterClose
+    });
+    
+    if (filterToggle && filterPanel) {
+        console.log('✅ Ajout des event listeners pour toggle et panel');
+        filterToggle.addEventListener('click', () => {
+            console.log('🖱️ Clic sur bouton filtres');
+            filterPanel.classList.toggle('active');
+            filterToggle.classList.toggle('active');
+            console.log('📊 Panel classe active:', filterPanel.classList.contains('active'));
+        });
+    } else {
+        console.error('❌ Éléments filterToggle ou filterPanel non trouvés');
+    }
+    
+    if (filterClose) {
+        filterClose.addEventListener('click', () => {
+            console.log('🖱️ Clic sur fermer filtres');
+            filterPanel.classList.remove('active');
+            filterToggle.classList.remove('active');
+        });
+    }
+    
+    // Gestion de la barre de recherche
+    const searchInput = document.getElementById('transaction-search');
+    const searchClear = document.getElementById('transaction-search-clear');
+    
+    if (searchInput) {
+        // Recherche en temps réel avec debounce
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                applyTransactionFilters(e.target.value.trim());
+            }, 300);
+        });
+        
+        // Gestion du bouton clear
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                applyTransactionFilters('');
+            });
+        }
+    }
+    
+    // Gestion des boutons d'application et de réinitialisation
+    const applyButton = document.getElementById('transaction-apply-filters');
+    const resetButton = document.getElementById('transaction-reset-filters');
+    
+    if (applyButton) {
+        applyButton.addEventListener('click', () => {
+            const searchTerm = searchInput ? searchInput.value.trim() : '';
+            applyTransactionFilters(searchTerm);
+            
+            // Fermer le panel après application
+            if (filterPanel) {
+                filterPanel.classList.remove('active');
+                filterToggle.classList.remove('active');
+            }
+        });
+    }
+    
+    if (resetButton) {
+        resetButton.addEventListener('click', () => {
+            resetTransactionFilters();
+        });
+    }
+    
+    // Event listeners pour les changements de filtres en temps réel
+    const filterInputs = document.querySelectorAll(
+        'input[name="transaction-status-filter"], ' +
+        'input[name="transaction-payment-filter"], ' +
+        'input[name="transaction-category-filter"]'
+    );
+    
+    filterInputs.forEach(input => {
+        input.addEventListener('change', () => {
+            const searchTerm = searchInput ? searchInput.value.trim() : '';
+            applyTransactionFilters(searchTerm);
+        });
+    });
+    
+    console.log('✅ Système de filtrage des transactions initialisé');
+}
+
 // Initialisation de la page
 function initTransactionsPage() {
     console.log('Initialisation de la page transactions...');
+    
+    // Sauvegarder l'ordre original des lignes
+    storeOriginalTransactionOrder();
+    
+    // Initialiser les event listeners pour le système de filtrage
+    initTransactionFiltering();
+    
+    // Initialiser les autres fonctionnalités
     attachTransactionButtonEvents();
     initModalClosing();
+    
     console.log('Page transactions initialisée avec succès');
 }
 

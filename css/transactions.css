@@ -48,44 +48,8 @@
     border-collapse: collapse;
 }
 
-/* Largeurs spécifiques des colonnes pour correspondre au design */
-.transactions-table th:nth-child(1), /* Transaction */
-.transactions-table td:nth-child(1) {
-    width: 12%;
-}
-
-.transactions-table th:nth-child(2), /* Document/Produit */
-.transactions-table td:nth-child(2) {
-    width: 20%;
-}
-
-.transactions-table th:nth-child(3), /* Institution émettrice */
-.transactions-table td:nth-child(3) {
-    width: 15%;
-}
-
-.transactions-table th:nth-child(4), /* Type de paiement */
-.transactions-table td:nth-child(4) {
-    width: 20%;
-}
-
-.transactions-table th:nth-child(5), /* Montant */
-.transactions-table td:nth-child(5) {
-    width: 15%;
-}
-
-.transactions-table th:nth-child(6), /* Statut */
-.transactions-table td:nth-child(6) {
-    width: 15%;
-    text-align: center;
-}
-
-.transactions-table th:nth-child(7), /* Actions */
-.transactions-table td:nth-child(7) {
-    width: 3%;
-    text-align: center;
-    min-width: 40px;
-    padding: var(--spacing-xl) var(--spacing-sm);
+#transactions-table .payment-type {
+    display: table-cell;
 }
 
 /* Padding par défaut pour toutes les cellules */
@@ -110,11 +74,15 @@
     font-family: var(--font-family);
 }
 
-.transactions-table td {
+.transactions-table tbody td {
     font-size: var(--font-size-body-md);
     color: var(--color-text-primary);
     vertical-align: middle;
     height: 85px;
+}
+
+.transactions-table thead th {
+    border-bottom: 1px solid var(--color-gray-200);
 }
 
 .transactions-table tbody tr:hover {
@@ -147,12 +115,6 @@
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-body-md);
     white-space: nowrap;
-}
-
-/* Centrage vertical pour toutes les colonnes */
-.transactions-table td {
-    vertical-align: middle;
-    padding: var(--spacing-md) var(--spacing-lg);
 }
 
 .payment-logo {
@@ -220,6 +182,7 @@
 /* Actions avec dropdown */
 .actions {
     position: relative;
+    width: 24px;
 }
 
 .dropdown {
@@ -239,7 +202,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
+    min-width: 24px;
     height: 24px;
     font-size: 16px;
 }

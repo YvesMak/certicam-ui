@@ -447,7 +447,7 @@
 }
 
 .mobile-menu-logout:hover {
-    background: var(--color-error-bg);
+    background: var(--color-status-error-bg);
     border-color: var(--color-error);
 }
 
