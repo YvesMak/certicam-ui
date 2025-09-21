@@ -552,6 +552,7 @@ body {
 
 .modal-overlay.show .modal {
     transform: scale(1);
+    max-width: 600px;
 }
 
 .success-icon {

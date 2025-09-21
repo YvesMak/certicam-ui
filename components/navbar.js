@@ -188,23 +188,25 @@ class NavbarAuth {
         const overlay = document.createElement('div');
         overlay.className = 'logout-modal-overlay';
         overlay.innerHTML = `
-            <div class="logout-modal">
+            <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logout-title" aria-describedby="logout-description">
                 <div class="logout-modal-header">
-                    <i class="fi fi-rr-sign-out-alt logout-icon"></i>
-                    <h3>Déconnexion</h3>
+                    <div class="logout-icon" aria-hidden="true">
+                        <i class="fi fi-rr-sign-out-alt"></i>
+                    </div>
+                    <h3 id="logout-title">Confirmer la déconnexion</h3>
                 </div>
                 <div class="logout-modal-body">
-                    <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                    <p class="logout-modal-subtitle">Vous serez redirigé vers la page de connexion.</p>
+                    <p id="logout-description">Êtes-vous sûr de vouloir vous déconnecter de votre session ?</p>
+                    <p class="logout-modal-subtitle">Cette action vous redirigera vers la page de connexion et vous devrez vous reconnecter.</p>
                 </div>
                 <div class="logout-modal-actions">
-                    <button class="logout-cancel-btn" type="button">
-                        <i class="fi fi-rr-cross-small"></i>
-                        Annuler
+                    <button class="logout-confirm-btn" type="button" aria-describedby="logout-description">
+                        <i class="fi fi-rr-sign-out-alt" aria-hidden="true"></i>
+                        Oui, se déconnecter
                     </button>
-                    <button class="logout-confirm-btn" type="button">
-                        <i class="fi fi-rr-sign-out-alt"></i>
-                        Se déconnecter
+                    <button class="logout-cancel-btn" type="button">
+                        <i class="fi fi-rr-cross-small" aria-hidden="true"></i>
+                        Annuler
                     </button>
                 </div>
             </div>
@@ -221,160 +223,338 @@ class NavbarAuth {
                     left: 0;
                     width: 100vw;
                     height: 100vh;
-                    background: rgba(0, 0, 0, 0.5);
-                    backdrop-filter: blur(4px);
+                    background: rgba(16, 23, 32, 0.75);
+                    backdrop-filter: blur(12px) saturate(180%);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     z-index: 10000;
-                    animation: fadeIn 0.2s ease;
+                    animation: overlayFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+                    cursor: pointer;
                 }
 
                 .logout-modal {
-                    background: var(--color-white);
-                    border-radius: var(--radius-lg);
-                    box-shadow: none;
-                    max-width: 400px;
-                    width: calc(100% - var(--spacing-lg));
-                    animation: slideUp 0.3s ease;
+                    background: var(--color-surface-primary);
+                    border-radius: var(--radius-xl);
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                               0 0 0 1px rgba(255, 255, 255, 0.1);
+                    max-width: 440px;
+                    width: calc(100% - var(--spacing-xl));
+                    margin: var(--spacing-lg);
+                    animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    transform-origin: center;
+                    cursor: default;
+                    overflow: hidden;
                 }
 
                 .logout-modal-header {
-                    padding: var(--spacing-lg);
+                    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
                     text-align: center;
-                    border-bottom: 1px solid var(--color-gray-200);
+                    position: relative;
                 }
 
                 .logout-icon {
-                    font-size: 32px;
-                    color: var(--color-text-interactive);
-                    margin-bottom: var(--spacing-sm);
+                    font-size: 48px;
+                    color: var(--color-status-warning);
+                    margin-bottom: var(--spacing-md);
+                    background: var(--color-status-warning-bg);
+                    border-radius: 50%;
+                    width: 80px;
+                    height: 80px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    animation: iconPulse 2s ease-in-out infinite;
                 }
 
                 .logout-modal-header h3 {
                     margin: 0;
-                    font-size: var(--font-size-heading-sm);
-                    font-weight: var(--font-weight-semibold);
+                    font-size: var(--font-size-heading-md);
+                    font-weight: var(--font-weight-bold);
                     color: var(--color-text-primary);
+                    letter-spacing: -0.02em;
                 }
 
                 .logout-modal-body {
-                    padding: var(--spacing-lg);
+                    padding: 0 var(--spacing-xl) var(--spacing-xl);
                     text-align: center;
                 }
 
                 .logout-modal-body p {
                     margin: 0;
                     color: var(--color-text-primary);
-                    font-size: var(--font-size-body-sm);
+                    font-size: var(--font-size-body-md);
+                    line-height: 1.5;
+                    font-weight: var(--font-weight-regular);
                 }
 
                 .logout-modal-subtitle {
                     margin-top: var(--spacing-sm) !important;
                     color: var(--color-text-secondary) !important;
-                    font-size: var(--font-size-body-xs) !important;
+                    font-size: var(--font-size-body-sm) !important;
+                    font-weight: var(--font-weight-regular) !important;
                 }
 
                 .logout-modal-actions {
-                    padding: var(--spacing-lg);
+                    padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-xl);
                     display: flex;
-                    gap: var(--spacing-sm);
-                    border-top: 1px solid var(--color-gray-200);
+                    gap: var(--spacing-md);
+                    flex-direction: column-reverse;
                 }
 
                 .logout-cancel-btn, .logout-confirm-btn {
-                    flex: 1;
-                    padding: var(--spacing-sm) var(--spacing-md);
-                    border-radius: var(--radius-sm);
-                    font-size: var(--font-size-body-sm);
-                    font-weight: var(--font-weight-medium);
+                    padding: var(--spacing-md) var(--spacing-lg);
+                    border-radius: var(--radius-lg);
+                    font-size: var(--font-size-body-md);
+                    font-weight: var(--font-weight-semibold);
                     font-family: var(--font-family);
                     cursor: pointer;
-                    transition: all 0.2s ease;
+                    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    gap: var(--spacing-xs);
-                    min-height: 40px;
-                }
-
-                .logout-cancel-btn {
-                    background: var(--color-gray-100);
-                    color: var(--color-text-secondary);
-                    border: 1px solid var(--color-gray-200);
-                }
-
-                .logout-cancel-btn:hover {
-                    background: var(--color-gray-200);
-                    color: var(--color-text-primary);
-                }
-
-                .logout-confirm-btn {
-                    background: var(--color-button-bg-primary);
-                    color: var(--color-button-label-primary);
+                    gap: var(--spacing-sm);
+                    min-height: 52px;
+                    position: relative;
+                    overflow: hidden;
                     border: none;
                 }
 
+                .logout-cancel-btn {
+                    background: var(--color-surface-secondary);
+                    color: var(--color-text-primary);
+                    border: 1.5px solid var(--color-border-primary);
+                }
+
+                .logout-cancel-btn:hover {
+                    background: var(--color-surface-tertiary);
+                    border-color: var(--color-border-secondary);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                }
+
+                .logout-cancel-btn:active {
+                    transform: translateY(0);
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                }
+
+                .logout-confirm-btn {
+                    background: linear-gradient(135deg, var(--color-error) 0%, #e53e3e 100%);
+                    color: white;
+                    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+                }
+
                 .logout-confirm-btn:hover {
-                    background: var(--color-gray-700);
-                    transform: translateY(-1px);
+                    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
                 }
 
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
+                .logout-confirm-btn:active {
+                    transform: translateY(0);
+                    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
                 }
 
-                @keyframes slideUp {
+                .logout-confirm-btn::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: -100%;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+                    transition: left 0.5s;
+                }
+
+                .logout-confirm-btn:hover::before {
+                    left: 100%;
+                }
+
+                @keyframes overlayFadeIn {
                     from { 
                         opacity: 0; 
-                        transform: translateY(20px); 
+                        backdrop-filter: blur(0px);
                     }
                     to { 
                         opacity: 1; 
-                        transform: translateY(0); 
+                        backdrop-filter: blur(12px) saturate(180%);
                     }
+                }
+
+                @keyframes modalSlideIn {
+                    from { 
+                        opacity: 0; 
+                        transform: scale(0.85) translateY(20px);
+                        filter: blur(4px);
+                    }
+                    to { 
+                        opacity: 1; 
+                        transform: scale(1) translateY(0);
+                        filter: blur(0px);
+                    }
+                }
+
+                @keyframes iconPulse {
+                    0%, 100% {
+                        transform: scale(1);
+                        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+                    }
+                    50% {
+                        transform: scale(1.05);
+                        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+                    }
+                }
+
+                @keyframes overlayFadeOut {
+                    from { 
+                        opacity: 1; 
+                        backdrop-filter: blur(12px) saturate(180%);
+                    }
+                    to { 
+                        opacity: 0; 
+                        backdrop-filter: blur(0px);
+                    }
+                }
+
+                @keyframes modalSlideOut {
+                    from { 
+                        opacity: 1; 
+                        transform: scale(1) translateY(0);
+                        filter: blur(0px);
+                    }
+                    to { 
+                        opacity: 0; 
+                        transform: scale(0.85) translateY(20px);
+                        filter: blur(4px);
+                    }
+                }
+
+                .logout-modal-overlay:hover .logout-modal {
+                    transform: scale(1.02);
+                }
+
+                .logout-modal:hover {
+                    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.35),
+                               0 0 0 1px rgba(255, 255, 255, 0.15);
                 }
 
                 @media (max-width: 480px) {
                     .logout-modal {
                         max-width: none;
-                        width: calc(100% - var(--spacing-md));
+                        width: calc(100% - var(--spacing-lg));
+                        margin: var(--spacing-md);
+                    }
+                    
+                    .logout-modal-header {
+                        padding: var(--spacing-lg);
+                    }
+                    
+                    .logout-modal-body {
+                        padding: 0 var(--spacing-lg) var(--spacing-lg);
                     }
                     
                     .logout-modal-actions {
-                        flex-direction: column;
+                        padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+                        gap: var(--spacing-sm);
+                    }
+                    
+                    .logout-cancel-btn, .logout-confirm-btn {
+                        min-height: 48px;
+                        font-size: var(--font-size-body-sm);
+                    }
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    .logout-modal-overlay,
+                    .logout-modal,
+                    .logout-cancel-btn,
+                    .logout-confirm-btn {
+                        animation: none !important;
+                        transition: none !important;
+                    }
+                    
+                    .logout-icon {
+                        animation: none !important;
                     }
                 }
             `;
             document.head.appendChild(styles);
         }
 
-        // Add event listeners
+        // Add event listeners avec animations de sortie
         const cancelBtn = overlay.querySelector('.logout-cancel-btn');
         const confirmBtn = overlay.querySelector('.logout-confirm-btn');
+        const modal = overlay.querySelector('.logout-modal');
 
-        cancelBtn.addEventListener('click', () => {
-            overlay.remove();
-        });
-
-        confirmBtn.addEventListener('click', () => {
-            overlay.remove();
-            this.performLogout();
-        });
-
-        // Close on overlay click
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) {
+        // Fonction pour fermer avec animation
+        const closeModal = () => {
+            overlay.style.animation = 'overlayFadeOut 0.25s ease';
+            modal.style.animation = 'modalSlideOut 0.25s ease';
+            setTimeout(() => {
                 overlay.remove();
+                document.removeEventListener('keydown', handleEscape);
+            }, 250);
+        };
+
+        // Focus management pour l'accessibilité
+        const focusableElements = modal.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstFocusableElement = focusableElements[0];
+        const lastFocusableElement = focusableElements[focusableElements.length - 1];
+
+        // Focus sur le premier élément
+        setTimeout(() => firstFocusableElement?.focus(), 100);
+
+        // Trap focus dans le modal
+        const trapFocus = (e) => {
+            if (e.key === 'Tab') {
+                if (e.shiftKey && document.activeElement === firstFocusableElement) {
+                    e.preventDefault();
+                    lastFocusableElement?.focus();
+                } else if (!e.shiftKey && document.activeElement === lastFocusableElement) {
+                    e.preventDefault();
+                    firstFocusableElement?.focus();
+                }
+            }
+        };
+
+        cancelBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeModal();
+        });
+
+        confirmBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Animation de chargement
+            confirmBtn.innerHTML = '<i class="fi fi-rr-loading"></i> Déconnexion...';
+            confirmBtn.disabled = true;
+            confirmBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                closeModal();
+                this.performLogout();
+            }, 800);
+        });
+
+        // Close on overlay click (avec vérification stricte)
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay && !modal.contains(e.target)) {
+                closeModal();
             }
         });
 
-        // Close on Escape key
+        // Prevent modal click from closing
+        modal.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Close on Escape key avec trap focus
         const handleEscape = (e) => {
+            trapFocus(e);
             if (e.key === 'Escape') {
-                overlay.remove();
-                document.removeEventListener('keydown', handleEscape);
+                e.preventDefault();
+                closeModal();
             }
         };
         document.addEventListener('keydown', handleEscape);

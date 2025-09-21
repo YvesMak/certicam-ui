@@ -26,6 +26,14 @@ body {
 .page-header {
     text-align: center;
     margin-bottom: var(--spacing-3xl);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--color-gray-200);
+    /* Annuler les styles sticky globaux du header */
+    position: static !important;
+    z-index: auto !important;
+    background: var(--color-surface-primary) !important;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    box-shadow: none !important;
 }
 
 .page-title {
@@ -147,7 +155,6 @@ body {
     background: var(--color-surface-primary);
     border-radius: var(--radius-lg);
     padding: var(--spacing-md);
-    box-shadow: 0 8px 32px rgba(16, 23, 32, 0.12);
     border: 1px solid var(--color-border);
     margin-bottom: var(--spacing-md);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -155,7 +162,6 @@ body {
 
 .qr-code:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(16, 23, 32, 0.16);
 }
 
 .qr-code svg {
@@ -321,5 +327,260 @@ body {
     .success-banner {
         background: none;
         border: 1px solid var(--color-border);
+    }
+}
+
+/* === MODAL DE DÉCONNEXION MODERNE === */
+.logout-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(16, 23, 32, 0.75);
+    backdrop-filter: blur(12px) saturate(180%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: overlayFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.logout-modal {
+    background: var(--color-surface-primary);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+               0 0 0 1px rgba(255, 255, 255, 0.1);
+    max-width: 440px;
+    width: calc(100% - var(--spacing-xl));
+    margin: var(--spacing-lg);
+    animation: modalSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: center;
+    cursor: default;
+    overflow: hidden;
+}
+
+.logout-modal-header {
+    padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-lg);
+    text-align: center;
+    position: relative;
+}
+
+.logout-icon {
+    font-size: 48px;
+    color: var(--color-status-warning);
+    margin-bottom: var(--spacing-md);
+    background: var(--color-status-warning-bg);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    animation: iconPulse 2s ease-in-out infinite;
+}
+
+.logout-modal-header h3 {
+    margin: 0;
+    font-size: var(--font-size-heading-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+}
+
+.logout-modal-body {
+    padding: 0 var(--spacing-xl) var(--spacing-xl);
+    text-align: center;
+}
+
+.logout-modal-body p {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: var(--font-size-body-md);
+    line-height: 1.5;
+    font-weight: var(--font-weight-regular);
+}
+
+.logout-modal-subtitle {
+    margin-top: var(--spacing-sm) !important;
+    color: var(--color-text-secondary) !important;
+    font-size: var(--font-size-body-sm) !important;
+    font-weight: var(--font-weight-regular) !important;
+}
+
+.logout-modal-actions {
+    padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-xl);
+    display: flex;
+    gap: var(--spacing-md);
+    flex-direction: column-reverse;
+}
+
+.logout-cancel-btn, .logout-confirm-btn {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    min-height: 52px;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.logout-cancel-btn {
+    background: var(--color-surface-secondary);
+    color: var(--color-text-primary);
+    border: 1.5px solid var(--color-border-primary);
+}
+
+.logout-cancel-btn:hover {
+    background: var(--color-surface-tertiary);
+    border-color: var(--color-border-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.logout-cancel-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logout-confirm-btn {
+    background: linear-gradient(135deg, var(--color-error) 0%, #e53e3e 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3);
+}
+
+.logout-confirm-btn:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.logout-confirm-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.logout-confirm-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.logout-confirm-btn:hover::before {
+    left: 100%;
+}
+
+/* Animations */
+@keyframes overlayFadeIn {
+    from { 
+        opacity: 0; 
+        backdrop-filter: blur(0px);
+    }
+    to { 
+        opacity: 1; 
+        backdrop-filter: blur(12px) saturate(180%);
+    }
+}
+
+@keyframes modalSlideIn {
+    from { 
+        opacity: 0; 
+        transform: scale(0.85) translateY(20px);
+        filter: blur(4px);
+    }
+    to { 
+        opacity: 1; 
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+    }
+}
+
+@keyframes overlayFadeOut {
+    from { 
+        opacity: 1; 
+        backdrop-filter: blur(12px) saturate(180%);
+    }
+    to { 
+        opacity: 0; 
+        backdrop-filter: blur(0px);
+    }
+}
+
+@keyframes modalSlideOut {
+    from { 
+        opacity: 1; 
+        transform: scale(1) translateY(0);
+        filter: blur(0px);
+    }
+    to { 
+        opacity: 0; 
+        transform: scale(0.85) translateY(20px);
+        filter: blur(4px);
+    }
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .logout-modal {
+        max-width: none;
+        width: calc(100% - var(--spacing-lg));
+        margin: var(--spacing-md);
+    }
+    
+    .logout-modal-header {
+        padding: var(--spacing-lg);
+    }
+    
+    .logout-modal-body {
+        padding: 0 var(--spacing-lg) var(--spacing-lg);
+    }
+    
+    .logout-modal-actions {
+        padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+        gap: var(--spacing-sm);
+    }
+    
+    .logout-cancel-btn, .logout-confirm-btn {
+        min-height: 48px;
+        font-size: var(--font-size-body-sm);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logout-modal-overlay,
+    .logout-modal,
+    .logout-cancel-btn,
+    .logout-confirm-btn {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .logout-icon {
+        animation: none !important;
     }
 }

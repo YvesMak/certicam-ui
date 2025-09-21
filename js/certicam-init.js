@@ -10,8 +10,8 @@
     // Configuration globale
     window.CerticamConfig = {
         navbarEnabled: true,
-        authPages: ['login.html', 'register.html', 'auth.html'],
-        debug: false // Rétabli à false
+        authPages: ['login.html', 'register.html', 'auth.html', 'payment.html', 'document-upload.html', 'niu-entry.html', 'edit.html'],
+        debug: true // Activé pour diagnostiquer
     };
     
     // Fonction utilitaire pour débugger
@@ -30,7 +30,7 @@
     // Vérifier si la navbar existe déjà  
     function hasNavbar() {
         // Vérifier si on a déjà une navbar chargée via le système
-        if (window.navbarLoaded || document.querySelector('.certicam-header, #navbar-container')) {
+        if (window.navbarLoaded || document.querySelector('.certicam-header')) {
             return true;
         }
         return false;
@@ -83,8 +83,10 @@
             await loadNavbarLoader();
             log('Navbar-loader chargé avec succès');
             
-            // Le NavbarLoader s'initialise automatiquement via autoInit
-            log('NavbarLoader initialisé automatiquement');
+            // Créer explicitement l'instance NavbarLoader
+            log('Création de l\'instance NavbarLoader...');
+            window.navbarLoader = new NavbarLoader();
+            log('NavbarLoader créé et initialisé');
             
         } catch (error) {
             console.error('Erreur lors du chargement de la navbar:', error);
