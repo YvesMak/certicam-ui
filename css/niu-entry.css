@@ -1,4 +1,4 @@
-/* NIU Entry CSS */
+/* NIU Entry CSS - Design moderne pleine page */
 * {
     margin: 0;
     padding: 0;
@@ -8,27 +8,37 @@
 body {
     font-family: var(--font-family);
     min-height: 100vh;
-    background: var(--color-surface-secondary);
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    color: var(--color-text-primary);
+}
+
+.niu-main {
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
 }
 
 .niu-container {
-    max-width: 800px;
     width: 100%;
+    max-width: 1200px;
     background: var(--color-surface-primary);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-3xl) var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.9);
+    overflow: hidden;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input-section {
+    padding: var(--spacing-4xl) var(--spacing-3xl);
     text-align: center;
-    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(24px) scale(0.95);
+        transform: translateY(32px) scale(0.96);
     }
     to {
         opacity: 1;
@@ -37,15 +47,15 @@ body {
 }
 
 .niu-title {
-    font-size: var(--font-size-body-lg);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-heading-lg);
+    font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
-    margin-bottom: var(--spacing-xs);
-    line-height: var(--line-height-body-lg);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.2;
 }
 
 .niu-subtitle {
-    font-size: var(--font-size-body-md);
+    font-size: var(--font-size-body-lg);
     font-weight: var(--font-weight-regular);
     color: var(--color-text-secondary);
     margin-bottom: var(--spacing-3xl);
@@ -54,45 +64,52 @@ body {
 .niu-inputs-container {
     display: flex;
     justify-content: center;
-    gap: var(--spacing-xs);
-    margin-bottom: var(--spacing-3xl);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-4xl);
     flex-wrap: wrap;
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: var(--spacing-4xl);
 }
 
 .niu-input {
-    width: 56px;
-    height: 56px;
-    border: 2px solid var(--color-gray-200);
-    border-radius: var(--radius-md);
+    width: 64px;
+    height: 64px;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-lg);
     text-align: center;
-    font-size: var(--font-size-body-lg);
+    font-size: var(--font-size-heading-sm);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
     background: var(--color-surface-primary);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     outline: none;
     font-family: var(--font-family);
     position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .niu-input::before {
     content: '';
     position: absolute;
-    inset: 0;
-    border-radius: var(--radius-md);
-    padding: 2px;
-    background: linear-gradient(135deg, transparent, var(--color-green));
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: xor;
+    inset: -2px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--color-green), #00b360);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    z-index: -1;
+    transition: opacity 0.4s ease;
 }
 
 .niu-input:focus {
     border-color: var(--color-green);
-    transform: scale(1.05);
-    box-shadow: none;
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 195, 108, 0.15);
+    background: var(--color-surface-primary);
 }
 
 .niu-input:focus::before {
@@ -101,13 +118,15 @@ body {
 
 .niu-input.filled {
     border-color: var(--color-green);
-    background: var(--primary-100);
+    background: #f0fdf4;
     transform: scale(1.02);
+    color: var(--color-green);
 }
 
 .niu-input:hover:not(:focus) {
     border-color: var(--color-gray-300);
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .niu-input:invalid {
@@ -124,26 +143,40 @@ body {
 
 .button-container {
     display: flex;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
     justify-content: center;
-    max-width: 400px;
+    max-width: 500px;
     margin: 0 auto;
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-2xl) 0;
 }
 
 .btn {
     flex: 1;
-    padding: var(--spacing-md) var(--spacing-xl);
+    padding: var(--spacing-lg) var(--spacing-2xl);
     border: none;
-    border-radius: var(--radius-md);
-    font-size: var(--font-size-body-md);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-body-lg);
     font-weight: var(--font-weight-semibold);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    min-width: 140px;
+    min-width: 160px;
     font-family: var(--font-family);
     position: relative;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn i {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover i {
+    transform: scale(1.1);
 }
 
 .btn::before {
@@ -153,7 +186,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: transparent;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -162,13 +195,15 @@ body {
 }
 
 .btn-cancel {
-    background: var(--color-gray-900);
+    background: var(--color-gray-800);
     color: var(--color-white);
     border: 2px solid transparent;
 }
 
 .btn-cancel:hover {
-    background: var(--color-gray-900-hover);
+    background: var(--color-gray-700);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 .btn-cancel:active {
@@ -176,13 +211,15 @@ body {
 }
 
 .btn-submit {
-    background: var(--color-green);
+    background: linear-gradient(135deg, var(--color-green), #00b360);
     color: var(--color-white);
     border: 2px solid transparent;
 }
 
 .btn-submit:hover {
-    background: var(--color-green-hover);
+    background: linear-gradient(135deg, #00b360, #009954);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 195, 108, 0.25);
 }
 
 .btn-submit:active {
@@ -278,16 +315,6 @@ body {
     }
 }
 
-/* Mode sombre (préparation) */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --color-surface-primary: var(--color-gray-900);
-        --color-surface-secondary: var(--color-black);
-        --color-text-primary: var(--color-white);
-        --color-text-secondary: var(--color-gray-300);
-    }
-}
-
 /* Focus amélioré pour l'accessibilité */
 .niu-input:focus-visible {
     outline: 2px solid var(--color-green);
@@ -297,13 +324,62 @@ body {
 /* Amélioration pour les écrans tactiles */
 @media (pointer: coarse) {
     .niu-input {
-        width: 52px;
-        height: 52px;
-        font-size: var(--font-size-body-lg);
+        width: 72px;
+        height: 72px;
+        font-size: var(--font-size-heading-sm);
     }
 
     .btn {
-        padding: var(--spacing-lg) var(--spacing-xl);
-        min-height: 44px;
+        padding: var(--spacing-xl) var(--spacing-2xl);
+        min-height: 48px;
     }
+}
+
+/* Feedback visuel pour les erreurs */
+.niu-input.error {
+    border-color: var(--color-red);
+    background: #fef2f2;
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+.niu-input.success {
+    border-color: var(--color-green);
+    background: #f0fdf4;
+}
+
+/* Message d'erreur */
+.error-message {
+    color: var(--color-red);
+    font-size: var(--font-size-body-sm);
+    text-align: center;
+    margin-top: var(--spacing-sm);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: all 0.3s ease;
+}
+
+.error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Indicateur de progression */
+.progress-indicator {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.progress-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--color-border);
+    transition: background 0.3s ease;
+}
+
+.progress-dot.active {
+    background: var(--color-green);
 }

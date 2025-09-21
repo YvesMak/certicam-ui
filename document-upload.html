@@ -2,118 +2,136 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter un document - Certicam</title>
-    <link rel="stylesheet" href="css/tokens.css">
-    <link rel="stylesheet" href="css/document-upload.css">
-</head>
-<body>
-    <div class="upload-container">
-        <!-- Header -->
-        <div class="upload-header">
-            <h1 class="upload-title">Ajouter un document</h1>
-            <p class="upload-format">Formats pris en charge : PDF</p>
-        </div>
-
-        <!-- Drop zone -->
-        <div class="drop-zone" id="drop-zone">
-            <div class="cloud-icon"></div>
-            <p class="upload-text">Cliquez ou glissez-déposez le fichier ici</p>
-            <p class="upload-subtext">Taille maximale : 10 MB</p>
-            <input type="file" id="file-input" accept=".pdf" />
-        </div>
-
-        <!-- File preview -->
-        <div class="file-preview" id="file-preview">
-            <div class="file-info">
-                <div class="file-details">
-                    <div class="file-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                        </svg>
-                    </div>
-                    <div class="file-text">
-                        <div class="file-name" id="file-name">Relevé bancaire Coco Cobango.pdf</div>
-                        <div class="file-size" id="file-size">1.2MB</div>
-                    </div>
-                </div>
-                <button class="remove-file" id="remove-file">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
-                    </svg>
-                </button>
-            </div>
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill" style="width: 100%;"></div>
-                </div>
-                <div class="progress-text" id="progress-text">
-                    <span>Téléchargement terminé</span>
-                    <span class="progress-percentage">100%</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Category selection section -->
-        <div class="category-section" id="category-section" style="display: none;">
-            <div class="category-dropdown">
-                <button class="dropdown-btn" id="dropdown-btn">
-                    <span class="dropdown-text">Choisissez la catégorie du document</span>
-                    <span class="dropdown-arrow">▼</span>
-                </button>
-                <div class="dropdown-menu" id="dropdown-menu">
-                    <div class="dropdown-item" data-value="releve-bancaire">Relevé bancaire</div>
-                    <div class="dropdown-item" data-value="justificatif-domicile">Justificatif de domicile</div>
-                    <div class="dropdown-item" data-value="piece-identite">Pièce d'identité</div>
-                    <div class="dropdown-item" data-value="bulletin-salaire">Bulletin de salaire</div>
-                    <div class="dropdown-item" data-value="contrat-travail">Contrat de travail</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Selected tag section -->
-        <div class="tag-section" id="tag-section" style="display: none;">
-            <div class="tag" id="document-tag">
-                <span id="tag-text">Relevé bancaire</span>
-                <button class="tag-close" id="tag-close">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Buttons -->
-        <div class="button-container">
-            <button type="button" class="btn btn-cancel">Annuler</button>
-            <button type="button" class="btn btn-submit" id="submit-btn">Ajouter</button>
-        </div>
-    </div>
+    <meta name="viewport" content="width=device-width    </main>
 
     <script src="js/document-upload.js"></script>
+</body>
+</html>le=1.0">
+    <title>Ajouter un document - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/document-upload.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <main class="upload-main">
+        <div class="upload-container">
+            <!-- Section d'upload -->
+            <div class="upload-section">
+                <h1 class="upload-title">Ajouter un document</h1>
+                <p class="upload-subtitle">Formats pris en charge : PDF</p>
 
-    <!-- Confirmation Modal -->
-    <div class="modal-overlay" id="modal-overlay">
-        <div class="modal-container">
-            <div class="modal-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="#6B7280">
-                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                </svg>
+                <!-- Drop zone -->
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <i class="fi fi-rr-cloud-upload drop-icon"></i>
+                        <p class="drop-text">Cliquez ou glissez-déposez le fichier ici</p>
+                    </div>
+                    <input type="file" id="file-input" accept=".pdf" style="display: none;" />
+                </div>
+
+                <!-- File preview section -->
+                <div class="file-preview" id="file-preview" style="display: none;">
+                    <div class="file-info">
+                        <i class="fi fi-rr-file-pdf file-icon"></i>
+                        <div class="file-details">
+                            <div class="file-name" id="file-name">Relevé bancaire Coco Cobango.pdf</div>
+                            <div class="file-size" id="file-size">1.2MB</div>
+                        </div>
+                        <button class="remove-file" id="remove-file">
+                            <i class="fi fi-rr-cross-small"></i>
+                        </button>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- Category selection -->
+                <div class="category-section" id="category-section" style="display: none;">
+                    <button class="category-btn" id="category-btn">
+                        <span id="category-text">Choisissez la catégorie du document</span>
+                        <i class="fi fi-rr-angle-down"></i>
+                    </button>
+                    <div class="category-menu" id="category-menu">
+                        <div class="category-item" data-value="releve-bancaire">
+                            <i class="fi fi-rr-bank"></i>
+                            Relevé bancaire
+                        </div>
+                        <div class="category-item" data-value="justificatif-domicile">
+                            <i class="fi fi-rr-home"></i>
+                            Justificatif de domicile
+                        </div>
+                        <div class="category-item" data-value="piece-identite">
+                            <i class="fi fi-rr-user"></i>
+                            Pièce d'identité
+                        </div>
+                        <div class="category-item" data-value="bulletin-salaire">
+                            <i class="fi fi-rr-receipt"></i>
+                            Bulletin de salaire
+                        </div>
+                        <div class="category-item" data-value="contrat-travail">
+                            <i class="fi fi-rr-document"></i>
+                            Contrat de travail
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected category tag -->
+                <div class="category-tag" id="category-tag" style="display: none;">
+                    <span id="tag-text">Relevé bancaire</span>
+                    <button class="tag-close" id="tag-close">
+                        <i class="fi fi-rr-cross-small"></i>
+                    </button>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="button-container">
+                    <button type="button" class="btn btn-cancel" id="cancel-btn">
+                        <i class="fi fi-rr-cross-small"></i>
+                        Annuler
+                    </button>
+                    <button type="button" class="btn btn-submit" id="submit-btn" disabled>
+                        <i class="fi fi-rr-plus"></i>
+                        Ajouter
+                    </button>
+                </div>
             </div>
-            <h3 class="modal-title">Relevé bancaire Coco Cobango.pdf</h3>
-            <p class="modal-subtitle">a été ajouté au portefeuille de Coco Cobango !</p>
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" id="add-another-btn">Ajouter un nouveau fichier</button>
-                <button class="btn btn-primary" id="understand-btn">
-                    <span class="btn-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
-                        </svg>
-                    </span>
-                    Compris !
-                </button>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="success-icon">
+                    <i class="fi fi-rr-check"></i>
+                </div>
+                <h3 id="modal-title">Relevé bancaire Coco Cobango.pdf</h3>
+                <p id="modal-subtitle">a été ajouté au portefeuille de Coco Cobango !</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" id="add-another">
+                        <i class="fi fi-rr-plus"></i>
+                        Ajouter un nouveau fichier
+                    </button>
+                    <button class="btn btn-primary" id="understood">
+                        <i class="fi fi-rr-check"></i>
+                        Compris !
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+
+    <script>
+        // Marquer la page document-upload comme active quand la navbar est chargée
+        document.addEventListener('navbarLoaded', () => {
+            if (window.Certicam) {
+                window.Certicam.setActivePage('document-upload.html');
+            }
+        });
+    </script>
+    <script src="js/document-upload.js"></script>
 </body>
 </html>

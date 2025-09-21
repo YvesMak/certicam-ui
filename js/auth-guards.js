@@ -12,8 +12,8 @@ class AuthGuard {
             'edit.html': ['user', 'checker', 'agent', 'admin'],
             
             // Role-specific pages
-            'checker-dashboard.html': ['checker', 'agent', 'admin'],
-            'agent-dashboard.html': ['agent', 'admin'],
+            'agent-dashboard.html': ['checker', 'agent', 'admin'],
+            'checker-dashboard.html': ['agent', 'admin'],
             'admin.html': ['admin'],
             
             // Special permissions
@@ -144,8 +144,8 @@ class AuthGuard {
     getDashboardUrl(userRole) {
         const dashboards = {
             user: 'index.html',
-            checker: 'checker-dashboard.html',
-            agent: 'agent-dashboard.html',
+            checker: 'agent-dashboard.html',
+            agent: 'checker-dashboard.html',
             admin: 'admin.html'
         };
 

@@ -627,7 +627,7 @@ window.Certicam.setActivePage = function(pageName) {
         'settings.html': ['settings', 'paramètres'],
         'support.html': ['support', 'aide'],
         'checker.html': ['checker', 'vérification'],
-        'agent-dashboard.html': ['agent']
+        'checker-dashboard.html': ['agent']
     };
     
     const keywords = pageMap[pageName] || [pageName.replace('.html', '')];

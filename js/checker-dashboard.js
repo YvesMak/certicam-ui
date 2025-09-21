@@ -1,188 +1,336 @@
-// Checker Dashboard JavaScript
-
-document.addEventListener('DOMContentLoaded', function() {
-    initCheckerDashboard();
-});
-
-let checkerDashboard = {
-    activities: []
-};
-
-function initCheckerDashboard() {
-    // Vérifier l'authentification
-    if (typeof AuthGuard !== 'undefined') {
-        AuthGuard.requireRole('checker');
+// Agent Dashboard functionality
+class AgentDashboard {
+    constructor() {
+        this.users = [];
+        this.checkers = [];
+        this.alerts = [];
+        this.init();
     }
-    
-    // Charger les données d'activité
-    loadUserActivity();
-    
-    // Attacher les événements
-    attachEventListeners();
-    
-    // Mettre à jour le nom d'utilisateur si disponible
-    updateUserName();
-}
 
-function attachEventListeners() {
-    const addDocumentBtn = document.getElementById('add-document-btn');
-    
-    if (addDocumentBtn) {
-        addDocumentBtn.addEventListener('click', handleAddDocument);
-    }
-}
-
-function updateUserName() {
-    // Récupérer les informations utilisateur depuis le sessionStorage ou localStorage
-    const currentUser = JSON.parse(sessionStorage.getItem('currentUser') || localStorage.getItem('currentUser') || '{}');
-    
-    if (currentUser && currentUser.profile) {
-        const firstName = currentUser.profile.firstName || 'Martin';
-        const welcomeTitle = document.querySelector('.welcome-title');
+    init() {
+        // Require agent role
+        AuthGuard.requireRole('agent');
         
-        if (welcomeTitle) {
-            welcomeTitle.textContent = `Hello ${firstName}, Bienvenu(e) sur Certicam.`;
-        }
+        this.loadData();
+        this.loadUsers();
+        this.loadCheckers();
+        this.loadAlerts();
+        this.startRealTimeUpdates();
     }
-}
 
-function handleAddDocument() {
-    // Rediriger vers la page d'ajout de document ou ouvrir un modal
-    console.log('Redirection vers la page d\'ajout de document...');
-    
-    // Pour l'instant, rediriger vers upload-document.html
-    if (window.location.pathname.includes('checker-dashboard.html')) {
-        window.location.href = 'upload-document.html';
-    } else {
-        // Si on est dans un autre contexte, afficher un message
-        showNotification('Fonctionnalité d\'ajout de document à venir', 'info');
+    loadData() {
+        // Simulate real-time data updates
+        this.updateMetrics();
     }
-}
 
-function loadUserActivity() {
-    // Simuler le chargement des activités utilisateur
-    checkerDashboard.activities = [
-        {
-            id: 1,
-            title: 'Martin Bineli s\'est connecté sur Certicam',
-            description: '',
-            time: 'à l\'instant',
-            type: 'login'
-        },
-        {
-            id: 2,
-            title: 'Martin Bineli s\'est déconnecté',
-            description: '',
-            time: 'il y a 20 minutes',
-            type: 'logout'
-        },
-        {
-            id: 3,
-            title: 'Martin Bineli a ajouté Relevé bancaire Josette Sicac.pdf au portefeuille de Josette Sicac',
-            description: '',
-            time: 'il y a 23 minutes',
-            type: 'document_upload'
-        },
-        {
-            id: 4,
-            title: 'Martin Bineli s\'est connecté sur Certicam',
-            description: '',
-            time: 'il y a 25 minutes',
-            type: 'login'
-        }
-    ];
-    
-    renderActivityList();
-}
+    updateMetrics() {
+        // Simulate API calls for metrics
+        const metrics = {
+            totalUsers: 1247 + Math.floor(Math.random() * 10),
+            activeToday: 342 + Math.floor(Math.random() * 20),
+            newUsers: 89 + Math.floor(Math.random() * 5),
+            pendingVerifications: 127 - Math.floor(Math.random() * 10),
+            completedToday: 89 + Math.floor(Math.random() * 15),
+            approvalRate: (92.4 + Math.random() * 2).toFixed(1),
+            revenueToday: (2847 + Math.random() * 500).toFixed(0),
+            revenueMonth: (45230 + Math.random() * 1000).toFixed(0),
+            avgRevenue: (36.30 + Math.random() * 5).toFixed(2)
+        };
 
-function renderActivityList() {
-    const activityList = document.getElementById('activity-list');
-    
-    if (!activityList) return;
-    
-    if (checkerDashboard.activities.length === 0) {
-        activityList.innerHTML = `
-            <div class="activity-empty">
-                <div class="activity-empty-icon">📋</div>
-                <div class="activity-empty-text">Aucune activité récente</div>
+        // Update DOM
+        Object.keys(metrics).forEach(key => {
+            const element = document.getElementById(key.replace(/([A-Z])/g, '-$1').toLowerCase());
+            if (element) {
+                if (key.includes('revenue') || key.includes('avg')) {
+                    element.textContent = metrics[key] + (key.includes('avg') ? '€' : '€');
+                } else if (key.includes('rate')) {
+                    element.textContent = metrics[key] + '%';
+                } else {
+                    element.textContent = metrics[key];
+                }
+            }
+        });
+    }
+
+    loadUsers() {
+        // Simulate user data
+        this.users = [
+            {
+                id: 'user_001',
+                name: 'Marie Dubois',
+                email: 'marie.dubois@email.com',
+                status: 'active',
+                lastActive: '2024-01-15T11:30:00Z',
+                verifications: 12
+            },
+            {
+                id: 'user_002',
+                name: 'Jean Martin',
+                email: 'jean.martin@email.com',
+                status: 'active',
+                lastActive: '2024-01-15T10:15:00Z',
+                verifications: 8
+            },
+            {
+                id: 'user_003',
+                name: 'Sophie Lambert',
+                email: 'sophie.lambert@email.com',
+                status: 'inactive',
+                lastActive: '2024-01-14T16:45:00Z',
+                verifications: 3
+            },
+            {
+                id: 'user_004',
+                name: 'Pierre Durand',
+                email: 'pierre.durand@email.com',
+                status: 'suspended',
+                lastActive: '2024-01-13T14:20:00Z',
+                verifications: 0
+            }
+        ];
+
+        this.renderUsers();
+    }
+
+    loadCheckers() {
+        // Simulate checker data
+        this.checkers = [
+            {
+                id: 'checker_001',
+                name: 'Alice Robert',
+                email: 'alice.robert@certicam.com',
+                status: 'active',
+                verificationsToday: 15,
+                approvalRate: 94.2
+            },
+            {
+                id: 'checker_002',
+                name: 'Bob Moreau',
+                email: 'bob.moreau@certicam.com',
+                status: 'active',
+                verificationsToday: 12,
+                approvalRate: 91.8
+            },
+            {
+                id: 'checker_003',
+                name: 'Claire Petit',
+                email: 'claire.petit@certicam.com',
+                status: 'inactive',
+                verificationsToday: 0,
+                approvalRate: 96.1
+            }
+        ];
+
+        this.renderCheckers();
+    }
+
+    loadAlerts() {
+        // Simulate alerts
+        this.alerts = [
+            {
+                id: 'alert_001',
+                type: 'error',
+                title: 'Erreur de connexion base de données',
+                message: 'Connexion intermittente détectée à 11:45',
+                time: '2024-01-15T11:45:00Z'
+            },
+            {
+                id: 'alert_002',
+                type: 'warning',
+                title: 'File de vérification surchargée',
+                message: 'Plus de 150 documents en attente',
+                time: '2024-01-15T11:30:00Z'
+            },
+            {
+                id: 'alert_003',
+                type: 'info',
+                title: 'Nouveau vérificateur connecté',
+                message: 'Alice Robert a commencé sa session',
+                time: '2024-01-15T11:00:00Z'
+            }
+        ];
+
+        this.renderAlerts();
+    }
+
+    renderUsers() {
+        const container = document.getElementById('user-list');
+        container.innerHTML = '';
+
+        this.users.forEach(user => {
+            const userItem = this.createUserItem(user);
+            container.appendChild(userItem);
+        });
+    }
+
+    createUserItem(user) {
+        const div = document.createElement('div');
+        div.className = 'user-item';
+        
+        const initials = user.name.split(' ').map(n => n[0]).join('');
+        const lastActive = this.getTimeAgo(user.lastActive);
+
+        div.innerHTML = `
+            <div class="user-info">
+                <div class="user-avatar">${initials}</div>
+                <div class="user-details">
+                    <h5>${user.name}</h5>
+                    <p>${user.email} • ${user.verifications} vérifications</p>
+                </div>
+            </div>
+            <div>
+                <span class="user-status status-${user.status}">
+                    ${user.status === 'active' ? 'Actif' : 
+                      user.status === 'inactive' ? 'Inactif' : 'Suspendu'}
+                </span>
             </div>
         `;
-        return;
+
+        div.addEventListener('click', () => this.viewUserDetails(user.id));
+        return div;
     }
-    
-    activityList.innerHTML = checkerDashboard.activities.map(activity => `
-        <div class="activity-item" data-activity-id="${activity.id}">
-            <div class="activity-content">
-                <div class="activity-title">${activity.title}</div>
-                ${activity.description ? `<div class="activity-description">${activity.description}</div>` : ''}
+
+    renderCheckers() {
+        const container = document.getElementById('checker-list');
+        container.innerHTML = '';
+
+        this.checkers.forEach(checker => {
+            const checkerItem = this.createCheckerItem(checker);
+            container.appendChild(checkerItem);
+        });
+    }
+
+    createCheckerItem(checker) {
+        const div = document.createElement('div');
+        div.className = 'checker-item';
+        
+        const initials = checker.name.split(' ').map(n => n[0]).join('');
+
+        div.innerHTML = `
+            <div class="user-info">
+                <div class="user-avatar">${initials}</div>
+                <div class="user-details">
+                    <h5>${checker.name}</h5>
+                    <p>${checker.verificationsToday} vérifications • ${checker.approvalRate}% approbation</p>
+                </div>
             </div>
-            <div class="activity-time">${activity.time}</div>
-        </div>
-    `).join('');
-}
+            <div>
+                <span class="user-status status-${checker.status}">
+                    ${checker.status === 'active' ? 'En ligne' : 'Hors ligne'}
+                </span>
+            </div>
+        `;
 
-function showNotification(message, type = 'info') {
-    // Créer une notification simple si le système de notifications n'est pas disponible
-    if (typeof showNotificationSystem === 'function') {
-        showNotificationSystem(message, type);
-        return;
+        div.addEventListener('click', () => this.viewCheckerDetails(checker.id));
+        return div;
     }
-    
-    // Notification basique
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${type === 'success' ? '#059669' : type === 'error' ? '#dc3545' : '#6c757d'};
-        color: white;
-        padding: 12px 20px;
-        border-radius: 8px;
-        z-index: 10000;
-        font-size: 14px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        max-width: 300px;
-        word-wrap: break-word;
-    `;
-    
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    // Supprimer la notification après 3 secondes
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.parentNode.removeChild(notification);
+
+    renderAlerts() {
+        const container = document.getElementById('alerts-container');
+        container.innerHTML = '';
+
+        if (this.alerts.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-color-muted); text-align: center;">Aucune alerte active</p>';
+            return;
         }
-    }, 3000);
-}
 
-// Fonctions utilitaires pour les activités
-function addActivity(title, description = '', type = 'general') {
-    const newActivity = {
-        id: Date.now(),
-        title,
-        description,
-        time: 'à l\'instant',
-        type
-    };
-    
-    checkerDashboard.activities.unshift(newActivity);
-    
-    // Limiter à 10 activités pour éviter une liste trop longue
-    if (checkerDashboard.activities.length > 10) {
-        checkerDashboard.activities = checkerDashboard.activities.slice(0, 10);
+        this.alerts.forEach(alert => {
+            const alertItem = this.createAlertItem(alert);
+            container.appendChild(alertItem);
+        });
     }
-    
-    renderActivityList();
+
+    createAlertItem(alert) {
+        const div = document.createElement('div');
+        div.className = `alert-item ${alert.type}`;
+        
+        const icons = {
+            error: '⚠️',
+            warning: '⚡',
+            info: 'ℹ️'
+        };
+
+        div.innerHTML = `
+            <div class="alert-icon">${icons[alert.type]}</div>
+            <div>
+                <h5>${alert.title}</h5>
+                <p>${alert.message}</p>
+                <small style="color: var(--text-color-muted);">${this.getTimeAgo(alert.time)}</small>
+            </div>
+        `;
+
+        return div;
+    }
+
+    viewUserDetails(userId) {
+        // Simulate opening user details modal
+        SessionManager.showNotification('Ouverture des détails utilisateur...', 'info');
+    }
+
+    viewCheckerDetails(checkerId) {
+        // Simulate opening checker details
+        SessionManager.showNotification('Ouverture des détails vérificateur...', 'info');
+    }
+
+    getTimeAgo(dateString) {
+        const diff = Date.now() - new Date(dateString).getTime();
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        
+        if (days > 0) return `il y a ${days}j`;
+        if (hours > 0) return `il y a ${hours}h`;
+        return `il y a ${minutes}min`;
+    }
+
+    startRealTimeUpdates() {
+        // Update metrics every 30 seconds
+        setInterval(() => {
+            this.updateMetrics();
+        }, 30000);
+
+        // Reload data every 5 minutes
+        setInterval(() => {
+            this.loadUsers();
+            this.loadCheckers();
+            this.loadAlerts();
+        }, 300000);
+    }
 }
 
-function refreshActivity() {
-    loadUserActivity();
+// Global functions
+function openUserManagement() {
+    window.location.href = 'admin-users.html';
 }
 
-// Exposer les fonctions pour usage externe si nécessaire
-window.checkerDashboard = {
-    addActivity,
-    refreshActivity,
-    showNotification
-};
+function manageCheckers() {
+    window.location.href = 'admin-checkers.html';
+}
+
+function generateReport() {
+    SessionManager.showNotification('Génération du rapport en cours...', 'info');
+}
+
+function manageSettings() {
+    window.location.href = 'admin-settings.html';
+}
+
+function viewLogs() {
+    SessionManager.showNotification('Ouverture des journaux système...', 'info');
+}
+
+function backupData() {
+    if (confirm('Lancer une sauvegarde complète des données ?')) {
+        SessionManager.showNotification('Sauvegarde en cours...', 'info');
+        // Simulate backup process
+        setTimeout(() => {
+            SessionManager.showNotification('Sauvegarde terminée avec succès', 'success');
+        }, 3000);
+    }
+}
+
+// Initialize dashboard
+let agentDashboard;
+document.addEventListener('DOMContentLoaded', () => {
+    agentDashboard = new AgentDashboard();
+});

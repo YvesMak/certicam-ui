@@ -200,7 +200,7 @@ h1 {
 .documents-table {
     background-color: var(--color-surface-primary);
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-gray-100);
+    border: 1px solid var(--color-gray-200);
     overflow: hidden;
 }
 

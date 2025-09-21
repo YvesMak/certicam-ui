@@ -1,4 +1,4 @@
-// Document Upload JavaScript
+// Document Upload JavaScript - Matching Design
 document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
     const dropZone = document.getElementById('drop-zone');
@@ -7,35 +7,32 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileName = document.getElementById('file-name');
     const fileSize = document.getElementById('file-size');
     const progressFill = document.getElementById('progress-fill');
-    const progressText = document.getElementById('progress-text');
     const removeFileBtn = document.getElementById('remove-file');
-    const submitBtn = document.getElementById('submit-btn');
-    const cancelBtn = document.querySelector('.btn-cancel');
     
-    // Category dropdown elements
+    // Category elements
     const categorySection = document.getElementById('category-section');
-    const dropdownBtn = document.getElementById('dropdown-btn');
-    const dropdownMenu = document.getElementById('dropdown-menu');
-    const dropdownText = document.querySelector('.dropdown-text');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const categoryBtn = document.getElementById('category-btn');
+    const categoryMenu = document.getElementById('category-menu');
+    const categoryText = document.getElementById('category-text');
+    const categoryItems = document.querySelectorAll('.category-item');
     
     // Tag elements
-    const tagSection = document.getElementById('tag-section');
+    const categoryTag = document.getElementById('category-tag');
     const tagText = document.getElementById('tag-text');
     const tagClose = document.getElementById('tag-close');
     
+    // Button elements
+    const submitBtn = document.getElementById('submit-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    
     // Modal elements
     const modalOverlay = document.getElementById('modal-overlay');
-    const addAnotherBtn = document.getElementById('add-another-btn');
-    const understandBtn = document.getElementById('understand-btn');
+    const addAnotherBtn = document.getElementById('add-another');
+    const understoodBtn = document.getElementById('understood');
 
-    // State variables
+    // State
     let currentFile = null;
-    let uploadComplete = false;
     let selectedCategory = null;
-
-    // Initialize - disable submit button
-    submitBtn.disabled = true;
 
     // File upload handlers
     dropZone.addEventListener('click', () => {
@@ -69,171 +66,148 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // File handling
     function handleFile(file) {
+        if (file.type !== 'application/pdf') {
+            alert('Seuls les fichiers PDF sont acceptés.');
+            return;
+        }
+
         currentFile = file;
         fileName.textContent = file.name;
         fileSize.textContent = formatFileSize(file.size);
         
         // Show file preview
-        filePreview.classList.add('show');
-        dropZone.style.display = 'none';
+        filePreview.style.display = 'block';
         
-        // Show category selection with animation
-        categorySection.style.display = 'block';
-        setTimeout(() => {
-            categorySection.classList.add('show');
-        }, 10);
-        
-        // Start upload simulation
+        // Simulate upload
         simulateUpload();
+        
+        // Show category selection
+        setTimeout(() => {
+            categorySection.style.display = 'block';
+        }, 1000);
     }
 
     function simulateUpload() {
         let progress = 0;
-        const progressContainer = document.querySelector('.progress-text');
-        progressContainer.innerHTML = '<span>Téléchargement en cours...</span><span class="progress-percentage">0%</span>';
-        
         const interval = setInterval(() => {
             progress += Math.random() * 15;
             if (progress >= 100) {
                 progress = 100;
-                uploadComplete = true;
                 clearInterval(interval);
-                progressContainer.innerHTML = '<span>Téléchargement terminé</span><span class="progress-percentage">100%</span>';
-                updateSubmitButton();
             }
-            
             progressFill.style.width = progress + '%';
-            document.querySelector('.progress-percentage').textContent = Math.floor(progress) + '%';
         }, 100);
     }
 
-    // Dropdown functionality
-    dropdownBtn?.addEventListener('click', (e) => {
+    // Category dropdown
+    categoryBtn?.addEventListener('click', (e) => {
         e.stopPropagation();
-        toggleDropdown();
+        categoryMenu.classList.toggle('show');
     });
 
-    function toggleDropdown() {
-        dropdownBtn.classList.toggle('active');
-        dropdownMenu.classList.toggle('show');
-    }
-
-    // Dropdown item selection
-    dropdownItems.forEach(item => {
+    // Category selection
+    categoryItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.stopPropagation();
-            selectCategory(item.textContent, item.getAttribute('data-value'));
+            const categoryName = item.textContent;
+            const categoryValue = item.getAttribute('data-value');
+            
+            selectCategory(categoryName, categoryValue);
         });
     });
 
-    function selectCategory(categoryName, categoryValue) {
-        selectedCategory = categoryValue;
+    function selectCategory(name, value) {
+        selectedCategory = value;
         
-        // Hide dropdown with animation
-        dropdownBtn.classList.remove('active');
-        dropdownMenu.classList.remove('show');
-        categorySection.classList.remove('show');
+        // Hide dropdown and category section
+        categoryMenu.classList.remove('show');
+        categorySection.style.display = 'none';
         
-        setTimeout(() => {
-            categorySection.style.display = 'none';
-            
-            // Show selected tag with animation
-            tagText.textContent = categoryName;
-            tagSection.style.display = 'block';
-            setTimeout(() => {
-                tagSection.classList.add('show');
-            }, 10);
-            
-            // Enable submit button if file is uploaded
-            updateSubmitButton();
-        }, 300);
+        // Show selected tag
+        tagText.textContent = name;
+        categoryTag.style.display = 'inline-flex';
+        
+        // Enable submit button
+        updateSubmitButton();
     }
 
-    // Tag close functionality
+    // Tag close
     tagClose?.addEventListener('click', () => {
         selectedCategory = null;
-        tagSection.classList.remove('show');
-        
-        setTimeout(() => {
-            tagSection.style.display = 'none';
-            categorySection.style.display = 'block';
-            setTimeout(() => {
-                categorySection.classList.add('show');
-            }, 10);
-            updateSubmitButton();
-        }, 300);
+        categoryTag.style.display = 'none';
+        categorySection.style.display = 'block';
+        updateSubmitButton();
     });
 
-    // Submit button state management
-    function updateSubmitButton() {
-        submitBtn.disabled = !(uploadComplete && selectedCategory);
-    }
+    // Remove file
+    removeFileBtn?.addEventListener('click', () => {
+        resetForm();
+    });
 
-    // Submit form
-    submitBtn.addEventListener('click', () => {
-        if (uploadComplete && selectedCategory) {
+    // Submit button
+    submitBtn?.addEventListener('click', () => {
+        if (currentFile && selectedCategory) {
             showSuccessModal();
         }
     });
 
+    // Cancel button
+    cancelBtn?.addEventListener('click', () => {
+        if (confirm('Voulez-vous vraiment annuler ? Les modifications seront perdues.')) {
+            resetForm();
+            // Redirect or close
+            window.history.back();
+        }
+    });
+
+    // Modal handlers
+    addAnotherBtn?.addEventListener('click', () => {
+        hideModal();
+        resetForm();
+    });
+
+    understoodBtn?.addEventListener('click', () => {
+        hideModal();
+        // Redirect back to checker dashboard
+        window.location.href = 'checker.html';
+    });
+
+    // Update submit button state
+    function updateSubmitButton() {
+        submitBtn.disabled = !(currentFile && selectedCategory);
+    }
+
+    // Show success modal
     function showSuccessModal() {
         modalOverlay.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
 
+    // Hide modal
     function hideModal() {
         modalOverlay.classList.remove('show');
         document.body.style.overflow = '';
     }
 
-    // Modal button handlers
-    addAnotherBtn?.addEventListener('click', () => {
-        resetForm();
-        hideModal();
-    });
-
-    understandBtn?.addEventListener('click', () => {
-        hideModal();
-        // Could redirect to another page or show success state
-    });
-
-    // Reset form to initial state
+    // Reset form
     function resetForm() {
         currentFile = null;
-        uploadComplete = false;
         selectedCategory = null;
         
-        filePreview.classList.remove('show');
-        categorySection.classList.remove('show');
-        tagSection.classList.remove('show');
+        filePreview.style.display = 'none';
+        categorySection.style.display = 'none';
+        categoryTag.style.display = 'none';
+        categoryMenu.classList.remove('show');
         
-        setTimeout(() => {
-            categorySection.style.display = 'none';
-            tagSection.style.display = 'none';
-            dropZone.style.display = 'block';
-            fileInput.value = '';
-            
-            progressFill.style.width = '0%';
-            updateSubmitButton();
-        }, 300);
+        fileInput.value = '';
+        progressFill.style.width = '0%';
+        
+        updateSubmitButton();
     }
 
-    // Remove file
-    removeFileBtn.addEventListener('click', () => {
-        resetForm();
-    });
-
-    // Cancel button
-    cancelBtn.addEventListener('click', () => {
-        resetForm();
-    });
-
     // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-        if (dropdownBtn && !dropdownBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-            dropdownBtn.classList.remove('active');
-            dropdownMenu.classList.remove('show');
-        }
+    document.addEventListener('click', () => {
+        categoryMenu?.classList.remove('show');
     });
 
     // Close modal when clicking overlay
@@ -251,4 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const i = Math.floor(Math.log(bytes) / Math.log(k));
         return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
     }
+
+    // Initialize
+    updateSubmitButton();
 });

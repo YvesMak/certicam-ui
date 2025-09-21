@@ -103,12 +103,11 @@
 }
 
 .transactions-table th {
-    background: var(--color-gray-50);
-    font-weight: var(--font-weight-semibold);
+    background: var(--color-gray-100);
+    font-weight: var(--font-weight-medium);
     font-size: var(--font-size-label-sm);
     color: var(--color-text-secondary);
     font-family: var(--font-family);
-    letter-spacing: 0.5px;
 }
 
 .transactions-table td {

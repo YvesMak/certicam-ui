@@ -5,397 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de bord - Agent | Certicam</title>
     <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/agent-dashboard.css">
-    <link rel="stylesheet" href="css/navbar.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    <style>
-        .agent-dashboard {
-            background: var(--surface-gradient);
-            min-height: 100vh;
-            padding: 2rem 0;
-        }
-
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .analytics-card {
-            background: var(--card-background);
-            border-radius: var(--border-radius-lg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-card);
-        }
-
-        .metric-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .metric-row:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .metric-label {
-            color: var(--text-color-muted);
-            font-size: 0.9rem;
-        }
-
-        .metric-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-
-        .metric-trend {
-            font-size: 0.8rem;
-            margin-left: 0.5rem;
-        }
-
-        .trend-up { color: var(--success-color); }
-        .trend-down { color: var(--error-color); }
-        .trend-neutral { color: var(--text-color-muted); }
-
-        .management-sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .management-card {
-            background: var(--card-background);
-            border-radius: var(--border-radius-lg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .user-list, .checker-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .user-item, .checker-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s;
-        }
-
-        .user-item:hover, .checker-item:hover {
-            background: var(--hover-background);
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .user-details h5 {
-            margin: 0 0 0.25rem 0;
-            color: var(--text-color);
-        }
-
-        .user-details p {
-            margin: 0;
-            color: var(--text-color-muted);
-            font-size: 0.9rem;
-        }
-
-        .user-status {
-            padding: 0.25rem 0.75rem;
-            border-radius: var(--border-radius);
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-active { background: var(--success-color); color: white; }
-        .status-inactive { background: var(--text-color-muted); color: white; }
-        .status-suspended { background: var(--error-color); color: white; }
-
-        .performance-chart {
-            background: var(--card-background);
-            border-radius: var(--border-radius-lg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-
-        .chart-placeholder {
-            height: 300px;
-            background: var(--surface-background);
-            border-radius: var(--border-radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-color-muted);
-        }
-
-        .quick-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .action-btn {
-            padding: 1rem 2rem;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-        }
-
-        .action-btn:hover {
-            background: var(--primary-hover);
-            transform: translateY(-1px);
-        }
-
-        .action-btn.secondary {
-            background: var(--secondary-color);
-        }
-
-        .alerts-section {
-            background: var(--card-background);
-            border-radius: var(--border-radius-lg);
-            padding: 2rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-
-        .alert-item {
-            display: flex;
-            align-items: start;
-            gap: 1rem;
-            padding: 1rem;
-            border-left: 4px solid var(--warning-color);
-            background: var(--warning-background);
-            border-radius: var(--border-radius);
-            margin-bottom: 1rem;
-        }
-
-        .alert-item.error {
-            border-left-color: var(--error-color);
-            background: var(--error-background);
-        }
-
-        .alert-item.info {
-            border-left-color: var(--info-color);
-            background: var(--info-background);
-        }
-
-        .alert-icon {
-            flex-shrink: 0;
-            margin-top: 0.25rem;
-        }
-
-        @media (max-width: 768px) {
-            .agent-dashboard {
-                padding: 1rem;
-            }
-            
-            .analytics-grid, .management-sections {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .analytics-card, .management-card {
-                padding: 1.5rem;
-            }
-
-            .quick-actions {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
+    
+    <!-- Script d'initialisation universel Certicam -->
+    <script src="js/certicam-init.js"></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <div id="navbar-container"></div>
+    <!-- La navbar sera chargée automatiquement par certicam-init.js -->
 
-    <div class="agent-dashboard">
-        <div class="container">
-            <!-- Dashboard Header -->
-            <div class="dashboard-header">
-                <h1>Tableau de bord - Agent</h1>
-                <p>Vue d'ensemble de la plateforme et gestion des opérations</p>
-            </div>
-
-            <!-- Analytics Grid -->
-            <div class="analytics-grid">
-                <div class="analytics-card">
-                    <h3>Utilisateurs actifs</h3>
-                    <div class="metric-row">
-                        <span class="metric-label">Total</span>
-                        <div>
-                            <span class="metric-value" id="total-users">1,247</span>
-                            <span class="metric-trend trend-up">↗ +5.2%</span>
-                        </div>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Aujourd'hui</span>
-                        <div>
-                            <span class="metric-value" id="active-today">342</span>
-                        </div>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Nouveaux (7j)</span>
-                        <div>
-                            <span class="metric-value" id="new-users">89</span>
-                            <span class="metric-trend trend-up">↗ +12%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="analytics-card">
-                    <h3>Vérifications</h3>
-                    <div class="metric-row">
-                        <span class="metric-label">En attente</span>
-                        <div>
-                            <span class="metric-value" id="pending-verifications">127</span>
-                            <span class="metric-trend trend-down">↘ -8%</span>
-                        </div>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Complétées</span>
-                        <div>
-                            <span class="metric-value" id="completed-today">89</span>
-                        </div>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Taux d'approbation</span>
-                        <div>
-                            <span class="metric-value" id="approval-rate">92.4%</span>
-                            <span class="metric-trend trend-up">↗ +2.1%</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="analytics-card">
-                    <h3>Revenus</h3>
-                    <div class="metric-row">
-                        <span class="metric-label">Aujourd'hui</span>
-                        <div>
-                            <span class="metric-value" id="revenue-today">2,847€</span>
-                        </div>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Ce mois</span>
-                        <div>
-                            <span class="metric-value" id="revenue-month">45,230€</span>
-                            <span class="metric-trend trend-up">↗ +15.3%</span>
-                        </div>
-                    </div>
-                    <div class="metric-row">
-                        <span class="metric-label">Moyenne/utilisateur</span>
-                        <div>
-                            <span class="metric-value" id="avg-revenue">36.30€</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Alerts Section -->
-            <div class="alerts-section">
-                <h3>Alertes système</h3>
-                <div id="alerts-container">
-                    <!-- Alerts will be populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Performance Chart -->
-            <div class="performance-chart">
-                <h3>Performance des vérifications (7 derniers jours)</h3>
-                <div class="chart-placeholder">
-                    <p>Graphique de performance - Intégration Chart.js recommandée</p>
-                </div>
-            </div>
-
-            <!-- Management Sections -->
-            <div class="management-sections">
-                <!-- User Management -->
-                <div class="management-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3>Gestion des utilisateurs</h3>
-                        <button class="btn btn-sm btn-primary" onclick="openUserManagement()">
-                            <i class="fas fa-plus"></i> Ajouter
-                        </button>
-                    </div>
-                    <div class="user-list" id="user-list">
-                        <!-- Users will be populated by JavaScript -->
-                    </div>
-                </div>
-
-                <!-- Checker Management -->
-                <div class="management-card">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <h3>Vérificateurs</h3>
-                        <button class="btn btn-sm btn-primary" onclick="manageCheckers()">
-                            <i class="fas fa-cog"></i> Gérer
-                        </button>
-                    </div>
-                    <div class="checker-list" id="checker-list">
-                        <!-- Checkers will be populated by JavaScript -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <button class="action-btn" onclick="generateReport()">
-                    <i class="fas fa-chart-line"></i> Générer rapport
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Section de bienvenue -->
+            <div class="welcome-section">
+                <h1 class="welcome-title">Hello Martin, Bienvenu(e) sur Certicam.</h1>
+                <p class="welcome-subtitle">Voulez vous ajouter un document ?</p>
+                
+                <button class="btn-add-document" id="add-document-btn">
+                    <i class="fi fi-rr-plus"></i>
+                    Ajouter documents
                 </button>
-                <button class="action-btn secondary" onclick="manageSettings()">
-                    <i class="fas fa-cog"></i> Paramètres système
-                </button>
-                <button class="action-btn secondary" onclick="viewLogs()">
-                    <i class="fas fa-file-alt"></i> Journaux système
-                </button>
-                <button class="action-btn secondary" onclick="backupData()">
-                    <i class="fas fa-download"></i> Sauvegarde
-                </button>
+            </div>
+
+            <!-- Section activité -->
+            <div class="activity-section">
+                <h2 class="section-title">Mon activité</h2>
+                <div class="activity-list" id="activity-list">
+                    <!-- Les éléments d'activité seront chargés par JavaScript -->
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- Scripts -->
-    <script src="components/navbar-loader.js"></script>
-    <script src="js/session-manager.js"></script>
-    <script src="js/auth-guards.js"></script>
+    <script>
+        // Marquer la page agent-dashboard comme active quand la navbar est chargée
+        document.addEventListener('navbarLoaded', () => {
+            if (window.Certicam) {
+                window.Certicam.setActivePage('agent-dashboard.html');
+            }
+        });
+    </script>
     <script src="js/agent-dashboard.js"></script>
 </body>
 </html>

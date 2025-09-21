@@ -14,13 +14,13 @@ const USER_ROLES = {
     checker: {
         level: 2,
         permissions: ['view_documents', 'validate_documents', 'reject_documents'],
-        dashboardUrl: 'checker-dashboard.html',
+        dashboardUrl: 'agent-dashboard.html',
         title: 'Checker'
     },
     agent: {
         level: 3,
         permissions: ['manage_users', 'view_analytics', 'customer_support'],
-        dashboardUrl: 'agent-dashboard.html',
+        dashboardUrl: 'checker-dashboard.html',
         title: 'Agent'
     },
     admin: {
