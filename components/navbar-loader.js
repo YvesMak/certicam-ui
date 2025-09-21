@@ -29,14 +29,14 @@ class NavbarLoader {
     
     checkExistingNavbar() {
         // Vérifier si la navbar est déjà chargée par notre système
-        const hasNavbar = window.navbarLoaded || document.querySelector('.certicam-header, #navbar-container');
+        const hasLoadedNavbar = window.navbarLoaded || document.querySelector('.certicam-header');
         console.log('🔍 Vérification navbar existante:', {
             navbarLoaded: !!window.navbarLoaded,
             headerExists: !!document.querySelector('.certicam-header'),
             containerExists: !!document.querySelector('#navbar-container'),
-            result: !!hasNavbar
+            result: !!hasLoadedNavbar
         });
-        return !!hasNavbar;
+        return !!hasLoadedNavbar;
     }
     
     shouldLoadNavbar() {
@@ -275,23 +275,29 @@ class NavbarLoader {
             return;
         }
         
-        // Injecter au début du body
-        const firstChild = document.body.firstChild;
-        const navbarContainer = document.createElement('div');
-        navbarContainer.innerHTML = this.navbarHtml;
+        // Chercher le conteneur navbar
+        let targetContainer = document.querySelector('#navbar-container');
         
-        console.log('📦 Container créé avec HTML:', this.navbarHtml.substring(0, 100) + '...');
-        console.log('🎯 Premier enfant du body:', firstChild?.tagName || 'null');
-        console.log('🔢 Enfants dans container:', navbarContainer.children.length);
-        
-        // Insérer chaque élément au début du body
-        const elementsToInsert = Array.from(navbarContainer.children);
-        console.log('🚀 Insertion de', elementsToInsert.length, 'éléments...');
-        
-        for (let i = 0; i < elementsToInsert.length; i++) {
-            const element = elementsToInsert[i];
-            console.log(`📍 Insertion élément ${i + 1}:`, element.tagName, element.className);
-            document.body.insertBefore(element, firstChild);
+        if (targetContainer) {
+            // Injecter dans le conteneur prévu
+            console.log('🎯 Injection dans #navbar-container');
+            targetContainer.innerHTML = this.navbarHtml;
+        } else {
+            // Fallback: injecter au début du body
+            console.log('🎯 Fallback: injection au début du body');
+            const firstChild = document.body.firstChild;
+            const navbarContainer = document.createElement('div');
+            navbarContainer.innerHTML = this.navbarHtml;
+            
+            // Insérer chaque élément au début du body
+            const elementsToInsert = Array.from(navbarContainer.children);
+            console.log('🚀 Insertion de', elementsToInsert.length, 'éléments...');
+            
+            for (let i = 0; i < elementsToInsert.length; i++) {
+                const element = elementsToInsert[i];
+                console.log(`📍 Insertion élément ${i + 1}:`, element.tagName, element.className);
+                document.body.insertBefore(element, firstChild);
+            }
         }
         
         this.isLoaded = true;
