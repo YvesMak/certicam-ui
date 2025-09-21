@@ -16,6 +16,7 @@ class CheckerInstructions {
         this.setupInstructionAnimations();
         this.trackPageView();
         this.setupAccessibility();
+        this.respectMotionPreference();
     }
 
     /**
