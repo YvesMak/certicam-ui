@@ -254,7 +254,7 @@ td {
     align-items: center;
     justify-content: center;
     padding: var(--spacing-xs) var(--spacing-md);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     font-size: var(--font-size-label-sm);
     font-weight: var(--font-weight-medium);
     font-family: var(--font-family);
@@ -916,7 +916,7 @@ i {
 }
 
 .btn-download:hover {
-    background: #00a559;
+    background: var(--color-green-hover);
     transform: translateY(-1px);
 }
 
@@ -939,7 +939,7 @@ i {
 }
 
 .btn-pay:hover {
-    background: #00a559;
+    background: var(--color-green-hover);
     transform: translateY(-1px);
 }
 
@@ -1550,8 +1550,8 @@ i {
 }
 
 .date-picker-actions .btn-primary:hover {
-    background: #00a85c;
-    border-color: #00a85c;
+    background: var(--color-green-hover);
+    border-color: var(--color-green-hover);
     transform: translateY(-1px);
     box-shadow: none;
 }
@@ -1614,7 +1614,7 @@ i {
 }
 
 .filter-actions .btn-primary:hover {
-    background: #00a559;
+    background: var(--color-green-hover);
 }
 
 /* Menu Mobile */

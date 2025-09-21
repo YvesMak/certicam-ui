@@ -1,0 +1,309 @@
+/* NIU Entry CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    min-height: 100vh;
+    background: var(--color-surface-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.niu-container {
+    max-width: 800px;
+    width: 100%;
+    background: var(--color-surface-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+    text-align: center;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.niu-title {
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: var(--line-height-body-lg);
+}
+
+.niu-subtitle {
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.niu-inputs-container {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-3xl);
+    flex-wrap: wrap;
+    padding: var(--spacing-lg) 0;
+}
+
+.niu-input {
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--color-gray-200);
+    border-radius: var(--radius-md);
+    text-align: center;
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    background: var(--color-surface-primary);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    font-family: var(--font-family);
+    position: relative;
+}
+
+.niu-input::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-md);
+    padding: 2px;
+    background: linear-gradient(135deg, transparent, var(--color-green));
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.niu-input:focus {
+    border-color: var(--color-green);
+    transform: scale(1.05);
+    box-shadow: none;
+}
+
+.niu-input:focus::before {
+    opacity: 1;
+}
+
+.niu-input.filled {
+    border-color: var(--color-green);
+    background: var(--primary-100);
+    transform: scale(1.02);
+}
+
+.niu-input:hover:not(:focus) {
+    border-color: var(--color-gray-300);
+    transform: translateY(-1px);
+}
+
+.niu-input:invalid {
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.button-container {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg) 0;
+}
+
+.btn {
+    flex: 1;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    min-width: 140px;
+    font-family: var(--font-family);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-cancel {
+    background: var(--color-gray-900);
+    color: var(--color-white);
+    border: 2px solid transparent;
+}
+
+.btn-cancel:hover {
+    background: var(--color-gray-900-hover);
+}
+
+.btn-cancel:active {
+    transform: translateY(0);
+}
+
+.btn-submit {
+    background: var(--color-green);
+    color: var(--color-white);
+    border: 2px solid transparent;
+}
+
+.btn-submit:hover {
+    background: var(--color-green-hover);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+}
+
+/* Loading state */
+.btn.loading {
+    pointer-events: none;
+    position: relative;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    margin: auto;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Responsive avec amélioration UX */
+@media (max-width: 768px) {
+    .niu-container {
+        padding: var(--spacing-2xl) var(--spacing-lg);
+        margin: var(--spacing-sm);
+    }
+
+    .niu-inputs-container {
+        gap: var(--spacing-xxs);
+        padding: var(--spacing-md) 0;
+    }
+
+    .niu-input {
+        width: 48px;
+        height: 48px;
+        font-size: var(--font-size-body-md);
+    }
+
+    .button-container {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        max-width: none;
+    }
+
+    .btn {
+        min-width: none;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+}
+
+@media (max-width: 600px) {
+    .niu-inputs-container {
+        gap: 2px;
+    }
+
+    .niu-input {
+        width: 42px;
+        height: 42px;
+        font-size: var(--font-size-body-sm);
+    }
+
+    .niu-title {
+        font-size: var(--font-size-body-md);
+    }
+
+    .niu-subtitle {
+        font-size: var(--font-size-body-sm);
+    }
+}
+
+/* États d'accessibilité améliorés */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Mode sombre (préparation) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-surface-primary: var(--color-gray-900);
+        --color-surface-secondary: var(--color-black);
+        --color-text-primary: var(--color-white);
+        --color-text-secondary: var(--color-gray-300);
+    }
+}
+
+/* Focus amélioré pour l'accessibilité */
+.niu-input:focus-visible {
+    outline: 2px solid var(--color-green);
+    outline-offset: 2px;
+}
+
+/* Amélioration pour les écrans tactiles */
+@media (pointer: coarse) {
+    .niu-input {
+        width: 52px;
+        height: 52px;
+        font-size: var(--font-size-body-lg);
+    }
+
+    .btn {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        min-height: 44px;
+    }
+}

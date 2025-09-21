@@ -28,14 +28,19 @@
   /* Tokens sémantiques */
   --color-surface-primary: var(--color-white);
   --color-surface-secondary: var(--color-gray-50);
+  --color-text: var(--color-gray-950);
   --color-text-primary: var(--color-gray-950);
   --color-text-secondary: var(--color-gray-500);
+  --color-text-muted: var(--color-gray-400);
   --color-text-interactive: var(--color-green);
+  --color-background: var(--color-white);
+  --color-border: var(--color-gray-200);
   --color-button-bg-primary: var(--color-gray-800);
   --color-button-label-primary: var(--color-white);
   --color-border-active: var(--color-black);
   --color-icon-primary: var(--color-gray-950);
   --color-icon-secondary: var(--color-gray-500);
+  --color-muted: var(--color-gray-300);
   
   /* === ESPACEMENT === */
   --spacing-none: 0px;
@@ -54,12 +59,13 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 24px;
   
   /* Alias pour border-radius */
   --border-radius-sm: var(--radius-xs);
   --border-radius-md: var(--radius-md);
   --border-radius-lg: var(--radius-lg);
-  --border-radius-xl: var(--radius-lg);
+  --border-radius-xl: var(--radius-xl);
   
   /* === TYPOGRAPHIE === */
   --font-family: 'Outfit', sans-serif;
@@ -81,6 +87,11 @@
   --font-size-heading-xl: 36px;
   
   /* Alias pour compatibilité */
+  --font-size-xs: var(--font-size-body-xs);
+  --font-size-sm: var(--font-size-body-sm);
+  --font-size-base: var(--font-size-body-md);
+  --font-size-lg: var(--font-size-body-lg);
+  --font-size-xl: var(--font-size-body-xl);
   --font-size-label-xs: var(--font-size-body-xs);
   --font-size-label-sm: var(--font-size-body-sm);
   --font-size-heading-2xl: var(--font-size-heading-xl);
@@ -115,12 +126,29 @@
   --color-status-neutral-text: #374151;
   
   /* === SHADOWS === */
-  /* Note: Flat design - toutes les ombres sont désactivées */
+  /* Flat design - aucune ombre */
+  --shadow-none: none;
   --shadow-sm: none;
   --shadow-md: none;
   --shadow-lg: none;
   --shadow-xl: none;
   --shadow-2xl: none;
+  
+  /* === COULEURS HOVER === */
+  --color-green-hover: #00a559;
+  --color-gray-900-hover: var(--color-gray-900);
+  
+  /* Couleurs d'état supplémentaires */
+  --color-success: var(--color-status-success);
+  --color-success-light: var(--color-status-success-bg);
+  --color-error: var(--color-status-error);
+  --color-error-light: var(--color-status-error-bg);
+  --color-warning: var(--color-status-warning);
+  --color-warning-light: var(--color-status-warning-bg);
+  --color-green-light: #dcfce7;
+  
+  /* Transitions */
+  --transition-base: 0.2s ease-in-out;
   
   /* === ALIAS POUR COMPATIBILITÉ === */
   /* Alias gray colors */

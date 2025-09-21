@@ -1,0 +1,224 @@
+/* Email Verification Page - Clean Flat Design */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    min-height: 100vh;
+    display: flex;
+    background: var(--color-gray-50);
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.verification-container {
+    max-width: 500px;
+    width: 100%;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    text-align: center;
+    border: 1px solid var(--color-gray-200);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.verification-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--color-green-50);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+}
+
+.verification-icon svg {
+    width: 40px;
+    height: 40px;
+    color: var(--color-green);
+}
+
+.verification-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.verification-message {
+    font-size: var(--font-size-body);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-md);
+}
+
+.email-address {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.verification-steps {
+    background: var(--color-gray-50);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-xl) 0;
+    text-align: left;
+}
+
+.verification-steps h3 {
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.verification-steps ol {
+    list-style: none;
+    counter-reset: step-counter;
+    padding-left: 0;
+}
+
+.verification-steps li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: var(--spacing-xl);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+.verification-steps li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background: var(--color-green);
+    color: var(--color-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-body-xs);
+    font-weight: var(--font-weight-semibold);
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+}
+
+.btn-primary {
+    background: var(--color-green);
+    color: var(--color-white);
+    border: none;
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background: var(--color-green-hover);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-secondary:hover {
+    background: var(--color-gray-50);
+    border-color: var(--color-gray-400);
+    color: var(--color-text-primary);
+}
+
+.back-link {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-gray-200);
+}
+
+.back-link a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-medium);
+    transition: color 0.2s ease;
+}
+
+.back-link a:hover {
+    color: var(--color-green);
+}
+
+.countdown {
+    font-size: var(--font-size-body-sm);
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-md);
+    font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+    body {
+        padding: var(--spacing-md);
+    }
+
+    .verification-container {
+        padding: var(--spacing-xl) var(--spacing-lg);
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .verification-steps {
+        padding: var(--spacing-md);
+    }
+
+    .verification-steps li {
+        padding-left: var(--spacing-lg);
+    }
+
+    .verification-steps li::before {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+}
