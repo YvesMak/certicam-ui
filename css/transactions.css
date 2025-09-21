@@ -5,6 +5,11 @@
     font-family: var(--font-family);
 }
 
+/* Layout principal avec navbar */
+main {
+    padding-top: var(--spacing-lg);
+}
+
 /* Corrections pour la page transactions */
 .search-section {
     position: relative; /* Nécessaire pour le positionnement absolu du filter-panel */
