@@ -170,11 +170,15 @@ body {
 .password-container {
     position: relative;
     width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    display: block;
 }
 
 .password-container .form-input {
     width: 100%;
     padding-right: calc(var(--spacing-md) + 32px);
+    margin: 0;
 }
 
 .password-container .form-input.error {
@@ -204,6 +208,7 @@ body {
     height: 24px;
     border-radius: var(--radius-xs);
     transition: all 0.2s ease;
+    z-index: 10;
 }
 
 .password-toggle:hover {
@@ -216,7 +221,6 @@ body {
 }
 
 .password-toggle:focus {
-    outline: 2px solid var(--color-border-active);
     outline-offset: 2px;
 }
 
