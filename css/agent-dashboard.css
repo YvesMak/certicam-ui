@@ -112,7 +112,7 @@ html, body {
 
 .welcome-title {
     font-size: clamp(20px, 3.5vw, 24px);
-    font-weight: var(--font-weight-normal);
+    font-weight: var(--font-weight-bold);
     color: var(--color-gray-700);
     margin-bottom: var(--spacing-sm);
     line-height: 1.3;
