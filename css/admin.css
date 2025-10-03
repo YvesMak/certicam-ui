@@ -58,7 +58,7 @@
     display: block;
     font-size: 24px;
     font-weight: 700;
-    color: var(--primary-600);
+    color: var(--color-green);
     line-height: 1;
     margin-bottom: var(--spacing-xs);
 }
@@ -183,9 +183,9 @@
 }
 
 .add-user-btn {
-    background: var(--primary-600);
+    background: var(--color-green);
     color: white;
-    border: 1px solid var(--primary-600);
+    border: 1px solid var(--color-green);
     padding: 12px 20px;
     border-radius: var(--border-radius-md);
     cursor: pointer;
@@ -278,11 +278,11 @@
 }
 
 .sortable:hover {
-    color: var(--primary-600);
+    color: var(--color-green);
 }
 
 .sortable.active {
-    color: var(--primary-600);
+    color: var(--color-green);
     font-weight: 600;
 }
 
@@ -294,7 +294,7 @@
 
 .sortable:hover .sort-icon,
 .sortable.active .sort-icon {
-    color: var(--primary-600);
+    color: var(--color-green);
     transform: scale(1.2);
 }
 
@@ -455,7 +455,7 @@
 
 .edit-action:hover {
     background: var(--primary-100);
-    color: var(--primary-600);
+    color: var(--color-green);
     transform: scale(1.1);
 }
 
@@ -740,9 +740,9 @@
 }
 
 .btn-primary {
-    background: var(--primary-600);
+    background: var(--color-green);
     color: white;
-    border: 1px solid var(--primary-600);
+    border: 1px solid var(--color-green);
     padding: 12px 24px;
     border-radius: var(--border-radius-md);
     cursor: pointer;
@@ -756,8 +756,8 @@
 }
 
 .btn-primary:hover {
-    background: var(--primary-700);
-    border-color: var(--primary-700);
+    background: var(--color-green-hover);
+    border-color: var(--color-green-hover);
     transform: translateY(-1px);
 }
 
