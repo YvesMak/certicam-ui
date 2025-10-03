@@ -780,6 +780,53 @@ function initTransactionFiltering() {
     console.log('✅ Système de filtrage des transactions initialisé');
 }
 
+// Gestion du sélecteur de transactions par page
+function initRowsPerPageSelector() {
+    const selectorWrapper = document.querySelector('.selector-wrapper');
+    const currentSelection = document.querySelector('.current-selection');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+    if (!selectorWrapper || !currentSelection || !dropdownItems.length) {
+        console.log('⚠️ Éléments du sélecteur de pagination introuvables');
+        return;
+    }
+
+    console.log('🔧 Initialisation du sélecteur de transactions par page');
+
+    // Toggle du dropdown au clic sur le sélecteur
+    selectorWrapper.addEventListener('click', function(e) {
+        e.stopPropagation();
+        selectorWrapper.classList.toggle('active');
+        console.log('📊 Sélecteur toggled:', selectorWrapper.classList.contains('active'));
+    });
+
+    // Fermer le dropdown quand on clique ailleurs sur la page
+    document.addEventListener('click', function(e) {
+        if (!selectorWrapper.contains(e.target)) {
+            selectorWrapper.classList.remove('active');
+        }
+    });
+
+    // Gestion de la sélection d'un nombre de transactions par page
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const value = parseInt(this.dataset.value);
+            
+            // Mettre à jour l'affichage avec "transactions"
+            currentSelection.textContent = `${value} transactions`;
+            selectorWrapper.classList.remove('active');
+            
+            console.log(`📊 Nombre de transactions par page: ${value}`);
+            
+            // Ici vous pouvez ajouter la logique pour afficher le bon nombre de transactions
+            // Par exemple: updateTransactionsDisplay(value);
+        });
+    });
+
+    console.log('✅ Sélecteur de pagination initialisé');
+}
+
 // Initialisation de la page
 function initTransactionsPage() {
     console.log('Initialisation de la page transactions...');
@@ -789,6 +836,9 @@ function initTransactionsPage() {
     
     // Initialiser les event listeners pour le système de filtrage
     initTransactionFiltering();
+    
+    // Initialiser le sélecteur de pagination
+    initRowsPerPageSelector();
     
     // Initialiser les autres fonctionnalités
     attachTransactionButtonEvents();

@@ -365,7 +365,7 @@ td:nth-last-child(3) {  /* Colonne Statut */
 .selector-wrapper {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: var(--spacing-xs);
     background-color: var(--color-surface-primary);
     border: 1px solid var(--color-gray-150);
@@ -2446,7 +2446,7 @@ i {
     /* Selector improvements for mobile */
     .selector-wrapper {
         height: 40px;
-        padding: var(--spacing-xs);
+        
     }
     
     .current-selection {
@@ -2565,7 +2565,6 @@ i {
     /* Selector mobile ultra compact */
     .selector-wrapper {
         height: 38px;
-        padding: var(--spacing-2xs) var(--spacing-sm);
     }
     
     .current-selection {
