@@ -35,6 +35,7 @@
     color: var(--color-text-secondary);
     transition: all 0.2s ease;
     white-space: nowrap;
+    flex: 1;
     flex-shrink: 0;
 }
 
@@ -108,6 +109,7 @@
     background: var(--color-gray-100);
     border-radius: var(--border-radius-lg);
     padding: var(--spacing-xxs);
+    width: fit-content;
 }
 
 .lang-btn,
@@ -516,4 +518,51 @@
     .tab-btn {
         min-width: 80px;
     }
+}
+
+/* Success Message Toast */
+.success-message-toast {
+    position: fixed;
+    bottom: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-green);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    transition: bottom 0.3s ease;
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-medium);
+}
+
+.success-message-toast i {
+    font-size: 1.25rem;
+}
+
+.success-message-toast.show {
+    bottom: var(--spacing-2xl);
+}
+
+/* Avatar Upload Improvements */
+.profile-avatar {
+    cursor: pointer;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.profile-avatar-section .btn-link {
+    transition: all 0.2s ease;
+}
+
+.profile-avatar-section .btn-link:hover {
+    transform: translateY(-2px);
 }

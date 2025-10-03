@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initPasswordVisibility();
     initPaymentMethods();
     initMobileMenu(); // Ajout de la gestion du menu mobile
+    initAvatarUpload(); // Ajout de la gestion du changement d'avatar
 });
 
 // Initialize mobile menu
@@ -220,3 +221,92 @@ timezoneSelect?.addEventListener('change', function() {
     const selectedOption = this.options[this.selectedIndex];
     timezoneBadge.textContent = selectedOption.textContent;
 });
+
+// Gestion du changement d'avatar
+function initAvatarUpload() {
+    const changeAvatarBtn = document.getElementById('change-avatar-btn');
+    const avatarInput = document.getElementById('profile-avatar-input');
+    const avatarImg = document.getElementById('profile-avatar-img');
+    
+    if (changeAvatarBtn && avatarInput && avatarImg) {
+        // Ouvrir le sélecteur de fichier au clic sur le bouton
+        changeAvatarBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            avatarInput.click();
+        });
+        
+        // Gérer le changement d'image
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Vérifier que c'est bien une image
+                if (!file.type.startsWith('image/')) {
+                    alert('Veuillez sélectionner une image valide');
+                    return;
+                }
+                
+                // Vérifier la taille du fichier (max 5MB)
+                const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+                if (file.size > maxSize) {
+                    alert('La taille de l\'image ne doit pas dépasser 5 MB');
+                    return;
+                }
+                
+                // Lire et afficher l'image
+                const reader = new FileReader();
+                
+                reader.onload = function(event) {
+                    avatarImg.src = event.target.result;
+                    
+                    // Animation de confirmation
+                    avatarImg.style.opacity = '0';
+                    setTimeout(() => {
+                        avatarImg.style.transition = 'opacity 0.3s ease';
+                        avatarImg.style.opacity = '1';
+                    }, 100);
+                    
+                    // Afficher un message de succès
+                    showSuccessMessage('Photo de profil mise à jour !');
+                };
+                
+                reader.onerror = function() {
+                    alert('Erreur lors du chargement de l\'image');
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
+
+// Fonction pour afficher un message de succès
+function showSuccessMessage(message) {
+    // Vérifier si un message existe déjà
+    let existingMessage = document.querySelector('.success-message-toast');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = 'success-message-toast';
+    toast.innerHTML = `
+        <i class="fi fi-rr-check-circle"></i>
+        <span>${message}</span>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Animer l'apparition
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    // Retirer après 3 secondes
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 3000);
+}
