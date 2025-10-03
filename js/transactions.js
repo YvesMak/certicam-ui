@@ -81,11 +81,244 @@ const transactionData = {
         paymentType: 'MTN MoMo',
         amount: '1000 FCFA',
         status: 'valid'
+    },
+    '7891': {
+        number: '7891',
+        date: '13 Mai 2025',
+        product: 'Acte de naissance',
+        category: 'État Civil',
+        institution: 'Mairie',
+        paymentType: 'Orange Money',
+        amount: '500 FCFA',
+        status: 'valid'
+    },
+    '3456': {
+        number: '3456',
+        date: '13 Mai 2025',
+        product: 'Casier judiciaire',
+        category: 'Justice',
+        institution: 'Tribunal',
+        paymentType: 'MTN MoMo',
+        amount: '2000 FCFA',
+        status: 'pending'
+    },
+    '8902': {
+        number: '8902',
+        date: '14 Mai 2025',
+        product: 'Relevé bancaire',
+        category: 'Banque',
+        institution: 'Banque XYZ',
+        paymentType: 'Orange Money',
+        amount: '1500 FCFA',
+        status: 'valid'
+    },
+    '1234': {
+        number: '1234',
+        date: '14 Mai 2025',
+        product: 'Passeport',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'MTN MoMo',
+        amount: '2500 FCFA',
+        status: 'failed'
+    },
+    '5678': {
+        number: '5678',
+        date: '15 Mai 2025',
+        product: 'Certificat de résidence',
+        category: 'Administration',
+        institution: 'Mairie',
+        paymentType: 'Orange Money',
+        amount: '800 FCFA',
+        status: 'valid'
+    },
+    '9012': {
+        number: '9012',
+        date: '15 Mai 2025',
+        product: 'CNI',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'MTN MoMo',
+        amount: '1000 FCFA',
+        status: 'valid'
+    },
+    '3457': {
+        number: '3457',
+        date: '16 Mai 2025',
+        product: 'Attestation de travail',
+        category: 'Emploi',
+        institution: 'Entreprise ABC',
+        paymentType: 'Orange Money',
+        amount: '1200 FCFA',
+        status: 'pending'
+    },
+    '6789': {
+        number: '6789',
+        date: '16 Mai 2025',
+        product: 'Relevé bancaire',
+        category: 'Banque',
+        institution: 'Banque DEF',
+        paymentType: 'MTN MoMo',
+        amount: '1500 FCFA',
+        status: 'valid'
+    },
+    '2345': {
+        number: '2345',
+        date: '17 Mai 2025',
+        product: 'Extrait de naissance',
+        category: 'État Civil',
+        institution: 'Mairie',
+        paymentType: 'Orange Money',
+        amount: '500 FCFA',
+        status: 'valid'
+    },
+    '7890': {
+        number: '7890',
+        date: '17 Mai 2025',
+        product: 'Casier judiciaire',
+        category: 'Justice',
+        institution: 'Tribunal',
+        paymentType: 'MTN MoMo',
+        amount: '2000 FCFA',
+        status: 'failed'
+    },
+    '4568': {
+        number: '4568',
+        date: '18 Mai 2025',
+        product: 'CNI',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'Orange Money',
+        amount: '1000 FCFA',
+        status: 'valid'
+    },
+    '1235': {
+        number: '1235',
+        date: '18 Mai 2025',
+        product: 'Passeport',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'MTN MoMo',
+        amount: '2500 FCFA',
+        status: 'pending'
+    },
+    '8903': {
+        number: '8903',
+        date: '19 Mai 2025',
+        product: 'Relevé bancaire',
+        category: 'Banque',
+        institution: 'Banque GHI',
+        paymentType: 'Orange Money',
+        amount: '1500 FCFA',
+        status: 'valid'
+    },
+    '5679': {
+        number: '5679',
+        date: '19 Mai 2025',
+        product: 'Certificat de mariage',
+        category: 'État Civil',
+        institution: 'Mairie',
+        paymentType: 'MTN MoMo',
+        amount: '1000 FCFA',
+        status: 'valid'
+    },
+    '2346': {
+        number: '2346',
+        date: '20 Mai 2025',
+        product: 'CNI',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'Orange Money',
+        amount: '1000 FCFA',
+        status: 'failed'
+    },
+    '6790': {
+        number: '6790',
+        date: '20 Mai 2025',
+        product: 'Attestation de résidence',
+        category: 'Administration',
+        institution: 'Mairie',
+        paymentType: 'MTN MoMo',
+        amount: '800 FCFA',
+        status: 'valid'
+    },
+    '9013': {
+        number: '9013',
+        date: '21 Mai 2025',
+        product: 'Passeport',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'Orange Money',
+        amount: '2500 FCFA',
+        status: 'pending'
+    },
+    '3458': {
+        number: '3458',
+        date: '21 Mai 2025',
+        product: 'Relevé bancaire',
+        category: 'Banque',
+        institution: 'Banque JKL',
+        paymentType: 'MTN MoMo',
+        amount: '1500 FCFA',
+        status: 'valid'
+    },
+    '7892': {
+        number: '7892',
+        date: '22 Mai 2025',
+        product: 'CNI',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'Orange Money',
+        amount: '1000 FCFA',
+        status: 'valid'
+    },
+    '4569': {
+        number: '4569',
+        date: '22 Mai 2025',
+        product: 'Casier judiciaire',
+        category: 'Justice',
+        institution: 'Tribunal',
+        paymentType: 'MTN MoMo',
+        amount: '2000 FCFA',
+        status: 'failed'
+    },
+    '1236': {
+        number: '1236',
+        date: '23 Mai 2025',
+        product: 'Certificat de scolarité',
+        category: 'Éducation',
+        institution: 'Université',
+        paymentType: 'Orange Money',
+        amount: '1200 FCFA',
+        status: 'valid'
+    },
+    '8904': {
+        number: '8904',
+        date: '23 Mai 2025',
+        product: 'Relevé bancaire',
+        category: 'Banque',
+        institution: 'Banque MNO',
+        paymentType: 'MTN MoMo',
+        amount: '1500 FCFA',
+        status: 'pending'
+    },
+    '5680': {
+        number: '5680',
+        date: '24 Mai 2025',
+        product: 'CNI',
+        category: 'Identité',
+        institution: 'DGSN',
+        paymentType: 'Orange Money',
+        amount: '1000 FCFA',
+        status: 'valid'
     }
 };
 
-// Variables globales pour le système de filtrage
+// Variables globales pour le système de filtrage et pagination
 let originalTransactionRowsOrder = [];
+let currentPage = 1;
+let rowsPerPage = 8;
+let allTransactions = [];
 
 // Fonctions de gestion de l'ordre original des transactions
 function storeOriginalTransactionOrder() {
@@ -302,6 +535,37 @@ function showTransactionReceipt(transaction) {
 // Gestion des événements
 function attachTransactionButtonEvents() {
     console.log('Initialisation des événements...');
+    
+    // Utiliser la délégation d'événements sur le tbody pour les boutons d'action
+    const tbody = document.querySelector('#transactions-table tbody');
+    if (tbody) {
+        tbody.addEventListener('click', function(e) {
+            // Gérer les boutons view-receipt
+            if (e.target.closest('.view-receipt')) {
+                e.preventDefault();
+                const button = e.target.closest('.view-receipt');
+                const transactionNumber = button.getAttribute('data-transaction');
+                const transaction = transactionData[transactionNumber];
+                if (transaction) {
+                    console.log('Voir facture:', transactionNumber);
+                    showTransactionReceipt(transaction);
+                }
+            }
+            
+            // Gérer les boutons retry-payment
+            if (e.target.closest('.retry-payment')) {
+                e.preventDefault();
+                const button = e.target.closest('.retry-payment');
+                const transactionNumber = button.getAttribute('data-transaction');
+                const transaction = transactionData[transactionNumber];
+                if (transaction) {
+                    console.log('Relancer paiement:', transactionNumber);
+                    retryPayment(transaction);
+                }
+            }
+        });
+        console.log('✅ Événements des boutons d\'action attachés au tbody');
+    }
     
     document.addEventListener('click', function(e) {
         // Fermer dropdowns si clic ailleurs
@@ -819,26 +1083,271 @@ function initRowsPerPageSelector() {
             
             console.log(`📊 Nombre de transactions par page: ${value}`);
             
-            // Ici vous pouvez ajouter la logique pour afficher le bon nombre de transactions
-            // Par exemple: updateTransactionsDisplay(value);
+            // Mettre à jour le nombre de lignes par page et réafficher
+            rowsPerPage = value;
+            currentPage = 1; // Retour à la première page
+            renderTransactionsPage();
         });
     });
 
     console.log('✅ Sélecteur de pagination initialisé');
 }
 
+// Fonction pour convertir transactionData en array
+function getTransactionsArray() {
+    return Object.values(transactionData);
+}
+
+// Fonction pour rendre les transactions dans le tableau
+function renderTransactionsPage() {
+    const tbody = document.querySelector('#transactions-table tbody');
+    if (!tbody) {
+        console.error('❌ Table tbody introuvable');
+        return;
+    }
+
+    // Obtenir toutes les transactions
+    allTransactions = getTransactionsArray();
+    const totalTransactions = allTransactions.length;
+    const totalPages = Math.ceil(totalTransactions / rowsPerPage);
+
+    // S'assurer que currentPage est valide
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    // Calculer les indices de début et fin
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = Math.min(startIndex + rowsPerPage, totalTransactions);
+
+    // Effacer le tbody
+    tbody.innerHTML = '';
+
+    // Afficher les transactions de la page actuelle
+    const transactionsToShow = allTransactions.slice(startIndex, endIndex);
+    
+    transactionsToShow.forEach(transaction => {
+        const row = createTransactionRow(transaction);
+        tbody.appendChild(row);
+    });
+
+    // Mettre à jour les contrôles de pagination
+    updatePaginationControls(totalPages, totalTransactions);
+
+    console.log(`📄 Page ${currentPage}/${totalPages} - Affichage de ${transactionsToShow.length} transactions (${startIndex + 1}-${endIndex} sur ${totalTransactions})`);
+}
+
+// Fonction pour créer une ligne de transaction
+function createTransactionRow(transaction) {
+    const tr = document.createElement('tr');
+    
+    // Déterminer la classe de statut
+    let statusClass = '';
+    let statusText = '';
+    if (transaction.status === 'valid') {
+        statusClass = 'success';
+        statusText = 'Réussite';
+    } else if (transaction.status === 'pending') {
+        statusClass = 'pending';
+        statusText = 'En attente';
+    } else if (transaction.status === 'failed') {
+        statusClass = 'error';
+        statusText = 'Échec';
+    }
+
+    // Déterminer le logo de paiement
+    const paymentLogo = transaction.paymentType.includes('Orange') 
+        ? '<img src="img/orange-logo.png" alt="Orange Money" class="payment-logo">'
+        : '<img src="img/mtn-logo.png" alt="MTN MoMo" class="payment-logo">';
+
+    tr.innerHTML = `
+        <td>
+            <div class="transaction-info">
+                <span class="transaction-number">TXN-${transaction.number}</span>
+                <span class="transaction-date">${transaction.date}</span>
+            </div>
+        </td>
+        <td>
+            <div class="transaction-info">
+                <span class="transaction-number">${transaction.product}</span>
+                <span class="transaction-date">${transaction.category}</span>
+            </div>
+        </td>
+        <td>${transaction.institution}</td>
+        <td>
+            <div class="payment-type">
+                ${paymentLogo}
+                <span>${transaction.paymentType}</span>
+            </div>
+        </td>
+        <td><strong class="amount">${transaction.amount}</strong></td>
+        <td><span class="status ${statusClass}">${statusText}</span></td>
+        <td>
+            <div class="actions">
+                <div class="dropdown">
+                    <button class="dropdown-toggle action-button" aria-label="Actions">
+                        <i class="fi fi-rr-menu-dots-vertical"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <button class="dropdown-item view-receipt" data-transaction="${transaction.number}">
+                            <i class="fi fi-rr-eye"></i>
+                            <span>Voir la facture</span>
+                        </button>
+                        <button class="dropdown-item download-receipt" data-transaction="${transaction.number}">
+                            <i class="fi fi-rr-download"></i>
+                            <span>Télécharger le reçu</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </td>
+    `;
+
+    return tr;
+}
+
+// Fonction pour mettre à jour les contrôles de pagination
+function updatePaginationControls(totalPages, totalTransactions) {
+    // Mettre à jour les numéros de page
+    const pageNumbersContainer = document.querySelector('.page-numbers');
+    if (pageNumbersContainer) {
+        pageNumbersContainer.innerHTML = '';
+        
+        // Logique d'affichage des numéros de pages
+        if (totalPages <= 7) {
+            // Afficher toutes les pages si 7 ou moins
+            for (let i = 1; i <= totalPages; i++) {
+                const span = document.createElement('span');
+                span.textContent = i;
+                if (i === currentPage) span.classList.add('active');
+                span.addEventListener('click', () => goToPage(i));
+                pageNumbersContainer.appendChild(span);
+            }
+        } else {
+            // Afficher avec ellipses
+            // Toujours afficher page 1
+            const span1 = document.createElement('span');
+            span1.textContent = '1';
+            if (currentPage === 1) span1.classList.add('active');
+            span1.addEventListener('click', () => goToPage(1));
+            pageNumbersContainer.appendChild(span1);
+
+            // Si currentPage > 3, ajouter ellipse
+            if (currentPage > 3) {
+                const dots = document.createElement('span');
+                dots.textContent = '...';
+                dots.classList.add('dots');
+                pageNumbersContainer.appendChild(dots);
+            }
+
+            // Pages autour de currentPage
+            const startPage = Math.max(2, currentPage - 1);
+            const endPage = Math.min(totalPages - 1, currentPage + 1);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const span = document.createElement('span');
+                span.textContent = i;
+                if (i === currentPage) span.classList.add('active');
+                span.addEventListener('click', () => goToPage(i));
+                pageNumbersContainer.appendChild(span);
+            }
+
+            // Si currentPage < totalPages - 2, ajouter ellipse
+            if (currentPage < totalPages - 2) {
+                const dots = document.createElement('span');
+                dots.textContent = '...';
+                dots.classList.add('dots');
+                pageNumbersContainer.appendChild(dots);
+            }
+
+            // Toujours afficher dernière page
+            const spanLast = document.createElement('span');
+            spanLast.textContent = totalPages;
+            if (currentPage === totalPages) spanLast.classList.add('active');
+            spanLast.addEventListener('click', () => goToPage(totalPages));
+            pageNumbersContainer.appendChild(spanLast);
+        }
+    }
+
+    // Mettre à jour les boutons précédent/suivant
+    const prevButton = document.querySelector('.prev-button');
+    const nextButton = document.querySelector('.next-button');
+
+    if (prevButton) {
+        if (currentPage === 1) {
+            prevButton.classList.add('disabled');
+            prevButton.disabled = true;
+        } else {
+            prevButton.classList.remove('disabled');
+            prevButton.disabled = false;
+        }
+    }
+
+    if (nextButton) {
+        if (currentPage === totalPages) {
+            nextButton.classList.add('disabled');
+            nextButton.disabled = true;
+        } else {
+            nextButton.classList.remove('disabled');
+            nextButton.disabled = false;
+        }
+    }
+
+    console.log(`📊 Pagination mise à jour: Page ${currentPage}/${totalPages}`);
+}
+
+// Fonction pour aller à une page spécifique
+function goToPage(pageNumber) {
+    currentPage = pageNumber;
+    renderTransactionsPage();
+}
+
+// Initialiser les boutons de navigation
+function initPaginationButtons() {
+    const prevButton = document.querySelector('.prev-button');
+    const nextButton = document.querySelector('.next-button');
+
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTransactionsPage();
+            }
+        });
+    }
+
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            const totalPages = Math.ceil(allTransactions.length / rowsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTransactionsPage();
+            }
+        });
+    }
+
+    console.log('✅ Boutons de pagination initialisés');
+}
+
 // Initialisation de la page
 function initTransactionsPage() {
     console.log('Initialisation de la page transactions...');
     
-    // Sauvegarder l'ordre original des lignes
-    storeOriginalTransactionOrder();
+    // Rendre les transactions avec pagination
+    renderTransactionsPage();
+    
+    // Sauvegarder l'ordre original des lignes (après le rendu initial)
+    setTimeout(() => {
+        storeOriginalTransactionOrder();
+    }, 100);
     
     // Initialiser les event listeners pour le système de filtrage
     initTransactionFiltering();
     
     // Initialiser le sélecteur de pagination
     initRowsPerPageSelector();
+    
+    // Initialiser les boutons de pagination
+    initPaginationButtons();
     
     // Initialiser les autres fonctionnalités
     attachTransactionButtonEvents();

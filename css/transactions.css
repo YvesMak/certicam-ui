@@ -20,20 +20,23 @@ main {
 }
 
 /* Structure de transaction similaire aux documents */
-.transaction-info {
+.transaction-info,
+.document-info {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xxs);
 }
 
-.transaction-number {
+.transaction-number,
+.document-name {
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
     font-family: var(--font-family);
     font-size: var(--font-size-body-md);
 }
 
-.transaction-date {
+.transaction-date,
+.document-category {
     font-size: var(--font-size-label-sm);
     color: var(--color-text-secondary);
     font-family: var(--font-family);
@@ -84,6 +87,7 @@ main {
     color: var(--color-text-primary);
     vertical-align: middle;
     height: 85px;
+    border-bottom: 1px solid var(--color-gray-100);
 }
 
 .transactions-table thead th {
@@ -126,6 +130,7 @@ main {
     width: 20px;
     height: 20px;
     object-fit: contain;
+    vertical-align: middle;
 }
 
 .amount {
