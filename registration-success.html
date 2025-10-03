@@ -5,229 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Félicitations - Certicam</title>
     <link rel="stylesheet" href="css/tokens.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            background: #f5f7fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .success-container {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 60px 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .success-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #00D4AA, #4CAF50, #2196F3);
-        }
-
-        .logo {
-            margin-bottom: 40px;
-        }
-
-        .logo img {
-            height: 50px;
-        }
-
-        .success-icon {
-            width: 100px;
-            height: 100px;
-            background: linear-gradient(135deg, #4CAF50, #45a049);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 3rem;
-            color: white;
-            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.3);
-            animation: successPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes successPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .success-title {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 16px;
-        }
-
-        .success-subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 40px;
-        }
-
-        .success-details {
-            background: #f8fffe;
-            border: 1px solid #e0f2f1;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 40px;
-            text-align: left;
-        }
-
-        .success-details h3 {
-            color: #00695c;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-        }
-
-        .success-details p {
-            color: #00695c;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin: 0;
-        }
-
-        .access-btn {
-            width: 100%;
-            padding: 18px;
-            background: #2d3436;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .access-btn:hover {
-            background: #636e72;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(45, 52, 54, 0.3);
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: #00D4AA;
-            animation: confetti-fall 3s linear infinite;
-        }
-
-        .confetti:nth-child(2) { left: 20%; background: #4CAF50; animation-delay: 0.5s; }
-        .confetti:nth-child(3) { left: 40%; background: #2196F3; animation-delay: 1s; }
-        .confetti:nth-child(4) { left: 60%; background: #FF9800; animation-delay: 1.5s; }
-        .confetti:nth-child(5) { left: 80%; background: #E91E63; animation-delay: 2s; }
-
-        @keyframes confetti-fall {
-            0% {
-                top: -10px;
-                opacity: 1;
-                transform: rotate(0deg);
-            }
-            100% {
-                top: 100%;
-                opacity: 0;
-                transform: rotate(720deg);
-            }
-        }
-
-        .floating-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .floating-element {
-            position: absolute;
-            color: rgba(0, 212, 170, 0.1);
-            font-size: 1.5rem;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .floating-element:nth-child(1) {
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .floating-element:nth-child(2) {
-            top: 20%;
-            right: 10%;
-            animation-delay: 2s;
-        }
-
-        .floating-element:nth-child(3) {
-            bottom: 20%;
-            left: 15%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-
-        @media (max-width: 768px) {
-            .success-container {
-                margin: 20px;
-                padding: 40px 30px;
-            }
-
-            .success-title {
-                font-size: 1.5rem;
-            }
-
-            .success-subtitle {
-                font-size: 1rem;
-            }
-        }
-
-        /* Additional animations */
-        .success-container {
-            animation: slideIn 0.8s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/registration-success.css">
 </head>
 <body>
     <div class="success-container">
@@ -270,11 +48,6 @@
     </div>
 
     <script>
-        // Auto-redirect after 10 seconds
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 10000);
-
         // Create additional confetti elements
         function createConfetti() {
             for (let i = 0; i < 10; i++) {
@@ -283,7 +56,11 @@
                     confetti.className = 'confetti';
                     confetti.style.left = Math.random() * 100 + '%';
                     confetti.style.animationDelay = Math.random() * 2 + 's';
-                    confetti.style.background = ['#00D4AA', '#4CAF50', '#2196F3', '#FF9800', '#E91E63'][Math.floor(Math.random() * 5)];
+                    
+                    // Use design token colors
+                    const colors = ['#00c36c', '#10B981', '#00a559', '#F59E0B', '#dcfce7'];
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
                     document.querySelector('.success-container').appendChild(confetti);
                     
                     setTimeout(() => {

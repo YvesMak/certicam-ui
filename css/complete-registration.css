@@ -1,0 +1,393 @@
+/* Complete Registration Page Styles - Certicam - Clean Flat Design */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-gray-50);
+    padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.complete-registration-container {
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.header {
+    text-align: center;
+    padding: var(--spacing-2xl) var(--spacing-2xl) var(--spacing-lg);
+    background: var(--color-white);
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.logo img {
+    height: 32px;
+}
+
+.header-title {
+    font-size: var(--font-size-heading-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+}
+
+.header-subtitle {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
+    line-height: 1.5;
+}
+
+.form-container {
+    padding: var(--spacing-lg) var(--spacing-2xl) var(--spacing-2xl);
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.form-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.form-label {
+    display: block;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    margin-bottom: var(--spacing-xs);
+    font-size: var(--font-size-body-sm);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-body-sm);
+    font-family: var(--font-family);
+    color: var(--color-text-primary);
+    background: var(--color-surface-secondary);
+    transition: all 0.3s ease;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-border-active);
+    box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.1);
+    background: var(--color-white);
+}
+
+.form-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.form-input:disabled {
+    background: var(--color-gray-100);
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+    border-color: var(--color-gray-200);
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body-lg);
+    padding: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+    color: var(--color-text-secondary);
+}
+
+.password-requirements {
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-body-sm);
+}
+
+.requirement {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-xxs);
+    color: var(--color-text-secondary);
+    transition: color 0.2s ease;
+}
+
+.requirement:last-child {
+    margin-bottom: 0;
+}
+
+.requirement.valid {
+    color: var(--color-success);
+}
+
+.requirement.invalid {
+    color: var(--color-error);
+}
+
+.requirement-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.terms-section {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-md);
+    background: var(--color-surface-secondary);
+    border-radius: var(--radius-md);
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-green);
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid var(--color-gray-300);
+    background-color: var(--color-white);
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: var(--color-green);
+    border-color: var(--color-green);
+}
+
+.checkbox-container label {
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    font-size: var(--font-size-body-sm);
+    cursor: pointer;
+}
+
+.terms-link {
+    color: var(--color-text-interactive);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+.continue-btn {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--color-button-bg-primary);
+    color: var(--color-button-label-primary);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-body-sm);
+    font-weight: var(--font-weight-medium);
+    font-family: var(--font-family);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.continue-btn:hover {
+    background: var(--color-gray-900-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.continue-btn:active {
+    transform: translateY(0);
+}
+
+.continue-btn:disabled {
+    background: var(--color-gray-200);
+    color: var(--color-text-muted);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.continue-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+    position: relative;
+}
+
+.continue-btn.loading::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--color-button-label-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: var(--spacing-xs);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-message {
+    color: var(--color-error);
+    font-size: var(--font-size-body-xs);
+    margin-top: var(--spacing-xxs);
+    display: none;
+}
+
+.form-input.error {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+/* Responsive Design - Mobile First */
+
+/* Mobile - Small (320px - 479px) */
+@media (max-width: 479px) {
+    body {
+        padding: var(--spacing-sm);
+    }
+
+    .complete-registration-container {
+        border-radius: var(--radius-md);
+    }
+
+    .header {
+        padding: var(--spacing-xl) var(--spacing-md) var(--spacing-md);
+    }
+
+    .header-title {
+        font-size: var(--font-size-heading-md);
+    }
+
+    .form-container {
+        padding: var(--spacing-md) var(--spacing-md) var(--spacing-xl);
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+
+    .form-input {
+        font-size: var(--font-size-body-md);
+        padding: var(--spacing-md) var(--spacing-sm);
+    }
+
+    .password-toggle {
+        right: var(--spacing-sm);
+    }
+}
+
+/* Mobile - Medium (480px - 639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+    .complete-registration-container {
+        border-radius: var(--radius-md);
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+}
+
+/* Tablet - Small (640px - 767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+    .form-row {
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Tablet - Large (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    body {
+        padding: var(--spacing-2xl) var(--spacing-lg);
+    }
+
+    .complete-registration-container {
+        max-width: 640px;
+    }
+}
+
+/* Desktop - Small (1024px - 1199px) */
+@media (min-width: 1024px) {
+    .complete-registration-container {
+        max-width: 680px;
+    }
+}
+
+/* Desktop - Large (1200px+) */
+@media (min-width: 1200px) {
+    body {
+        padding: var(--spacing-3xl) var(--spacing-2xl);
+    }
+
+    .header {
+        padding: var(--spacing-3xl) var(--spacing-2xl) var(--spacing-xl);
+    }
+
+    .form-container {
+        padding: var(--spacing-xl) var(--spacing-3xl) var(--spacing-3xl);
+    }
+}
+
+/* High Resolution Displays */
+@media (min-width: 1920px) {
+    .complete-registration-container {
+        max-width: 720px;
+    }
+
+    .header-title {
+        font-size: var(--font-size-heading-xl);
+    }
+}
