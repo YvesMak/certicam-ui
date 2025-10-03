@@ -534,45 +534,81 @@ function showTransactionReceipt(transaction) {
 
 // Gestion des événements
 function attachTransactionButtonEvents() {
-    console.log('Initialisation des événements...');
+    console.log('🔧 Initialisation des événements des transactions...');
     
     // Utiliser la délégation d'événements sur le tbody pour les boutons d'action
     const tbody = document.querySelector('#transactions-table tbody');
     if (tbody) {
         tbody.addEventListener('click', function(e) {
+            console.log('👆 Clic dans tbody détecté');
+            
             // Gérer les boutons view-receipt
             if (e.target.closest('.view-receipt')) {
                 e.preventDefault();
+                console.log('✅ Bouton view-receipt détecté');
                 const button = e.target.closest('.view-receipt');
                 const transactionNumber = button.getAttribute('data-transaction');
+                console.log('📄 Transaction number:', transactionNumber);
                 const transaction = transactionData[transactionNumber];
                 if (transaction) {
-                    console.log('Voir facture:', transactionNumber);
+                    console.log('📊 Transaction trouvée:', transaction);
                     showTransactionReceipt(transaction);
+                } else {
+                    console.error('❌ Transaction non trouvée:', transactionNumber);
                 }
             }
             
             // Gérer les boutons retry-payment
             if (e.target.closest('.retry-payment')) {
                 e.preventDefault();
+                console.log('✅ Bouton retry-payment détecté');
                 const button = e.target.closest('.retry-payment');
                 const transactionNumber = button.getAttribute('data-transaction');
                 const transaction = transactionData[transactionNumber];
                 if (transaction) {
-                    console.log('Relancer paiement:', transactionNumber);
+                    console.log('🔄 Relancer paiement:', transactionNumber);
                     retryPayment(transaction);
                 }
             }
+            
+            // Gérer les boutons download-receipt
+            if (e.target.closest('.download-receipt')) {
+                e.preventDefault();
+                console.log('✅ Bouton download-receipt détecté');
+                const button = e.target.closest('.download-receipt');
+                const transactionNumber = button.getAttribute('data-transaction');
+                const transaction = transactionData[transactionNumber];
+                if (transaction) {
+                    console.log('⬇️ Télécharger reçu:', transactionNumber);
+                    downloadReceipt(transaction);
+                }
+            }
+            
+            // Gérer les boutons contact-support
+            if (e.target.closest('.contact-support')) {
+                e.preventDefault();
+                console.log('✅ Bouton contact-support détecté');
+                console.log('📧 Redirection vers support.html');
+                window.location.href = 'support.html';
+            }
         });
         console.log('✅ Événements des boutons d\'action attachés au tbody');
+    } else {
+        console.error('❌ Tbody non trouvé');
     }
     
     document.addEventListener('click', function(e) {
+        console.log('👆 Clic dans document détecté', e.target);
+        
         // Fermer dropdowns si clic ailleurs
         if (!e.target.closest('.dropdown')) {
-            document.querySelectorAll('.dropdown-menu.active').forEach(menu => {
-                menu.classList.remove('active');
-            });
+            const activeMenus = document.querySelectorAll('.dropdown-menu.active');
+            if (activeMenus.length > 0) {
+                console.log('🔒 Fermeture des dropdowns actifs');
+                activeMenus.forEach(menu => {
+                    menu.classList.remove('active');
+                });
+            }
         }
         
         // Ouvrir/fermer dropdown
@@ -580,9 +616,13 @@ function attachTransactionButtonEvents() {
             e.preventDefault();
             e.stopPropagation();
             
+            console.log('🔽 Dropdown toggle cliqué');
+            
             const button = e.target.closest('.dropdown-toggle');
             const dropdown = button.closest('.dropdown');
             const menu = dropdown.querySelector('.dropdown-menu');
+            
+            console.log('📋 Menu trouvé:', menu ? 'Oui' : 'Non');
             
             // Fermer autres menus
             document.querySelectorAll('.dropdown-menu.active').forEach(otherMenu => {
@@ -593,43 +633,14 @@ function attachTransactionButtonEvents() {
             
             // Toggle menu actuel
             if (menu) {
+                const wasActive = menu.classList.contains('active');
                 menu.classList.toggle('active');
-            }
-        }
-        
-        // Actions dans dropdown
-        if (e.target.closest('.dropdown-item')) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            const item = e.target.closest('.dropdown-item');
-            const dropdown = item.closest('.dropdown');
-            const button = dropdown.querySelector('.dropdown-toggle');
-            const transactionId = button.getAttribute('data-transaction');
-            const transaction = transactionData[transactionId];
-            
-            console.log('Action sélectionnée. Classes:', item.className);
-            console.log('ID transaction:', transactionId);
-            console.log('Données transaction:', transaction);
-            
-            // Fermer dropdown
-            dropdown.querySelector('.dropdown-menu').classList.remove('active');
-            
-            if (item.classList.contains('view-receipt')) {
-                console.log('Déclenchement "Voir facture"');
-                showTransactionReceipt(transaction);
-            } else if (item.classList.contains('download-receipt')) {
-                console.log('Déclenchement "Télécharger facture"');
-                downloadReceipt(transaction);
-            } else if (item.classList.contains('retry-payment')) {
-                console.log('Déclenchement "Relancer paiement"');
-                retryPayment(transaction);
-            } else if (item.classList.contains('contact-support')) {
-                console.log('Redirection vers support');
-                window.location.href = 'support.html';
+                console.log('🔄 Menu maintenant:', wasActive ? 'fermé' : 'ouvert');
             }
         }
     });
+    
+    console.log('✅ Tous les gestionnaires d\'événements attachés');
 }
 
 // Fonction pour télécharger la facture
