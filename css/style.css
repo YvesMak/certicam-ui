@@ -2273,6 +2273,39 @@ i {
     .logout-modal-actions button {
         width: 100%;
     }
+    
+    /* Pagination responsive */
+    .pagination {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        padding: 0;
+    }
+    
+    .pagination-controls {
+        order: 1;
+        width: 100%;
+    }
+    
+    .rows-per-page {
+        order: 2;
+        width: 100%;
+    }
+    
+    .selector-wrapper {
+        width: 100%;
+    }
+    
+    .pagination-buttons {
+        order: 3;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .prev-button,
+    .next-button {
+        flex: 1;
+        max-width: calc(50% - var(--spacing-xs));
+    }
 }
 
 /* Mobile Large - max 640px */
@@ -2363,6 +2396,24 @@ i {
         align-items: flex-start;
         gap: var(--spacing-2xs);
     }
+    
+    /* Pagination - compact version */
+    .page-numbers {
+        gap: var(--spacing-2xs);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .page-numbers span {
+        min-width: 36px;
+        padding: var(--spacing-2xs) var(--spacing-sm);
+        font-size: var(--font-size-body-xs);
+    }
+    
+    /* Hide middle page numbers on mobile, keep first, last and current */
+    .page-numbers span:nth-child(n+4):nth-last-child(n+4):not(.active):not(.dots) {
+        display: none;
+    }
 }
 
 /* Mobile - max 480px */
@@ -2437,6 +2488,36 @@ i {
     .logout-modal-message {
         font-size: var(--font-size-body-sm);
     }
+    
+    /* Pagination - ultra compact */
+    .prev-button,
+    .next-button {
+        width: auto;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        font-size: var(--font-size-body-xs);
+    }
+    
+    /* Show only icons on very small screens */
+    .prev-button span:not(.fi),
+    .next-button span:not(.fi) {
+        display: none;
+    }
+    
+    .prev-button,
+    .next-button {
+        min-width: 44px;
+        justify-content: center;
+    }
+    
+    .page-numbers span {
+        min-width: 32px;
+        padding: var(--spacing-2xs);
+    }
+    
+    /* Show only 3 page numbers max */
+    .page-numbers span:nth-child(n+3):nth-last-child(n+3):not(.active):not(.dots) {
+        display: none;
+    }
 }
 
 /* Mobile Small - max 375px */
@@ -2459,6 +2540,21 @@ i {
     
     .filter-chip {
         flex: 1 1 100%;
+    }
+    
+    /* Pagination - minimal */
+    .pagination {
+        gap: var(--spacing-sm);
+    }
+    
+    .selector-wrapper {
+        font-size: var(--font-size-body-xs);
+        padding: var(--spacing-2xs) var(--spacing-sm);
+        height: 36px;
+    }
+    
+    .current-selection {
+        font-size: var(--font-size-body-xs);
     }
 }
 
