@@ -283,6 +283,19 @@ main {
     color: var(--color-text-secondary);
 }
 
+/* Style spécial pour l'option "Annuler la transaction" en vert */
+.dropdown-item.cancel-transaction {
+    color: var(--color-green);
+}
+
+.dropdown-item.cancel-transaction i {
+    color: var(--color-green);
+}
+
+.dropdown-item.cancel-transaction:hover {
+    background: var(--color-status-success-bg);
+}
+
 /* Modal styles */
 .modal-overlay {
     position: fixed;

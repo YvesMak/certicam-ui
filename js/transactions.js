@@ -618,6 +618,9 @@ function attachTransactionButtonEvents() {
             if (item.classList.contains('view-receipt')) {
                 console.log('Déclenchement "Voir facture"');
                 showTransactionReceipt(transaction);
+            } else if (item.classList.contains('view-transaction')) {
+                console.log('Déclenchement "Voir la transaction"');
+                showTransactionReceipt(transaction);
             } else if (item.classList.contains('download-receipt')) {
                 console.log('Déclenchement "Télécharger facture"');
                 downloadReceipt(transaction);
@@ -629,7 +632,7 @@ function attachTransactionButtonEvents() {
                 cancelTransaction(transaction);
             } else if (item.classList.contains('contact-support')) {
                 console.log('Redirection vers support');
-                window.location.href = '/support.html';
+                window.location.href = 'support.html';
             }
         }
     });
@@ -1159,6 +1162,59 @@ function createTransactionRow(transaction) {
         ? '<img src="img/orange-logo.png" alt="Orange Money" class="payment-logo">'
         : '<img src="img/mtn-logo.png" alt="MTN MoMo" class="payment-logo">';
 
+    // Créer le menu contextuel selon le statut
+    let dropdownMenuContent = '';
+    
+    if (transaction.status === 'valid') {
+        // Transaction réussie - Options: Voir la transaction, Télécharger le reçu, Contacter le support
+        dropdownMenuContent = `
+            <button class="dropdown-item view-transaction" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-eye"></i>
+                <span>Voir la transaction</span>
+            </button>
+            <button class="dropdown-item download-receipt" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-download"></i>
+                <span>Télécharger le reçu</span>
+            </button>
+            <button class="dropdown-item contact-support" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-envelope"></i>
+                <span>Contacter le support</span>
+            </button>
+        `;
+    } else if (transaction.status === 'pending') {
+        // Transaction en attente - Options: Voir la transaction, Annuler la transaction, Contacter le support
+        dropdownMenuContent = `
+            <button class="dropdown-item view-transaction" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-eye"></i>
+                <span>Voir la transaction</span>
+            </button>
+            <button class="dropdown-item cancel-transaction" data-transaction="${transaction.number}" style="color: var(--color-green);">
+                <i class="fi fi-rr-cross-circle" style="color: var(--color-green);"></i>
+                <span>Annuler la transaction</span>
+            </button>
+            <button class="dropdown-item contact-support" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-envelope"></i>
+                <span>Contacter le support</span>
+            </button>
+        `;
+    } else if (transaction.status === 'failed') {
+        // Transaction échouée - Options: Voir la transaction, Relancer le paiement, Contacter le support
+        dropdownMenuContent = `
+            <button class="dropdown-item view-transaction" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-eye"></i>
+                <span>Voir la transaction</span>
+            </button>
+            <button class="dropdown-item retry-payment" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-refresh"></i>
+                <span>Relancer le paiement</span>
+            </button>
+            <button class="dropdown-item contact-support" data-transaction="${transaction.number}">
+                <i class="fi fi-rr-envelope"></i>
+                <span>Contacter le support</span>
+            </button>
+        `;
+    }
+
     tr.innerHTML = `
         <td>
             <div class="transaction-info">
@@ -1184,18 +1240,11 @@ function createTransactionRow(transaction) {
         <td>
             <div class="actions">
                 <div class="dropdown">
-                    <button class="dropdown-toggle action-button" aria-label="Actions">
+                    <button class="dropdown-toggle action-button" aria-label="Actions" data-status="${transaction.status}">
                         <i class="fi fi-rr-menu-dots-vertical"></i>
                     </button>
                     <div class="dropdown-menu">
-                        <button class="dropdown-item view-receipt" data-transaction="${transaction.number}">
-                            <i class="fi fi-rr-eye"></i>
-                            <span>Voir la facture</span>
-                        </button>
-                        <button class="dropdown-item download-receipt" data-transaction="${transaction.number}">
-                            <i class="fi fi-rr-download"></i>
-                            <span>Télécharger le reçu</span>
-                        </button>
+                        ${dropdownMenuContent}
                     </div>
                 </div>
             </div>
