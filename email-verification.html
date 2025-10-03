@@ -1,110 +1,71 @@
-<!DOCTYPE html><!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification email - Certicam</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/email-verification.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+</head>
+<body>
+    <div class="email-verification-container">
+        <div class="header">
+            <div class="logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam">
+            </div>
+            <div class="email-icon">
+                <i class="fi fi-rr-envelope"></i>
+            </div>
+            <h1 class="verification-title">Vérifiez votre email</h1>
+            <p class="verification-subtitle">
+                Un email de vérification a été envoyé à<br>
+                <span class="user-email" id="user-email">cococobango@gmail.com</span>
+            </p>
+        </div>
 
-<html lang="fr"><html lang="fr">
-
-<head><head>
-
-    <meta charset="UTF-8">    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Vérification email - Certicam</title>    <title>Vérification email - Certicam</title>
-
-    <link rel="stylesheet" href="css/tokens.css">    <link rel="stylesheet" href="css/tokens.css">
-
-    <link rel="stylesheet" href="css/email-verification.css">    <link rel="stylesheet" href="css/email-verification.css">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"></head>
-
-</head><body>
-
-<body>    <div class="email-verification-container">
-
-    <div class="verification-container">        <div class="verification-left">
-
-        <div class="verification-icon">            <div class="logo">
-
-            <svg viewBox="0 0 24 24" fill="currentColor">                <img src="img/certicam-main-logo.png" alt="Certicam">
-
-                <path d="M12 2L3 7l9 5 9-5-9-5zM3 17l9 5 9-5M3 12l9 5 9-5"/>            </div>
-
-            </svg>            
-
-        </div>            <div class="email-icon">
-
-                        ✉️
-
-        <h1 class="verification-title">Vérifiez votre email</h1>            </div>
-
-        
-
-        <div class="verification-message">            <div class="verification-message">
-
-            <p>Nous avons envoyé un email de vérification à :</p>                <p>Vous allez recevoir un mail à l'adresse <strong class="user-email" id="user-email">cococobango@gmail.com</strong></p>
-
-            <p><span class="email-address" id="user-email">votre.email@exemple.com</span></p>                <p>cliquez sur le lien pour continuer l'inscription.</p>
-
-        </div>            </div>
-
-
-
-        <div class="verification-steps">            <button type="button" class="check-email-btn" onclick="checkEmail()">
-
-            <h3>Instructions :</h3>                Vérifier ses mails
-
-            <ol>            </button>
-
-                <li>Vérifiez votre boîte de réception (et vos spams)</li>        </div>
-
-                <li>Cliquez sur le lien de vérification dans l'email</li>
-
-                <li>Revenez ici pour continuer votre inscription</li>        <div class="verification-right">
-
-            </ol>            <div class="floating-icons">
-
-        </div>                <div class="floating-icon icon-1">📧</div>
-
-                <div class="floating-icon icon-2">✉️</div>
-
-        <div class="action-buttons">                <div class="floating-icon icon-3">✓</div>
-
-            <button type="button" class="btn-primary" onclick="checkEmail()">            </div>
-
-                J'ai vérifié mon email            
-
-            </button>            <div class="security-graphic">
-
-                            <div class="shield">
-
-            <button type="button" class="btn-secondary" onclick="resendEmail()">                    <div class="check-mark">✓</div>
-
-                Renvoyer l'email                    <div class="fingerprint"></div>
-
-            </button>                    <div class="lock-icon">🔒</div>
-
-        </div>                    <div class="password-dots">
-
-                        <div class="dot"></div>
-
-        <div class="countdown" id="countdown"></div>                        <div class="dot"></div>
-
-                        <div class="dot"></div>
-
-        <div class="back-link">                        <div class="dot"></div>
-
-            <a href="register.html">← Retour à l'inscription</a>                        <div class="dot"></div>
-
-        </div>                    </div>
-
-    </div>                </div>
-
+        <div class="verification-content">
+            <div class="verification-steps">
+                <h3><i class="fi fi-rr-list-check"></i> Instructions</h3>
+                <ol>
+                    <li>
+                        <i class="fi fi-rr-inbox"></i>
+                        <span>Vérifiez votre boîte de réception (et vos spams)</span>
+                    </li>
+                    <li>
+                        <i class="fi fi-rr-cursor-finger"></i>
+                        <span>Cliquez sur le lien de vérification dans l'email</span>
+                    </li>
+                    <li>
+                        <i class="fi fi-rr-arrow-alt-circle-right"></i>
+                        <span>Revenez ici pour continuer votre inscription</span>
+                    </li>
+                </ol>
             </div>
 
-    <script src="js/email-verification.js"></script>        </div>
+            <div class="action-buttons">
+                <button type="button" class="btn-primary" onclick="checkEmail()">
+                    <i class="fi fi-rr-check"></i> J'ai vérifié mon email
+                </button>
 
-</body>    </div>
+                <button type="button" class="btn-secondary" onclick="resendEmail()">
+                    <i class="fi fi-rr-refresh"></i> Renvoyer l'email
+                </button>
+            </div>
 
-</html>
+            <div class="countdown" id="countdown"></div>
+
+            <div class="info-box">
+                <i class="fi fi-rr-info"></i>
+                <p>Vous n'avez pas reçu d'email ? Vérifiez vos spams ou cliquez sur "Renvoyer l'email"</p>
+            </div>
+
+            <div class="back-link">
+                <a href="register.html"><i class="fi fi-rr-arrow-left"></i> Retour à l'inscription</a>
+            </div>
+        </div>
+    </div>
+
     <script src="js/email-verification.js"></script>
 </body>
 </html>

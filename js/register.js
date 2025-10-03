@@ -351,6 +351,20 @@ class RegisterForm {
     }
 
     handleRegistrationSuccess() {
+        // Save registration data to sessionStorage
+        const firstname = document.getElementById('firstname').value.trim();
+        const lastname = document.getElementById('lastname').value.trim();
+        const email = document.getElementById('email').value.trim();
+        
+        const registrationData = {
+            firstname,
+            lastname,
+            email,
+            timestamp: Date.now()
+        };
+        
+        sessionStorage.setItem('registration_data', JSON.stringify(registrationData));
+        
         // Show success message
         this.showSuccessMessage();
         
