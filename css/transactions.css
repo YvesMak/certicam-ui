@@ -722,7 +722,7 @@ main {
     border-radius: 0 0 var(--radius-xl) var(--radius-xl);
     display: flex;
     gap: var(--spacing-md);
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .modal-actions .btn {
@@ -742,15 +742,15 @@ main {
 }
 
 .modal-actions .btn-secondary {
-    background: transparent;
-    color: var(--color-text-secondary);
+    background: var(--color-button-bg-primary);
+    color: var(--color-button-label-primary);
     border-color: var(--color-gray-300);
 }
 
 .modal-actions .btn-secondary:hover {
-    background: var(--color-gray-100);
-    color: var(--color-text-primary);
-    border-color: var(--color-gray-400);
+    background: var(--color-gray-900);
+    color: var(--color-button-label-primary);
+    border-color: var(--color-gray-800);
 }
 
 .modal-actions .btn-primary {

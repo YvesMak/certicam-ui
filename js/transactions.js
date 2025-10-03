@@ -1032,16 +1032,20 @@ function initTransactionFiltering() {
 
 // Gestion du sélecteur de transactions par page
 function initRowsPerPageSelector() {
-    const selectorWrapper = document.querySelector('.selector-wrapper');
-    const currentSelection = document.querySelector('.current-selection');
-    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const selectorWrapper = document.querySelector('.rows-per-page .selector-wrapper');
+    const currentSelection = document.querySelector('.rows-per-page .current-selection');
+    const dropdownItems = document.querySelectorAll('.rows-per-page .selector-dropdown .dropdown-item');
 
     if (!selectorWrapper || !currentSelection || !dropdownItems.length) {
         console.log('⚠️ Éléments du sélecteur de pagination introuvables');
+        console.log('🔍 selectorWrapper:', !!selectorWrapper);
+        console.log('🔍 currentSelection:', !!currentSelection);
+        console.log('🔍 dropdownItems count:', dropdownItems.length);
         return;
     }
 
     console.log('🔧 Initialisation du sélecteur de transactions par page');
+    console.log('📊 Nombre d\'items dropdown trouvés:', dropdownItems.length);
 
     // Toggle du dropdown au clic sur le sélecteur
     selectorWrapper.addEventListener('click', function(e) {
@@ -1058,10 +1062,19 @@ function initRowsPerPageSelector() {
     });
 
     // Gestion de la sélection d'un nombre de transactions par page
-    dropdownItems.forEach(item => {
+    dropdownItems.forEach((item, index) => {
         item.addEventListener('click', function(e) {
             e.stopPropagation();
             const value = parseInt(this.dataset.value);
+            
+            console.log(`🔍 Item ${index} cliqué`);
+            console.log('🔍 Dataset value:', this.dataset.value);
+            console.log('🔍 Parsed value:', value);
+            
+            if (isNaN(value)) {
+                console.error('❌ Valeur NaN détectée !');
+                return;
+            }
             
             // Mettre à jour l'affichage avec "transactions"
             currentSelection.textContent = `${value} transactions`;
