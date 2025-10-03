@@ -618,18 +618,12 @@ function attachTransactionButtonEvents() {
             if (item.classList.contains('view-receipt')) {
                 console.log('Déclenchement "Voir facture"');
                 showTransactionReceipt(transaction);
-            } else if (item.classList.contains('view-transaction')) {
-                console.log('Déclenchement "Voir la transaction"');
-                showTransactionReceipt(transaction);
             } else if (item.classList.contains('download-receipt')) {
                 console.log('Déclenchement "Télécharger facture"');
                 downloadReceipt(transaction);
             } else if (item.classList.contains('retry-payment')) {
                 console.log('Déclenchement "Relancer paiement"');
                 retryPayment(transaction);
-            } else if (item.classList.contains('cancel-transaction')) {
-                console.log('Déclenchement "Annuler transaction"');
-                cancelTransaction(transaction);
             } else if (item.classList.contains('contact-support')) {
                 console.log('Redirection vers support');
                 window.location.href = 'support.html';
@@ -822,28 +816,6 @@ function retryPayment(transaction) {
     setTimeout(() => {
         window.location.href = `/payment.html?${paymentParams.toString()}`;
     }, 1000);
-}
-
-// Fonction pour annuler une transaction (seulement si applicable)
-function cancelTransaction(transaction) {
-    console.log('Tentative d\'annulation pour transaction:', transaction.number, 'Statut:', transaction.status);
-    
-    // Vérifier si l'annulation est possible
-    if (transaction.status === 'pending') {
-        showNotification('Impossible d\'annuler une transaction en attente. Veuillez patienter ou contacter le support.', 'warning');
-        return;
-    }
-    
-    if (transaction.status === 'valid') {
-        showNotification('Impossible d\'annuler une transaction réussie. Contactez le support pour un remboursement.', 'warning');
-        return;
-    }
-    
-    // Pour les transactions échouées, on peut proposer d'autres actions
-    if (transaction.status === 'failed') {
-        showNotification('Transaction déjà échouée. Utilisez "Relancer le paiement" pour réessayer.', 'info');
-        return;
-    }
 }
 
 // Fonction pour afficher les notifications
@@ -1168,9 +1140,9 @@ function createTransactionRow(transaction) {
     if (transaction.status === 'valid') {
         // Transaction réussie - Options: Voir la transaction, Télécharger le reçu, Contacter le support
         dropdownMenuContent = `
-            <button class="dropdown-item view-transaction" data-transaction="${transaction.number}">
+            <button class="dropdown-item view-receipt" data-transaction="${transaction.number}">
                 <i class="fi fi-rr-eye"></i>
-                <span>Voir la transaction</span>
+                <span>Voir la facture</span>
             </button>
             <button class="dropdown-item download-receipt" data-transaction="${transaction.number}">
                 <i class="fi fi-rr-download"></i>
@@ -1182,15 +1154,11 @@ function createTransactionRow(transaction) {
             </button>
         `;
     } else if (transaction.status === 'pending') {
-        // Transaction en attente - Options: Voir la transaction, Annuler la transaction, Contacter le support
+        // Transaction en attente - Options: Voir la transaction, Contacter le support (PAS d'annulation)
         dropdownMenuContent = `
-            <button class="dropdown-item view-transaction" data-transaction="${transaction.number}">
+            <button class="dropdown-item view-receipt" data-transaction="${transaction.number}">
                 <i class="fi fi-rr-eye"></i>
                 <span>Voir la transaction</span>
-            </button>
-            <button class="dropdown-item cancel-transaction" data-transaction="${transaction.number}" style="color: var(--color-green);">
-                <i class="fi fi-rr-cross-circle" style="color: var(--color-green);"></i>
-                <span>Annuler la transaction</span>
             </button>
             <button class="dropdown-item contact-support" data-transaction="${transaction.number}">
                 <i class="fi fi-rr-envelope"></i>
@@ -1200,7 +1168,7 @@ function createTransactionRow(transaction) {
     } else if (transaction.status === 'failed') {
         // Transaction échouée - Options: Voir la transaction, Relancer le paiement, Contacter le support
         dropdownMenuContent = `
-            <button class="dropdown-item view-transaction" data-transaction="${transaction.number}">
+            <button class="dropdown-item view-receipt" data-transaction="${transaction.number}">
                 <i class="fi fi-rr-eye"></i>
                 <span>Voir la transaction</span>
             </button>
