@@ -738,27 +738,8 @@ function downloadDocument(documentData) {
     // Créer un nom de fichier basé sur le document
     const fileName = `${documentData.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${documentData.institution.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.pdf`;
     
-    // Simuler le téléchargement (dans un vrai système, ceci ferait appel à une API)
-    // Pour la démo, on crée un fichier PDF simulé
-    const pdfContent = generateDocumentPDF(documentData);
-    
-    // Créer un blob pour le téléchargement
-    const blob = new Blob([pdfContent], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    
-    // Créer un lien de téléchargement temporaire
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = fileName;
-    downloadLink.style.display = 'none';
-    
-    // Ajouter au DOM, cliquer, puis supprimer
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    
-    // Nettoyer l'URL
-    URL.revokeObjectURL(url);
+    // Générer un vrai PDF
+    generateDocumentPDF(documentData, fileName);
     
     // Afficher une notification de succès
     showDownloadNotification(documentData.name);
@@ -767,25 +748,106 @@ function downloadDocument(documentData) {
     closeDocumentPreview();
 }
 
-// Fonction pour générer un contenu PDF simulé
-function generateDocumentPDF(documentData) {
-    // Dans un vrai système, ceci générerait un vrai PDF avec les données du document
-    // Pour la démo, on retourne un contenu texte simple
-    return `
-CERTICAM - Document Certifié
-============================
-
-Document: ${documentData.name}
-Type: ${documentData.type}
-Institution émettrice: ${documentData.institution}
-Date de validité: ${documentData.validityDate}
-Date de mise en ligne: ${documentData.uploadDate}
-Statut: ${documentData.status}
-
-Ce document a été certifié par Certicam et peut être vérifié en ligne.
-
-Document téléchargé le: ${new Date().toLocaleDateString('fr-FR')}
-    `.trim();
+// Fonction pour générer un vrai document PDF
+function generateDocumentPDF(documentData, fileName) {
+    // Utiliser jsPDF pour créer un vrai PDF
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Configuration des couleurs
+    const primaryColor = [0, 195, 108]; // Vert Certicam
+    const darkColor = [16, 24, 40];
+    const grayColor = [102, 112, 133];
+    
+    // En-tête avec logo et titre
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, 0, 210, 40, 'F');
+    
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont(undefined, 'bold');
+    doc.text('CERTICAM', 20, 20);
+    
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text('Document Certifié', 20, 30);
+    
+    // Ligne de séparation
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(0.5);
+    doc.line(20, 45, 190, 45);
+    
+    // Informations du document
+    let yPos = 60;
+    doc.setTextColor(...darkColor);
+    doc.setFontSize(16);
+    doc.setFont(undefined, 'bold');
+    doc.text('Informations du document', 20, yPos);
+    
+    yPos += 15;
+    doc.setFontSize(11);
+    doc.setFont(undefined, 'normal');
+    
+    // Détails du document
+    const details = [
+        { label: 'Nom du document', value: documentData.name },
+        { label: 'Type', value: documentData.type },
+        { label: 'Institution émettrice', value: documentData.institution },
+        { label: 'Date de validité', value: documentData.validityDate },
+        { label: 'Date de mise en ligne', value: documentData.uploadDate },
+        { label: 'Statut', value: documentData.status }
+    ];
+    
+    details.forEach(detail => {
+        doc.setTextColor(...grayColor);
+        doc.text(detail.label + ':', 20, yPos);
+        doc.setTextColor(...darkColor);
+        doc.setFont(undefined, 'bold');
+        doc.text(detail.value, 80, yPos);
+        doc.setFont(undefined, 'normal');
+        yPos += 10;
+    });
+    
+    // Cadre de certification
+    yPos += 10;
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(1);
+    doc.roundedRect(20, yPos, 170, 40, 3, 3, 'S');
+    
+    yPos += 10;
+    doc.setTextColor(...primaryColor);
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'bold');
+    doc.text('✓ Document Certifié', 25, yPos);
+    
+    yPos += 10;
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.text('Ce document a été certifié par Certicam et peut être vérifié', 25, yPos);
+    yPos += 6;
+    doc.text('en ligne sur notre plateforme.', 25, yPos);
+    
+    // Pied de page
+    yPos = 260;
+    doc.setDrawColor(...grayColor);
+    doc.setLineWidth(0.3);
+    doc.line(20, yPos, 190, yPos);
+    
+    yPos += 8;
+    doc.setTextColor(...grayColor);
+    doc.setFontSize(9);
+    doc.text(`Document téléchargé le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 20, yPos);
+    
+    yPos += 6;
+    doc.text('Certicam - Plateforme de certification de documents', 20, yPos);
+    
+    // QR Code ou code de vérification (simulé)
+    doc.setFontSize(8);
+    doc.text(`Code de vérification: CERT-${Date.now().toString(36).toUpperCase()}`, 20, yPos + 6);
+    
+    // Sauvegarder le PDF
+    doc.save(fileName);
 }
 
 // Fonction pour afficher une notification de téléchargement

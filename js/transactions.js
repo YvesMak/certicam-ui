@@ -375,19 +375,164 @@ function attachTransactionButtonEvents() {
 function downloadReceipt(transaction) {
     console.log('Téléchargement de la facture pour transaction:', transaction.number);
     
-    // Simuler le téléchargement d'un PDF
-    showNotification('Téléchargement de la facture en cours...', 'info');
+    showNotification('Génération de la facture en cours...', 'info');
     
-    // Dans un vrai cas, on ferait un appel API pour générer/télécharger le PDF
+    // Générer un vrai PDF avec jsPDF
     setTimeout(() => {
-        showNotification(`Facture TXN-${transaction.number} téléchargée avec succès!`, 'success');
-        
-        // Simulation du téléchargement
-        const link = document.createElement('a');
-        link.href = '#'; // URL réelle du PDF
-        link.download = `Facture-TXN-${transaction.number}.pdf`;
-        // link.click(); // Décommenter pour vraiment télécharger
-    }, 1500);
+        try {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Configuration des couleurs
+            const primaryColor = [0, 195, 108]; // Vert Certicam
+            const darkColor = [16, 24, 40];
+            const grayColor = [102, 112, 133];
+            const redColor = [244, 33, 47];
+            const orangeColor = [255, 159, 28];
+            
+            // En-tête avec fond vert
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 50, 'F');
+            
+            // Logo et titre
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(28);
+            doc.setFont(undefined, 'bold');
+            doc.text('CERTICAM', 20, 25);
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'normal');
+            doc.text('Facture de Transaction', 20, 38);
+            
+            // Numéro de facture en haut à droite
+            doc.setFontSize(10);
+            doc.text(`Facture N° TXN-${transaction.number}`, 150, 25, { align: 'right' });
+            doc.text(`Date: ${transaction.date}`, 150, 32, { align: 'right' });
+            
+            // Ligne de séparation
+            doc.setDrawColor(...primaryColor);
+            doc.setLineWidth(1);
+            doc.line(20, 55, 190, 55);
+            
+            // Informations de la transaction
+            let yPos = 70;
+            doc.setTextColor(...darkColor);
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Détails de la transaction', 20, yPos);
+            
+            yPos += 15;
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            
+            // Détails
+            const details = [
+                { label: 'Produit/Service', value: transaction.product },
+                { label: 'Institution', value: transaction.institution },
+                { label: 'Catégorie', value: transaction.category },
+                { label: 'Méthode de paiement', value: transaction.paymentMethod || 'Mobile Money' },
+                { label: 'Date de transaction', value: transaction.date },
+                { label: 'Heure', value: new Date().toLocaleTimeString('fr-FR') }
+            ];
+            
+            details.forEach(detail => {
+                doc.setTextColor(...grayColor);
+                doc.text(detail.label + ':', 20, yPos);
+                doc.setTextColor(...darkColor);
+                doc.setFont(undefined, 'bold');
+                doc.text(detail.value, 90, yPos);
+                doc.setFont(undefined, 'normal');
+                yPos += 10;
+            });
+            
+            // Cadre pour le montant
+            yPos += 10;
+            doc.setFillColor(248, 250, 252);
+            doc.roundedRect(20, yPos, 170, 30, 3, 3, 'F');
+            
+            yPos += 12;
+            doc.setTextColor(...grayColor);
+            doc.setFontSize(12);
+            doc.text('Montant total', 25, yPos);
+            
+            doc.setTextColor(...primaryColor);
+            doc.setFontSize(24);
+            doc.setFont(undefined, 'bold');
+            doc.text(transaction.amount, 185, yPos + 5, { align: 'right' });
+            
+            // Statut de la transaction
+            yPos += 25;
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(...darkColor);
+            doc.text('Statut:', 20, yPos);
+            
+            // Couleur selon le statut
+            let statusColor = grayColor;
+            let statusText = transaction.status;
+            if (transaction.status === 'valid' || transaction.status === 'Réussie') {
+                statusColor = primaryColor;
+                statusText = '✓ Réussie';
+            } else if (transaction.status === 'failed' || transaction.status === 'Échouée') {
+                statusColor = redColor;
+                statusText = '✗ Échouée';
+            } else if (transaction.status === 'pending' || transaction.status === 'En attente') {
+                statusColor = orangeColor;
+                statusText = '◷ En attente';
+            }
+            
+            doc.setTextColor(...statusColor);
+            doc.text(statusText, 50, yPos);
+            
+            // Cadre de certification
+            yPos += 15;
+            doc.setDrawColor(...primaryColor);
+            doc.setLineWidth(1);
+            doc.roundedRect(20, yPos, 170, 45, 3, 3, 'S');
+            
+            yPos += 12;
+            doc.setTextColor(...primaryColor);
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('✓ Transaction Certifiée', 25, yPos);
+            
+            yPos += 10;
+            doc.setTextColor(...grayColor);
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'normal');
+            doc.text('Cette facture est un document officiel émis par Certicam.', 25, yPos);
+            yPos += 6;
+            doc.text('Elle peut être utilisée comme justificatif de paiement.', 25, yPos);
+            yPos += 6;
+            doc.text(`Code de vérification: CERT-TXN-${transaction.number}-${Date.now().toString(36).toUpperCase()}`, 25, yPos);
+            
+            // Pied de page
+            yPos = 260;
+            doc.setDrawColor(...grayColor);
+            doc.setLineWidth(0.3);
+            doc.line(20, yPos, 190, yPos);
+            
+            yPos += 8;
+            doc.setTextColor(...grayColor);
+            doc.setFontSize(9);
+            doc.text(`Facture générée le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 20, yPos);
+            
+            yPos += 5;
+            doc.text('Certicam - Plateforme de certification de documents et de transactions', 20, yPos);
+            
+            yPos += 5;
+            doc.text('Pour toute question, contactez notre support: support@certicam.cm', 20, yPos);
+            
+            // Sauvegarder le PDF
+            const fileName = `Facture_TXN_${transaction.number}_${transaction.date.replace(/[\/\s:]/g, '_')}.pdf`;
+            doc.save(fileName);
+            
+            showNotification(`Facture TXN-${transaction.number} téléchargée avec succès!`, 'success');
+        } catch (error) {
+            console.error('Erreur lors de la génération du PDF:', error);
+            showNotification('Erreur lors de la génération de la facture', 'error');
+        }
+    }, 500);
 }
 
 // Fonction pour relancer un paiement
