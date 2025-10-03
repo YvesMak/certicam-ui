@@ -1208,7 +1208,7 @@ function createTransactionRow(transaction) {
         <td>
             <div class="actions">
                 <div class="dropdown">
-                    <button class="dropdown-toggle action-button" aria-label="Actions" data-status="${transaction.status}">
+                    <button class="dropdown-toggle action-button" aria-label="Actions" data-transaction="${transaction.number}">
                         <i class="fi fi-rr-menu-dots-vertical"></i>
                     </button>
                     <div class="dropdown-menu">
