@@ -188,13 +188,23 @@ class NavbarAuth {
         const overlay = document.createElement('div');
         overlay.className = 'logout-modal-overlay';
         overlay.innerHTML = `
-            <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logout-title">
+            <div class="logout-modal" role="dialog" aria-modal="true" aria-labelledby="logout-title" aria-describedby="logout-description">
+                <div class="logout-modal-icon">
+                    <i class="fi fi-rr-sign-out-alt"></i>
+                </div>
                 <div class="logout-modal-content">
-                    <h3 id="logout-title">Êtes-vous sûr de vouloir vous déconnecter ?</h3>
+                    <h3 id="logout-title">Déconnexion</h3>
+                    <p id="logout-description">Voulez-vous vraiment vous déconnecter ?</p>
                 </div>
                 <div class="logout-modal-actions">
-                    <button class="logout-cancel-btn" type="button">Annuler</button>
-                    <button class="logout-confirm-btn" type="button">OK</button>
+                    <button class="logout-cancel-btn" type="button">
+                        <i class="fi fi-rr-cross-small"></i>
+                        <span>Annuler</span>
+                    </button>
+                    <button class="logout-confirm-btn" type="button">
+                        <i class="fi fi-rr-check"></i>
+                        <span>Confirmer</span>
+                    </button>
                 </div>
             </div>
         `;
@@ -204,85 +214,151 @@ class NavbarAuth {
             const styles = document.createElement('style');
             styles.id = 'logout-modal-styles';
             styles.textContent = `
-                /* Logout Modal - iOS Style Minimal */
+                /* Logout Modal - Design System Certicam */
                 .logout-modal-overlay {
                     position: fixed;
                     top: 0;
                     left: 0;
                     width: 100vw;
                     height: 100vh;
-                    background: rgba(0, 0, 0, 0.4);
-                    backdrop-filter: blur(20px);
-                    -webkit-backdrop-filter: blur(20px);
+                    background: rgba(0, 0, 0, 0.6);
+                    backdrop-filter: blur(8px);
+                    -webkit-backdrop-filter: blur(8px);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     z-index: 10000;
                     padding: var(--spacing-xl);
-                    animation: fadeIn 0.2s ease;
+                    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
                 }
 
                 .logout-modal {
-                    background: rgba(255, 255, 255, 0.95);
-                    border-radius: 14px;
-                    max-width: 270px;
+                    background: var(--color-white);
+                    border-radius: var(--radius-2xl);
+                    max-width: 420px;
                     width: 100%;
-                    overflow: hidden;
-                    animation: scaleIn 0.25s cubic-bezier(0.36, 0.66, 0.04, 1);
-                    box-shadow: 0 0 1px rgba(0, 0, 0, 0.04), 
-                                0 2px 6px rgba(0, 0, 0, 0.04), 
-                                0 10px 20px rgba(0, 0, 0, 0.1);
+                    padding: var(--spacing-3xl);
+                    text-align: center;
+                    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                    position: relative;
                 }
 
-                .logout-modal-content {
-                    padding: 20px 16px;
-                    text-align: center;
+                .logout-modal-icon {
+                    width: 72px;
+                    height: 72px;
+                    background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto var(--spacing-xl);
+                    position: relative;
+                    box-shadow: 0 8px 16px rgba(245, 158, 11, 0.15);
+                }
+
+                .logout-modal-icon::before {
+                    content: '';
+                    position: absolute;
+                    inset: -4px;
+                    border-radius: 50%;
+                    border: 2px solid #FCD34D;
+                    opacity: 0.3;
+                }
+
+                .logout-modal-icon i {
+                    font-size: 2rem;
+                    color: #D97706;
+                    animation: iconBounce 0.5s ease 0.2s;
                 }
 
                 .logout-modal-content h3 {
-                    margin: 0;
-                    font-size: 17px;
-                    font-weight: var(--font-weight-semibold);
-                    color: #000000;
-                    line-height: 1.4;
-                    letter-spacing: -0.4px;
+                    margin: 0 0 var(--spacing-xs) 0;
+                    font-size: var(--font-size-heading-md);
+                    font-weight: var(--font-weight-bold);
+                    color: var(--color-text-primary);
+                    letter-spacing: -0.02em;
+                }
+
+                .logout-modal-content p {
+                    margin: 0 0 var(--spacing-2xl) 0;
+                    font-size: var(--font-size-body-md);
+                    color: var(--color-text-secondary);
+                    line-height: 1.6;
                 }
 
                 .logout-modal-actions {
                     display: flex;
-                    border-top: 0.5px solid rgba(60, 60, 67, 0.29);
+                    gap: var(--spacing-md);
+                    margin-top: var(--spacing-xl);
                 }
 
                 .logout-cancel-btn,
                 .logout-confirm-btn {
                     flex: 1;
-                    padding: 11px 8px;
-                    border: none;
-                    background: transparent;
-                    font-size: 17px;
-                    font-weight: var(--font-weight-regular);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: var(--spacing-xs);
+                    padding: var(--spacing-md) var(--spacing-xl);
+                    border-radius: var(--radius-lg);
+                    font-size: var(--font-size-body-md);
+                    font-weight: var(--font-weight-semibold);
                     font-family: var(--font-family);
                     cursor: pointer;
-                    transition: background 0.15s ease;
+                    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+                    border: none;
                     outline: none;
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .logout-cancel-btn i,
+                .logout-confirm-btn i {
+                    font-size: 1.125rem;
+                    transition: transform 0.2s ease;
                 }
 
                 .logout-cancel-btn {
-                    color: #007AFF;
-                    border-right: 0.5px solid rgba(60, 60, 67, 0.29);
+                    background: var(--color-gray-100);
+                    color: var(--color-text-primary);
+                    border: 1.5px solid var(--color-gray-200);
+                }
+
+                .logout-cancel-btn:hover {
+                    background: var(--color-gray-200);
+                    border-color: var(--color-gray-300);
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+                }
+
+                .logout-cancel-btn:hover i {
+                    transform: rotate(90deg);
                 }
 
                 .logout-cancel-btn:active {
-                    background: rgba(0, 0, 0, 0.05);
+                    transform: translateY(0);
+                    box-shadow: none;
                 }
 
                 .logout-confirm-btn {
-                    color: #007AFF;
-                    font-weight: var(--font-weight-semibold);
+                    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+                }
+
+                .logout-confirm-btn:hover {
+                    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+                    transform: translateY(-2px);
+                }
+
+                .logout-confirm-btn:hover i {
+                    transform: scale(1.1);
                 }
 
                 .logout-confirm-btn:active {
-                    background: rgba(0, 0, 0, 0.05);
+                    transform: translateY(0);
+                    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
                 }
 
                 /* Animations */
@@ -298,11 +374,20 @@ class NavbarAuth {
                 @keyframes scaleIn {
                     from {
                         opacity: 0;
-                        transform: scale(1.15);
+                        transform: scale(0.9);
                     }
                     to {
                         opacity: 1;
                         transform: scale(1);
+                    }
+                }
+
+                @keyframes iconBounce {
+                    0%, 100% {
+                        transform: scale(1);
+                    }
+                    50% {
+                        transform: scale(1.1);
                     }
                 }
 
@@ -327,35 +412,51 @@ class NavbarAuth {
                 }
 
                 .logout-modal-overlay.closing {
-                    animation: fadeOut 0.15s ease forwards;
+                    animation: fadeOut 0.2s ease forwards;
                 }
 
                 .logout-modal-overlay.closing .logout-modal {
-                    animation: scaleOut 0.15s ease forwards;
+                    animation: scaleOut 0.2s ease forwards;
                 }
 
                 /* Responsive */
                 @media (max-width: 640px) {
                     .logout-modal {
-                        max-width: 270px;
+                        max-width: 100%;
+                        padding: var(--spacing-2xl);
                     }
-                }
 
-                @media (prefers-color-scheme: dark) {
-                    .logout-modal {
-                        background: rgba(44, 44, 46, 0.95);
+                    .logout-modal-icon {
+                        width: 64px;
+                        height: 64px;
+                    }
+
+                    .logout-modal-icon i {
+                        font-size: 1.75rem;
                     }
 
                     .logout-modal-content h3 {
-                        color: #FFFFFF;
+                        font-size: var(--font-size-heading-sm);
                     }
 
                     .logout-modal-actions {
-                        border-top-color: rgba(84, 84, 88, 0.65);
+                        flex-direction: column-reverse;
+                        gap: var(--spacing-sm);
                     }
 
-                    .logout-cancel-btn {
-                        border-right-color: rgba(84, 84, 88, 0.65);
+                    .logout-cancel-btn,
+                    .logout-confirm-btn {
+                        width: 100%;
+                    }
+                }
+
+                @media (max-width: 400px) {
+                    .logout-modal-overlay {
+                        padding: var(--spacing-md);
+                    }
+
+                    .logout-modal {
+                        padding: var(--spacing-xl);
                     }
                 }
             `;
