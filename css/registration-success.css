@@ -14,7 +14,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-4);
+    padding: var(--spacing-xl);
 }
 
 /* Success Container */
@@ -29,13 +29,13 @@ body {
 
 /* Header Section */
 .header {
-    padding: var(--spacing-8) var(--spacing-6);
+    padding: var(--spacing-3xl) var(--spacing-xl);
     text-align: center;
     border-bottom: 1px solid var(--color-gray-100);
 }
 
 .logo {
-    margin-bottom: var(--spacing-6);
+    margin-bottom: var(--spacing-2xl);
 }
 
 .logo img {
@@ -46,7 +46,7 @@ body {
 .success-icon {
     width: 80px;
     height: 80px;
-    margin: 0 auto var(--spacing-4);
+    margin: 0 auto var(--spacing-md);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -60,10 +60,10 @@ body {
 }
 
 .success-title {
-    font-size: var(--font-size-2xl);
-    font-weight: 700;
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-3);
+    font-size: var(--font-size-heading-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
 }
 
 .success-subtitle {
@@ -74,21 +74,21 @@ body {
 
 /* Content Section */
 .content {
-    padding: var(--spacing-6);
+    padding: var(--spacing-2xl);
 }
 
 .success-details {
-    margin-bottom: var(--spacing-6);
+    margin-bottom: var(--spacing-2xl);
 }
 
 .success-details h3 {
-    font-size: var(--font-size-lg);
-    font-weight: 600;
-    color: var(--color-gray-900);
-    margin-bottom: var(--spacing-4);
+    font-size: var(--font-size-body-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
+    gap: var(--spacing-xs);
 }
 
 .success-details h3 i {
@@ -100,13 +100,13 @@ body {
 .steps-list {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-4);
+    gap: var(--spacing-md);
 }
 
 .step-item {
     display: flex;
     align-items: flex-start;
-    gap: var(--spacing-3);
+    gap: var(--spacing-sm);
 }
 
 .step-number {
@@ -127,8 +127,8 @@ body {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: var(--spacing-2);
-    padding-top: var(--spacing-1);
+    gap: var(--spacing-xs);
+    padding-top: var(--spacing-xxs);
 }
 
 .step-content i {
@@ -138,8 +138,8 @@ body {
 }
 
 .step-content span {
-    color: var(--color-gray-700);
-    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-md);
     line-height: 1.5;
 }
 
@@ -147,24 +147,24 @@ body {
 .info-box {
     display: flex;
     align-items: flex-start;
-    gap: var(--spacing-3);
-    background: var(--color-blue-light);
-    border: 1px solid var(--color-blue);
+    gap: var(--spacing-sm);
+    background: #EFF6FF;
+    border: 1px solid #3B82F6;
     border-radius: var(--radius-lg);
-    padding: var(--spacing-4);
-    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-2xl);
 }
 
 .info-box i {
-    color: var(--color-blue);
+    color: #3B82F6;
     font-size: 1.25rem;
     flex-shrink: 0;
     margin-top: 2px;
 }
 
 .info-box p {
-    color: var(--color-gray-700);
-    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-body-sm);
     line-height: 1.6;
     margin: 0;
 }
@@ -174,13 +174,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-2);
+    gap: var(--spacing-xs);
     width: 100%;
-    padding: var(--spacing-4);
+    padding: var(--spacing-md);
     background: var(--color-green);
     color: var(--color-white);
-    font-size: var(--font-size-base);
-    font-weight: 600;
+    font-size: var(--font-size-body-md);
+    font-weight: var(--font-weight-semibold);
     border: none;
     border-radius: var(--radius-lg);
     text-decoration: none;
@@ -193,7 +193,7 @@ body {
 }
 
 .access-btn:hover {
-    background: var(--color-green-dark);
+    background: var(--color-green-hover);
     transform: translateY(-1px);
 }
 
@@ -206,7 +206,7 @@ body {
 /* Mobile Small (320px - 479px) */
 @media (max-width: 479px) {
     body {
-        padding: var(--spacing-2);
+        padding: var(--spacing-xs);
     }
 
     .success-container {
@@ -214,7 +214,7 @@ body {
     }
 
     .header {
-        padding: var(--spacing-6) var(--spacing-4);
+        padding: var(--spacing-2xl) var(--spacing-md);
     }
 
     .logo img {
@@ -231,19 +231,19 @@ body {
     }
 
     .success-title {
-        font-size: var(--font-size-xl);
+        font-size: var(--font-size-body-xl);
     }
 
     .success-subtitle {
-        font-size: var(--font-size-sm);
+        font-size: var(--font-size-body-sm);
     }
 
     .content {
-        padding: var(--spacing-4);
+        padding: var(--spacing-md);
     }
 
     .success-details h3 {
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-body-md);
     }
 
     .step-number {
@@ -253,16 +253,16 @@ body {
     }
 
     .step-content span {
-        font-size: var(--font-size-sm);
+        font-size: var(--font-size-body-sm);
     }
 
     .info-box {
-        padding: var(--spacing-3);
+        padding: var(--spacing-sm);
     }
 
     .access-btn {
-        padding: var(--spacing-3);
-        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-body-sm);
     }
 }
 
@@ -285,15 +285,15 @@ body {
 /* Tablet (768px - 1023px) */
 @media (min-width: 768px) {
     .header {
-        padding: var(--spacing-10) var(--spacing-8);
+        padding: 50px var(--spacing-3xl);
     }
 
     .content {
-        padding: var(--spacing-8);
+        padding: var(--spacing-3xl);
     }
 
     .success-title {
-        font-size: 2rem;
+        font-size: var(--font-size-heading-lg);
     }
 }
 
@@ -317,14 +317,14 @@ body {
     }
 
     .success-title {
-        font-size: 2.25rem;
+        font-size: var(--font-size-heading-xl);
     }
 
     .success-subtitle {
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-body-lg);
     }
 
     .step-content span {
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-body-md);
     }
 }
