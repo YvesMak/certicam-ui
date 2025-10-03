@@ -319,6 +319,9 @@ class NavbarLoader {
         // Éviter les conflits avec les event listeners existants
         this.cleanupExistingEvents();
         
+        // Écouter les mises à jour du profil utilisateur
+        this.initUserProfileListener();
+        
         // Gestion du menu mobile
         const menuButton = document.getElementById('mobile-menu-button');
         const menuOverlay = document.getElementById('mobile-menu-overlay');
@@ -373,6 +376,64 @@ class NavbarLoader {
         document.addEventListener('keydown', this.escapeHandler);
         
         console.log('🎯 Événements navbar initialisés avec succès');
+    }
+    
+    initUserProfileListener() {
+        console.log('👤 Initialisation du listener de profil utilisateur');
+        
+        // Charger le profil au démarrage
+        this.updateNavbarProfile();
+        
+        // Écouter les changements de profil
+        window.addEventListener('userProfileUpdated', (event) => {
+            console.log('📢 Profil utilisateur mis à jour:', event.detail);
+            this.updateNavbarProfile(event.detail);
+        });
+    }
+    
+    updateNavbarProfile(profile) {
+        // Récupérer le profil depuis sessionStorage si non fourni
+        if (!profile) {
+            const profileData = sessionStorage.getItem('user_profile');
+            if (profileData) {
+                profile = JSON.parse(profileData);
+            }
+        }
+        
+        if (!profile) {
+            console.log('ℹ️ Aucun profil utilisateur trouvé');
+            return;
+        }
+        
+        console.log('🔄 Mise à jour de la navbar avec le profil:', profile);
+        
+        // Mettre à jour les avatars (navbar et menu mobile)
+        const avatarElements = document.querySelectorAll('[data-user="avatar"]');
+        avatarElements.forEach(img => {
+            if (profile.avatar) {
+                img.src = profile.avatar;
+                console.log('✅ Avatar mis à jour:', img);
+            }
+        });
+        
+        // Mettre à jour le nom d'utilisateur dans le menu mobile
+        const nameElements = document.querySelectorAll('[data-user="name"]');
+        nameElements.forEach(element => {
+            if (profile.firstname) {
+                element.textContent = profile.firstname;
+                console.log('✅ Nom utilisateur mis à jour:', element);
+            }
+        });
+        
+        // Mettre à jour le rôle (optionnel)
+        const roleElements = document.querySelectorAll('[data-user="role"]');
+        roleElements.forEach(element => {
+            if (profile.role) {
+                element.textContent = profile.role;
+            }
+        });
+        
+        console.log('✅ Profil navbar mis à jour avec succès');
     }
     
     cleanupExistingEvents() {

@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initPaymentMethods();
     initMobileMenu(); // Ajout de la gestion du menu mobile
     initAvatarUpload(); // Ajout de la gestion du changement d'avatar
+    initProfileSave(); // Ajout de la sauvegarde du profil
+    loadUserProfile(); // Charger le profil utilisateur depuis sessionStorage
 });
 
 // Initialize mobile menu
@@ -259,6 +261,11 @@ function initAvatarUpload() {
                 reader.onload = function(event) {
                     avatarImg.src = event.target.result;
                     
+                    // Sauvegarder immédiatement l'avatar dans sessionStorage
+                    const userProfile = getUserProfile();
+                    userProfile.avatar = event.target.result;
+                    saveUserProfile(userProfile);
+                    
                     // Animation de confirmation
                     avatarImg.style.opacity = '0';
                     setTimeout(() => {
@@ -276,6 +283,121 @@ function initAvatarUpload() {
                 
                 reader.readAsDataURL(file);
             }
+        });
+    }
+}
+
+// Fonction pour charger le profil utilisateur
+function loadUserProfile() {
+    const userProfile = getUserProfile();
+    
+    if (userProfile) {
+        // Charger les valeurs dans les champs
+        const firstnameInput = document.getElementById('user-firstname');
+        const lastnameInput = document.getElementById('user-lastname');
+        const emailInput = document.getElementById('user-email');
+        const phoneInput = document.getElementById('user-phone');
+        const addressInput = document.getElementById('user-address');
+        const niuInput = document.getElementById('user-niu');
+        const avatarImg = document.getElementById('profile-avatar-img');
+        
+        if (firstnameInput && userProfile.firstname) firstnameInput.value = userProfile.firstname;
+        if (lastnameInput && userProfile.lastname) lastnameInput.value = userProfile.lastname;
+        if (emailInput && userProfile.email) emailInput.value = userProfile.email;
+        if (phoneInput && userProfile.phone) phoneInput.value = userProfile.phone;
+        if (addressInput && userProfile.address) addressInput.value = userProfile.address;
+        if (niuInput && userProfile.niu) niuInput.value = userProfile.niu;
+        if (avatarImg && userProfile.avatar) avatarImg.src = userProfile.avatar;
+    }
+}
+
+// Fonction pour obtenir le profil utilisateur depuis sessionStorage
+function getUserProfile() {
+    const profileData = sessionStorage.getItem('user_profile');
+    if (profileData) {
+        return JSON.parse(profileData);
+    }
+    
+    // Profil par défaut
+    return {
+        firstname: 'Coco',
+        lastname: 'Cobango',
+        email: 'cococobango@gmail.com',
+        phone: '699009900',
+        address: 'Bastos, Rue 1770, Yaoundé, Cameroun',
+        niu: 'P01222567890987',
+        avatar: 'img/coco-profile.jpg'
+    };
+}
+
+// Fonction pour sauvegarder le profil utilisateur
+function saveUserProfile(profile) {
+    sessionStorage.setItem('user_profile', JSON.stringify(profile));
+    
+    // Déclencher un événement personnalisé pour notifier les autres composants
+    window.dispatchEvent(new CustomEvent('userProfileUpdated', { 
+        detail: profile 
+    }));
+}
+
+// Fonction pour initialiser la sauvegarde du profil
+function initProfileSave() {
+    const saveBtn = document.getElementById('save-profile-btn');
+    
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Récupérer les valeurs des champs
+            const firstname = document.getElementById('user-firstname').value.trim();
+            const lastname = document.getElementById('user-lastname').value.trim();
+            const email = document.getElementById('user-email').value.trim();
+            const phone = document.getElementById('user-phone').value.trim();
+            const address = document.getElementById('user-address').value.trim();
+            const niu = document.getElementById('user-niu').value.trim();
+            const avatar = document.getElementById('profile-avatar-img').src;
+            
+            // Validation basique
+            if (!firstname || !lastname || !email) {
+                alert('Veuillez remplir les champs obligatoires (Nom, Prénoms, Email)');
+                return;
+            }
+            
+            // Validation email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('Veuillez entrer une adresse email valide');
+                return;
+            }
+            
+            // Créer l'objet profil
+            const userProfile = {
+                firstname,
+                lastname,
+                email,
+                phone,
+                address,
+                niu,
+                avatar
+            };
+            
+            // Sauvegarder dans sessionStorage
+            saveUserProfile(userProfile);
+            
+            // Animation du bouton
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Sauvegardé !';
+            saveBtn.style.background = 'var(--color-green)';
+            saveBtn.disabled = true;
+            
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.style.background = '';
+                saveBtn.disabled = false;
+            }, 2000);
+            
+            // Afficher un message de succès
+            showSuccessMessage('Profil mis à jour avec succès !');
         });
     }
 }
