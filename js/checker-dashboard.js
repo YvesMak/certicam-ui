@@ -121,9 +121,6 @@ class CheckerInstructions {
      * Setup accessibility enhancements
      */
     setupAccessibility() {
-        // Add skip link for keyboard navigation
-        this.addSkipLink();
-        
         // Enhance device instructions with better ARIA labels
         const deviceOptions = document.querySelectorAll('.device-option');
         deviceOptions.forEach((option, index) => {
@@ -135,44 +132,6 @@ class CheckerInstructions {
                 title.id = `device-${index}-title`;
             }
         });
-    }
-
-    /**
-     * Add skip link for accessibility
-     */
-    addSkipLink() {
-        const skipLink = document.createElement('a');
-        skipLink.href = '#main-content';
-        skipLink.textContent = 'Passer au contenu principal';
-        skipLink.className = 'skip-link';
-        skipLink.style.cssText = `
-            position: absolute;
-            top: -40px;
-            left: 6px;
-            background: var(--color-text-primary);
-            color: var(--color-surface-primary);
-            padding: 8px;
-            text-decoration: none;
-            z-index: 1000;
-            border-radius: 4px;
-            transition: top 0.3s;
-        `;
-        
-        skipLink.addEventListener('focus', () => {
-            skipLink.style.top = '6px';
-        });
-        
-        skipLink.addEventListener('blur', () => {
-            skipLink.style.top = '-40px';
-        });
-        
-        document.body.insertBefore(skipLink, document.body.firstChild);
-        
-        // Add id to main content
-        const mainContent = document.querySelector('.checker-page');
-        if (mainContent) {
-            mainContent.id = 'main-content';
-        }
     }
 
     /**
