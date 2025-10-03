@@ -3,78 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Félicitations - Certicam</title>
+    <title>Inscription réussie - Certicam</title>
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/registration-success.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
     <div class="success-container">
-        <div class="floating-elements">
-            <div class="floating-element">🎉</div>
-            <div class="floating-element">✨</div>
-            <div class="floating-element">🎊</div>
+        <div class="header">
+            <div class="logo">
+                <img src="img/certicam-main-logo.png" alt="Certicam">
+            </div>
+            
+            <div class="success-icon">
+                <i class="fi fi-rr-check-circle"></i>
+            </div>
+
+            <h1 class="success-title">Inscription réussie !</h1>
+            <p class="success-subtitle">
+                Votre compte a été créé avec succès.<br>
+                Vous pouvez maintenant accéder à tous nos services.
+            </p>
         </div>
 
-        <div class="confetti"></div>
-        <div class="confetti"></div>
-        <div class="confetti"></div>
-        <div class="confetti"></div>
-        <div class="confetti"></div>
+        <div class="content">
+            <div class="success-details">
+                <h3><i class="fi fi-rr-list-check"></i> Prochaines étapes</h3>
+                <div class="steps-list">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <i class="fi fi-rr-shield-check"></i>
+                            <span>Vérifiez votre identité avec nos documents acceptés</span>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <i class="fi fi-rr-diploma"></i>
+                            <span>Explorez nos services de certification</span>
+                        </div>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <i class="fi fi-rr-headset"></i>
+                            <span>Contactez notre support si vous avez besoin d'aide</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="logo">
-            <img src="img/certicam-main-logo.png" alt="Certicam">
+            <div class="info-box">
+                <i class="fi fi-rr-info"></i>
+                <p>Un email de confirmation a été envoyé à votre adresse. Veuillez vérifier votre boîte de réception.</p>
+            </div>
+
+            <a href="login.html" class="access-btn">
+                <i class="fi fi-rr-sign-in-alt"></i> Accéder à mon compte
+            </a>
         </div>
-        
-        <div class="success-icon">
-            ✓
-        </div>
-
-        <h1 class="success-title">Félicitations !</h1>
-        <p class="success-subtitle">
-            Votre demande d'inscription a été prise en compte.<br>
-            vous pouvez maintenant accéder à votre compte
-        </p>
-
-        <div class="success-details">
-            <h3>Prochaines étapes :</h3>
-            <p>• Vérifiez votre identité avec nos documents acceptés<br>
-               • Explorez nos services de certification<br>
-               • Contactez notre support si besoin</p>
-        </div>
-
-        <a href="login.html" class="access-btn">
-            Accéder à mon compte
-        </a>
     </div>
-
-    <script>
-        // Create additional confetti elements
-        function createConfetti() {
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.animationDelay = Math.random() * 2 + 's';
-                    
-                    // Use design token colors
-                    const colors = ['#00c36c', '#10B981', '#00a559', '#F59E0B', '#dcfce7'];
-                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                    
-                    document.querySelector('.success-container').appendChild(confetti);
-                    
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 3000);
-                }, i * 200);
-            }
-        }
-
-        // Start confetti animation
-        createConfetti();
-        
-        // Repeat confetti every 5 seconds
-        setInterval(createConfetti, 5000);
-    </script>
 </body>
 </html>
