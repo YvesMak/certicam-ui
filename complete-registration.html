@@ -6,6 +6,7 @@
     <title>Continuer votre inscription - Certicam</title>
     <link rel="stylesheet" href="css/tokens.css">
     <link rel="stylesheet" href="css/complete-registration.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
     <div class="complete-registration-container">
@@ -22,12 +23,12 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="firstname" class="form-label">Prénom</label>
-                        <input type="text" class="form-input" id="firstname" name="firstname" disabled>
+                        <input type="text" class="form-input" id="firstname" name="firstname" value="Jean" disabled>
                         <div class="error-message" id="firstname-error" style="display: none;"></div>
                     </div>
                     <div class="form-group">
                         <label for="lastname" class="form-label">Nom</label>
-                        <input type="text" class="form-input" id="lastname" name="lastname" disabled>
+                        <input type="text" class="form-input" id="lastname" name="lastname" value="Dupont" disabled>
                         <div class="error-message" id="lastname-error" style="display: none;"></div>
                     </div>
                 </div>
@@ -53,7 +54,7 @@
 
                 <div class="form-group">
                     <label for="email" class="form-label">Adresse email</label>
-                    <input type="email" class="form-input" id="email" name="email" disabled>
+                    <input type="email" class="form-input" id="email" name="email" value="jean.dupont@example.com" disabled>
                     <div class="error-message" id="email-error" style="display: none;"></div>
                 </div>
 
@@ -62,7 +63,7 @@
                     <div class="password-container">
                         <input type="password" class="form-input" id="password" name="password" placeholder="••••••••••••••••••••••••" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('password')">
-                            <span id="password-icon">👁️</span>
+                            <i class="fi fi-rr-eye" id="password-icon"></i>
                         </button>
                     </div>
                     <div class="password-requirements">
@@ -87,7 +88,7 @@
                     <div class="password-container">
                         <input type="password" class="form-input" id="confirm-password" name="confirm-password" placeholder="••••••••••••••••••••••••" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('confirm-password')">
-                            <span id="confirm-password-icon">👁️</span>
+                            <i class="fi fi-rr-eye" id="confirm-password-icon"></i>
                         </button>
                     </div>
                     <div class="error-message" id="confirm-password-error" style="display: none;"></div>
@@ -115,9 +116,9 @@
             const registrationData = sessionStorage.getItem('registration_data');
             if (registrationData) {
                 const data = JSON.parse(registrationData);
-                document.getElementById('firstname').value = data.firstname;
-                document.getElementById('lastname').value = data.lastname;
-                document.getElementById('email').value = data.email;
+                document.getElementById('firstname').value = data.firstname || 'Jean';
+                document.getElementById('lastname').value = data.lastname || 'Dupont';
+                document.getElementById('email').value = data.email || 'jean.dupont@example.com';
             }
         });
 
@@ -128,10 +129,10 @@
             
             if (passwordField.type === 'password') {
                 passwordField.type = 'text';
-                passwordIcon.textContent = '🙈';
+                passwordIcon.className = 'fi fi-rr-eye-crossed';
             } else {
                 passwordField.type = 'password';
-                passwordIcon.textContent = '👁️';
+                passwordIcon.className = 'fi fi-rr-eye';
             }
         }
 
