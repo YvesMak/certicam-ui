@@ -316,3 +316,69 @@ body {
         text-align: left;
     }
 }
+
+@media (max-width: 640px) {
+    .payment-container {
+        padding: var(--spacing-md);
+    }
+    
+    .order-card,
+    .payment-card {
+        padding: var(--spacing-lg);
+    }
+    
+    .payment-header h1 {
+        font-size: var(--font-size-heading-md);
+    }
+    
+    .btn-primary {
+        width: 100%;
+    }
+    
+    .payment-option {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-container {
+        padding: var(--spacing-sm);
+    }
+    
+    .order-card,
+    .payment-card {
+        padding: var(--spacing-md);
+    }
+    
+    .payment-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+    
+    .payment-header h1 {
+        font-size: var(--font-size-heading-sm);
+    }
+    
+    .product-info h2 {
+        font-size: var(--font-size-body-lg);
+    }
+    
+    .payment-option {
+        padding: var(--spacing-sm);
+    }
+    
+    .modify-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 375px) {
+    .payment-layout {
+        gap: var(--spacing-lg);
+    }
+    
+    .order-card,
+    .payment-card {
+        padding: var(--spacing-sm);
+    }
+}
